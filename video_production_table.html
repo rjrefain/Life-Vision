@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Production Rate Table</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            box-sizing: border-box;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            white-space: nowrap;
+            font-size: 0.9em;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 8px;
+            text-align: left;
+            font-size: 0.8em;
+        }
+        
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e8ecf0;
+            transition: background-color 0.3s ease;
+            position: relative;
+            vertical-align: middle;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .channel-name {
+            font-weight: 600;
+            color: #2c3e50;
+            min-width: 120px;
+            font-size: 0.85em;
+        }
+        
+        .client-name {
+            color: #7b68ee;
+            font-weight: 500;
+            min-width: 80px;
+            font-size: 0.85em;
+        }
+        
+        .collaborator {
+            color: #20b2aa;
+            font-weight: 500;
+            min-width: 80px;
+            font-size: 0.85em;
+        }
+        
+        .rate-usd {
+            font-weight: 700;
+            color: #27ae60;
+            font-size: 0.9em;
+            min-width: 80px;
+        }
+        
+        .rate-bdt {
+            font-weight: 600;
+            color: #e67e22;
+        }
+        
+        .daily-videos {
+            text-align: center;
+            font-weight: 600;
+            color: #8e44ad;
+            min-width: 40px;
+        }
+        
+        .stability-high {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+        }
+        
+        .stability-average {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+        }
+        
+        .stability-low {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+        }
+        
+        .stability-column {
+            text-align: center;
+            padding: 15px 10px;
+            min-width: 120px;
+        }
+        
+        .notice-none {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+        }
+        
+        .notice-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+            animation: blink-yellow 1.5s infinite;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .notice-warning:hover {
+            transform: scale(1.05);
+        }
+        
+        .notice-column {
+            text-align: center;
+            padding: 15px 10px;
+            min-width: 120px;
+        }
+
+        .status-column {
+            text-align: center;
+            padding: 15px 10px;
+            min-width: 120px;
+        }
+
+        .status-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 25px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .status-btn.completed {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+            animation: none;
+        }
+
+        .status-btn.pending {
+            animation: pulse-red 2s infinite;
+        }
+
+        .celebration {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 30px 50px;
+            border-radius: 20px;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-align: center;
+            z-index: 15000;
+            display: none;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: celebrationBounce 0.8s ease-out;
+        }
+
+        .celebration.show {
+            display: block;
+        }
+
+        .particle {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #27ae60;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 14000;
+            animation: particleFloat 2s ease-out forwards;
+        }
+
+        .particle:nth-child(odd) {
+            background: #f39c12;
+        }
+
+        .particle:nth-child(3n) {
+            background: #e74c3c;
+        }
+
+        .particle:nth-child(4n) {
+            background: #9b59b6;
+        }
+
+        .bubble {
+            position: fixed;
+            background: rgba(39, 174, 96, 0.6);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 14000;
+            animation: bubbleFloat 3s ease-out forwards;
+        }
+
+        .notice-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 2px solid #f39c12;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            max-width: 500px;
+            width: 90%;
+            display: none;
+        }
+        
+        .notice-popup.show {
+            display: block;
+        }
+        
+        .notice-popup h3 {
+            margin: 0 0 15px 0;
+            color: #f39c12;
+            border-bottom: 2px solid #f39c12;
+            padding-bottom: 10px;
+        }
+        
+        .notice-popup .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .notice-popup .close-btn:hover {
+            background: #c0392b;
+        }
+        
+        .notice-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            display: none;
+        }
+        
+        .notice-overlay.show {
+            display: block;
+        }
+
+        @keyframes blink-yellow {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes pulse-red {
+            0% { 
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+            }
+            50% { 
+                transform: scale(1.05);
+                box-shadow: 0 4px 16px rgba(231, 76, 60, 0.6);
+            }
+            100% { 
+                transform: scale(1);
+                box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
+            }
+        }
+
+        @keyframes celebrationBounce {
+            0% { 
+                transform: translate(-50%, -50%) scale(0.5);
+                opacity: 0;
+            }
+            50% { 
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+            100% { 
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-200px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes bubbleFloat {
+            0% {
+                transform: translateY(0) scale(0);
+                opacity: 0.8;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-300px) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        .summary {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .summary-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        
+        .summary-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .summary-card .number {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="main-title">Video Production Rate Table</h1>
+        <div style="text-align: center; margin-bottom: 15px;">
+            <div style="
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                color: white;
+                padding: 12px 20px;
+                border-radius: 25px;
+                display: inline-block;
+                font-size: 1em;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+                min-width: 400px;
+            ">
+                📅 <span id="current-date">Loading date...</span><br>
+                🕐 <span id="current-time">Loading time...</span> (Bangladesh Time)
+            </div>
+        </div>
+        
+        <!-- Admin Reset Button -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button id="reset-btn" style="
+                background: linear-gradient(135deg, #e74c3c, #c0392b);
+                color: white;
+                padding: 12px 25px;
+                border: none;
+                border-radius: 25px;
+                font-weight: 600;
+                font-size: 0.9em;
+                cursor: pointer;
+                box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+                transition: all 0.3s ease;
+                display: none;
+            " onclick="showResetConfirm()">
+                🔄 RESET ALL TO PENDING
+            </button>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Channel Name</th>
+                        <th>Client Name</th>
+                        <th>Collaborator</th>
+                        <th>Daily Videos</th>
+                        <th>Rate (BDT)</th>
+                        <th>Stability</th>
+                        <th>Notice</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="channel-name">Rider Chronicles</td>
+                        <td class="client-name">Jaroslav</td>
+                        <td class="collaborator">Imran</td>
+                        <td class="daily-videos">3</td>
+                        <td class="rate-bdt rate-usd">240 BDT</td>
+                        <td class="stability-column"><div class="stability-high">HIGH</div></td>
+                        <td class="notice-column"><div class="notice-warning" onclick="showNotice('rider-notice')">WARNING</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Imran')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Heart Blooms</td>
+                        <td class="client-name">Jaroslav</td>
+                        <td class="collaborator">Munna Aunty</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">240 BDT</td>
+                        <td class="stability-column"><div class="stability-high">HIGH</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Munna Aunty')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Our Family Diary</td>
+                        <td class="client-name">Jaroslav</td>
+                        <td class="collaborator">Raju</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">250 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Raju')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Parental Controls</td>
+                        <td class="client-name">Jaroslav</td>
+                        <td class="collaborator">Raju</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">250 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Raju')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Family Group Chat</td>
+                        <td class="client-name">Jaroslav</td>
+                        <td class="collaborator">Raju</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">250 BDT</td>
+                        <td class="stability-column"><div class="stability-low">LOW</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Raju')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">RAW Stories</td>
+                        <td class="client-name">Jaroslav P2</td>
+                        <td class="collaborator">Ramjan</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-low">LOW</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">The Love Letters</td>
+                        <td class="client-name">Jaroslav P2</td>
+                        <td class="collaborator">Ramjan</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">The Millionaire Files</td>
+                        <td class="client-name">Jaroslav P2</td>
+                        <td class="collaborator">Ramjan</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">She Who Dared</td>
+                        <td class="client-name">Jaroslav P2</td>
+                        <td class="collaborator">Mehedi</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Mehedi')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Her War, Her Words</td>
+                        <td class="client-name">Jaroslav P2</td>
+                        <td class="collaborator">Mehedi</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Mehedi')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Built from Zero</td>
+                        <td class="client-name">Jaroslav P2</td>
+                        <td class="collaborator">Robin</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Robin')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Western American Project</td>
+                        <td class="client-name">Franco</td>
+                        <td class="collaborator">Rashed</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">500 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-warning" onclick="showNotice('western-notice')">WARNING</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Rashed')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Celebrity Gossip Trash</td>
+                        <td class="client-name">Jason</td>
+                        <td class="collaborator">Shakil</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Shakil')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Spill</td>
+                        <td class="client-name">Jason</td>
+                        <td class="collaborator">Rashed</td>
+                        <td class="daily-videos">2</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Rashed')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Fading Footsteps</td>
+                        <td class="client-name">Muhammad Umair</td>
+                        <td class="collaborator">Hasib</td>
+                        <td class="daily-videos">2</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-low">LOW</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Hasib')">PENDING</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- UPCOMING PROJECTS SECTION -->
+        <div style="margin-top: 40px;">
+            <h2 style="
+                text-align: center;
+                color: #2c3e50;
+                margin-bottom: 20px;
+                font-size: 1.5em;
+                font-weight: 500;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                border-bottom: 3px solid #f39c12;
+                padding-bottom: 10px;
+            ">🚀 UPCOMING PROJECTS</h2>
+            
+            <div style="
+                background: linear-gradient(135deg, #f39c12, #e67e22);
+                color: white;
+                padding: 15px;
+                border-radius: 10px;
+                text-align: center;
+                margin-bottom: 20px;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+            ">
+                📞 CONTACT REON IF YOU ARE INTERESTED
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Channel Name</th>
+                            <th>Client Name</th>
+                            <th>Looking For</th>
+                            <th>Daily Videos</th>
+                            <th>Rate (BDT)</th>
+                            <th>Stability</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="channel-name">Top Time Wrap</td>
+                            <td class="client-name">Sunny</td>
+                            <td class="collaborator">New Collaborator</td>
+                            <td class="daily-videos">1</td>
+                            <td class="rate-bdt rate-usd">1000 BDT</td>
+                            <td class="stability-column"><div class="stability-high">HIGH</div></td>
+                            <td class="status-column"><div style="
+                                background: linear-gradient(135deg, #9b59b6, #8e44ad);
+                                color: white;
+                                padding: 8px 12px;
+                                border-radius: 20px;
+                                text-align: center;
+                                font-weight: 600;
+                                font-size: 0.75em;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
+                            ">AVAILABLE</div></td>
+                        </tr>
+                        <tr>
+                            <td class="channel-name">Incredible Stories</td>
+                            <td class="client-name">Jason</td>
+                            <td class="collaborator">New Collaborator</td>
+                            <td class="daily-videos">1</td>
+                            <td class="rate-bdt rate-usd">200 BDT</td>
+                            <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                            <td class="status-column"><div style="
+                                background: linear-gradient(135deg, #9b59b6, #8e44ad);
+                                color: white;
+                                padding: 8px 12px;
+                                border-radius: 20px;
+                                text-align: center;
+                                font-weight: 600;
+                                font-size: 0.75em;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
+                            ">AVAILABLE</div></td>
+                        </tr>
+                        <tr>
+                            <td class="channel-name">Grateful Storys PD</td>
+                            <td class="client-name">Jason</td>
+                            <td class="collaborator">New Collaborator</td>
+                            <td class="daily-videos">1</td>
+                            <td class="rate-bdt rate-usd">200 BDT</td>
+                            <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                            <td class="status-column"><div style="
+                                background: linear-gradient(135deg, #9b59b6, #8e44ad);
+                                color: white;
+                                padding: 8px 12px;
+                                border-radius: 20px;
+                                text-align: center;
+                                font-weight: 600;
+                                font-size: 0.75em;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
+                            ">AVAILABLE</div></td>
+                        </tr>
+                        <tr>
+                            <td class="channel-name">The Unbreakable PD</td>
+                            <td class="client-name">Jason</td>
+                            <td class="collaborator">New Collaborator</td>
+                            <td class="daily-videos">1</td>
+                            <td class="rate-bdt rate-usd">200 BDT</td>
+                            <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                            <td class="status-column"><div style="
+                                background: linear-gradient(135deg, #9b59b6, #8e44ad);
+                                color: white;
+                                padding: 8px 12px;
+                                border-radius: 20px;
+                                text-align: center;
+                                font-weight: 600;
+                                font-size: 0.75em;
+                                text-transform: uppercase;
+                                letter-spacing: 0.5px;
+                                box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
+                            ">AVAILABLE</div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="summary">
+            <div class="summary-card">
+                <h3>Active Projects</h3>
+                <p class="number">15</p>
+            </div>
+            <div class="summary-card">
+                <h3>Upcoming Projects</h3>
+                <p class="number">4</p>
+            </div>
+            <div class="summary-card">
+                <h3>Total Daily Videos</h3>
+                <p class="number">18</p>
+            </div>
+            <div class="summary-card">
+                <h3>Active Clients</h3>
+                <p class="number">6</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="celebration" id="celebration">
+        🎉 Excellent Work! 🎉<br>
+        <span id="collaborator-name"></span> has completed their task!
+    </div>
+
+    <div class="notice-overlay" id="notice-overlay" onclick="hideNotice()"></div>
+    <div class="notice-popup" id="western-notice">
+        <button class="close-btn" onclick="hideNotice()">×</button>
+        <h3>🚨 Important Notice - Western American Project</h3>
+        <div style="margin-bottom: 15px;">
+            <strong>📢 English:</strong><br>
+            Client sent advance for 5 videos. If the 5th video is good and creates momentum for his channel, then everything is fine. Good luck Rashed!
+        </div>
+        <div>
+            <strong>📢 বাংলা:</strong><br>
+            ক্লায়েন্ট ৫টি ভিডিওর জন্য অগ্রিম পাঠিয়েছে। যদি ৫ম ভিডিওটি ভালো হয় এবং তার চ্যানেলে গতি সৃষ্টি করে, তাহলে সবকিছু ঠিক থাকবে। শুভকামনা রাশেদ!
+        </div>
+    </div>
+
+    <div class="notice-popup" id="rider-notice">
+        <button class="close-btn" onclick="hideNotice()">×</button>
+        <h3>⚠️ Important Warning - Rider Chronicles</h3>
+        <div style="margin-bottom: 15px;">
+            <strong>📢 English:</strong><br>
+            Imran, the views of the video are going down. Please don't rush for Eid ul Azha. It will kill the channel.
+        </div>
+        <div>
+            <strong>📢 বাংলা:</strong><br>
+            ইমরান, ভিডিওর ভিউ কমে যাচ্ছে। ঈদুল আযহার জন্য তাড়াহুড়ো করবেন না। এটি চ্যানেলটি ধ্বংস করে দেবে।
+        </div>
+    </div>
+
+    <!-- Reset Confirmation Popup -->
+    <div class="notice-popup" id="reset-confirm">
+        <button class="close-btn" onclick="hideNotice()">×</button>
+        <h3>🔄 Reset All Projects</h3>
+        <div style="margin-bottom: 20px;">
+            <strong>⚠️ Warning:</strong><br>
+            This will reset ALL projects to PENDING status. Are you sure?
+        </div>
+        <div style="text-align: center;">
+            <button onclick="resetAllProjects()" style="
+                background: linear-gradient(135deg, #e74c3c, #c0392b);
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 20px;
+                font-weight: 600;
+                margin-right: 10px;
+                cursor: pointer;
+            ">YES, RESET ALL</button>
+            <button onclick="hideNotice()" style="
+                background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                border-radius: 20px;
+                font-weight: 600;
+                cursor: pointer;
+            ">CANCEL</button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBkNHnLFB5eayWqCKwkRUkc-rfI5T-CHgM",
+            authDomain: "video-production-tracker-12c07.firebaseapp.com",
+            projectId: "video-production-tracker-12c07",
+            storageBucket: "video-production-tracker-12c07.firebasestorage.app",
+            messagingSenderId: "126509441147",
+            appId: "1:126509441147:web:ac5fa9e93a7f45b0a342de",
+            measurementId: "G-YTZHNVXPM6"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Function to update date and time
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Simple date formatting
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            const dayName = days[now.getDay()];
+            const monthName = months[now.getMonth()];
+            const date = now.getDate();
+            const year = now.getFullYear();
+            
+            // Format time (adding 6 hours for Bangladesh time)
+            const bangladeshTime = new Date(now.getTime() + (6 * 60 * 60 * 1000));
+            let hours = bangladeshTime.getUTCHours();
+            const minutes = bangladeshTime.getUTCMinutes().toString().padStart(2, '0');
+            const seconds = bangladeshTime.getUTCSeconds().toString().padStart(2, '0');
+            
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // 0 should be 12
+            
+            const formattedDate = `${dayName}, ${monthName} ${date}, ${year}`;
+            const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+            
+            // Update the display
+            const dateElement = document.getElementById('current-date');
+            const timeElement = document.getElementById('current-time');
+            
+            if (dateElement && timeElement) {
+                dateElement.textContent = formattedDate;
+                dateElement.style.display = 'inline';
+                timeElement.textContent = formattedTime;
+                timeElement.style.display = 'inline';
+            }
+        }
+
+        // Project status mapping
+        const projectIds = {
+            'Rider Chronicles': 'rider-chronicles',
+            'Heart Blooms': 'heart-blooms',
+            'Our Family Diary': 'our-family-diary',
+            'Parental Controls': 'parental-controls',
+            'Family Group Chat': 'family-group-chat',
+            'RAW Stories': 'raw-stories',
+            'The Love Letters': 'the-love-letters',
+            'The Millionaire Files': 'the-millionaire-files',
+            'She Who Dared': 'she-who-dared',
+            'Her War, Her Words': 'her-war-her-words',
+            'Built from Zero': 'built-from-zero',
+            'Western American Project': 'western-american-project',
+            'Celebrity Gossip Trash': 'celebrity-gossip-trash',
+            'Spill': 'spill',
+            'Fading Footsteps': 'fading-footsteps'
+        };
+
+        // Load project statuses when page loads
+        window.addEventListener('load', async () => {
+            // Initialize date and time display
+            updateDateTime();
+            setInterval(updateDateTime, 1000); // Update every second
+
+            // Show reset button after 3 rapid clicks on title
+            let clickCount = 0;
+            document.querySelector('h1').addEventListener('click', () => {
+                clickCount++;
+                if (clickCount >= 3) {
+                    document.getElementById('reset-btn').style.display = 'inline-block';
+                }
+                setTimeout(() => clickCount = 0, 2000);
+            });
+
+            for (const [projectName, projectId] of Object.entries(projectIds)) {
+                try {
+                    const docRef = db.collection('projects').doc(projectId);
+                    const docSnap = await docRef.get();
+                    
+                    if (docSnap.exists) {
+                        const data = docSnap.data();
+                        const button = findButtonByProject(projectName);
+                        if (button && data.status === 'completed') {
+                            button.classList.remove('pending');
+                            button.classList.add('completed');
+                            button.textContent = 'COMPLETED';
+                        } else {
+                            button.classList.remove('completed');
+                            button.classList.add('pending');
+                            button.textContent = 'PENDING';
+                        }
+                    }
+                } catch (error) {
+                    console.log('Error loading project status:', error);
+                }
+            }
+        });
+
+        // Find button by project name
+        function findButtonByProject(projectName) {
+            const rows = document.querySelectorAll('tbody tr');
+            for (const row of rows) {
+                const channelName = row.querySelector('.channel-name').textContent;
+                if (channelName === projectName) {
+                    return row.querySelector('.status-btn');
+                }
+            }
+            return null;
+        }
+
+        // Save project status to Firebase
+        async function saveProjectStatus(projectName, status) {
+            const projectId = projectIds[projectName];
+            if (projectId) {
+                try {
+                    await db.collection('projects').doc(projectId).set({
+                        status: status,
+                        lastUpdated: new Date().toISOString(),
+                        projectName: projectName
+                    });
+                } catch (error) {
+                    console.error('Error saving status:', error);
+                }
+            }
+        }
+
+        // Updated completeWork function - toggles between pending and completed
+        window.completeWork = async function(button, collaboratorName) {
+            // Find project name from the row
+            const row = button.closest('tr');
+            const projectName = row.querySelector('.channel-name').textContent;
+            
+            // Toggle status
+            const isPending = button.classList.contains('pending');
+            const newStatus = isPending ? 'completed' : 'pending';
+            
+            // Update UI
+            if (isPending) {
+                // Change to completed
+                button.classList.remove('pending');
+                button.classList.add('completed');
+                button.textContent = 'COMPLETED';
+                
+                // Show celebration only when completing
+                const celebration = document.getElementById('celebration');
+                const nameSpan = document.getElementById('collaborator-name');
+                nameSpan.textContent = collaboratorName;
+                celebration.classList.add('show');
+                
+                createParticles(button);
+                createBubbles(button);
+                
+                setTimeout(() => {
+                    celebration.classList.remove('show');
+                }, 3000);
+            } else {
+                // Change to pending
+                button.classList.remove('completed');
+                button.classList.add('pending');
+                button.textContent = 'PENDING';
+            }
+            
+            // Save to Firebase
+            await saveProjectStatus(projectName, newStatus);
+        };
+
+        function createParticles(sourceElement) {
+            const rect = sourceElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const angle = (Math.PI * 2 * i) / 20;
+                const radius = 50;
+                const x = centerX + Math.cos(angle) * radius + (Math.random() - 0.5) * 100;
+                const y = centerY + Math.sin(angle) * radius + (Math.random() - 0.5) * 100;
+                
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                
+                document.body.appendChild(particle);
+                
+                setTimeout(() => {
+                    particle.remove();
+                }, 2000);
+            }
+        }
+
+        function createBubbles(sourceElement) {
+            const rect = sourceElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < 15; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                
+                const size = Math.random() * 30 + 10;
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                
+                const x = centerX + (Math.random() - 0.5) * 200;
+                const y = centerY + (Math.random() - 0.5) * 100;
+                
+                bubble.style.left = x + 'px';
+                bubble.style.top = y + 'px';
+                
+                document.body.appendChild(bubble);
+                
+                setTimeout(() => {
+                    bubble.remove();
+                }, 3000);
+            }
+        }
+
+        window.showNotice = function(noticeId) {
+            document.getElementById('notice-overlay').classList.add('show');
+            document.getElementById(noticeId).classList.add('show');
+        };
+
+        window.showResetConfirm = function() {
+            window.showNotice('reset-confirm');
+        };
+
+        window.resetAllProjects = async function() {
+            try {
+                // Reset all projects in Firebase
+                for (const [projectName, projectId] of Object.entries(projectIds)) {
+                    await db.collection('projects').doc(projectId).set({
+                        status: 'pending',
+                        lastUpdated: new Date().toISOString(),
+                        projectName: projectName
+                    });
+                }
+
+                // Reset all buttons in UI
+                const buttons = document.querySelectorAll('.status-btn');
+                buttons.forEach((button) => {
+                    button.classList.remove('completed');
+                    button.classList.add('pending');
+                    button.textContent = 'PENDING';
+                    
+                    // Re-enable onclick - get collaborator name from row
+                    const row = button.closest('tr');
+                    const collaborator = row.querySelector('.collaborator').textContent;
+                    button.onclick = () => window.completeWork(button, collaborator);
+                });
+
+                window.hideNotice();
+                
+                // Show success message
+                alert('✅ All projects reset to PENDING successfully!');
+                
+            } catch (error) {
+                console.error('Error resetting projects:', error);
+                alert('❌ Error resetting projects. Please try again.');
+            }
+        };
+
+        window.hideNotice = function() {
+            document.getElementById('notice-overlay').classList.remove('show');
+            document.querySelectorAll('.notice-popup').forEach(popup => {
+                popup.classList.remove('show');
+            });
+        };
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                window.hideNotice();
+            }
+        });
+    </script>
+</body>
+</html>
