@@ -144,19 +144,6 @@
             box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
         }
         
-        .stability-low {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
-        }
-        
         .stability-column {
             text-align: center;
             padding: 15px 10px;
@@ -483,6 +470,7 @@
                 🔄 RESET ALL TO PENDING
             </button>
         </div>
+        
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -517,6 +505,16 @@
                         <td class="stability-column"><div class="stability-high">HIGH</div></td>
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Munna Aunty')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Bruises Inside</td>
+                        <td class="client-name">Jaroslav</td>
+                        <td class="collaborator">Alamin</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">240 BDT</td>
+                        <td class="stability-column"><div class="stability-high">HIGH</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Alamin')">PENDING</button></td>
                     </tr>
                     <tr>
                         <td class="channel-name">Our Family Diary</td>
@@ -587,6 +585,16 @@
                         <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Mehedi')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Dressed for Power</td>
+                        <td class="client-name">Jaroslav P2</td>
+                        <td class="collaborator">Ramjan</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
                     </tr>
                     <tr>
                         <td class="channel-name">Built from Zero</td>
@@ -665,63 +673,22 @@
                 font-weight: 600;
                 box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
             ">
-                📞 CONTACT REON IF YOU ARE INTERESTED
+              📞 CONTACT REON IF YOU ARE INTERESTED 
             </div>
-
+            <div style="
+                background: linear-gradient(135deg, #ff0000, #ff3b3b);
+                color: white;
+                padding: 15px;
+                border-radius: 10px;
+                text-align: center;
+                margin-bottom: 20px;
+                font-weight: 600;
+                box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+            ">  Price of the Upcoming Project is not fixed Yet  
+            </div>
             <div class="table-wrapper">
                 <table>
                     <thead>
-                        <tr>
-                            <th>Channel Name</th>
-                            <th>Client Name</th>
-                            <th>Looking For</th>
-                            <th>Daily Videos</th>
-                            <th>Rate (BDT)</th>
-                            <th>Stability</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="channel-name">Top Time Wrap</td>
-                            <td class="client-name">Sunny</td>
-                            <td class="collaborator">New Collaborator</td>
-                            <td class="daily-videos">1</td>
-                            <td class="rate-bdt rate-usd">1000 BDT</td>
-                            <td class="stability-column"><div class="stability-high">HIGH</div></td>
-                            <td class="status-column"><div style="
-                                background: linear-gradient(135deg, #9b59b6, #8e44ad);
-                                color: white;
-                                padding: 8px 12px;
-                                border-radius: 20px;
-                                text-align: center;
-                                font-weight: 600;
-                                font-size: 0.75em;
-                                text-transform: uppercase;
-                                letter-spacing: 0.5px;
-                                box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
-                            ">AVAILABLE</div></td>
-                        </tr>
-                        <tr>
-                            <td class="channel-name">Bruises Inside</td>
-                            <td class="client-name">Jaroslav</td>
-                            <td class="collaborator">New Collaborator</td>
-                            <td class="daily-videos">1</td>
-                            <td class="rate-bdt rate-usd">240 BDT</td>
-                            <td class="stability-column"><div class="stability-high">HIGH</div></td>
-                            <td class="status-column"><div style="
-                                background: linear-gradient(135deg, #9b59b6, #8e44ad);
-                                color: white;
-                                padding: 8px 12px;
-                                border-radius: 20px;
-                                text-align: center;
-                                font-weight: 600;
-                                font-size: 0.75em;
-                                text-transform: uppercase;
-                                letter-spacing: 0.5px;
-                                box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
-                            ">AVAILABLE</div></td>
-                        </tr>
                         <tr>
                             <td class="channel-name">Social Security Stories</td>
                             <td class="client-name">Jason</td>
@@ -783,26 +750,6 @@
                             ">AVAILABLE</div></td>
                         </tr>
                         <tr>
-                            <td class="channel-name">Dressed for Power</td>
-                            <td class="client-name">Jaroslav P2</td>
-                            <td class="collaborator">New Collaborator</td>
-                            <td class="daily-videos">1</td>
-                            <td class="rate-bdt rate-usd">200 BDT</td>
-                            <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
-                            <td class="status-column"><div style="
-                                background: linear-gradient(135deg, #9b59b6, #8e44ad);
-                                color: white;
-                                padding: 8px 12px;
-                                border-radius: 20px;
-                                text-align: center;
-                                font-weight: 600;
-                                font-size: 0.75em;
-                                text-transform: uppercase;
-                                letter-spacing: 0.5px;
-                                box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
-                            ">AVAILABLE</div></td>
-                        </tr>
-                        <tr>
                             <td class="channel-name">Rookie Niche</td>
                             <td class="client-name">Muhammad Umair</td>
                             <td class="collaborator">New Collaborator</td>
@@ -830,15 +777,15 @@
         <div class="summary">
             <div class="summary-card">
                 <h3>Active Projects</h3>
-                <p class="number">14</p>
+                <p class="number">16</p>
             </div>
             <div class="summary-card">
                 <h3>Upcoming Projects</h3>
-                <p class="number">7</p>
+                <p class="number">5</p>
             </div>
             <div class="summary-card">
                 <h3>Total Daily Videos</h3>
-                <p class="number">19</p>
+                <p class="number">21</p>
             </div>
             <div class="summary-card">
                 <h3>Active Clients</h3>
@@ -970,6 +917,7 @@
         const projectIds = {
             'Rider Chronicles': 'rider-chronicles',
             'Heart Blooms': 'heart-blooms',
+            'Bruises Inside': 'bruises-inside',
             'Our Family Diary': 'our-family-diary',
             'Parental Controls': 'parental-controls',
             'Family Group Chat': 'family-group-chat',
@@ -977,11 +925,10 @@
             'The Millionaire Files': 'the-millionaire-files',
             'She Who Dared': 'she-who-dared',
             'Her War, Her Words': 'her-war-her-words',
+            'Dressed for Power': 'dressed-for-power',
             'Built from Zero': 'built-from-zero',
             'Incredible Stories': 'incredible-stories',
             'Western American Project': 'western-american-project',
-            'Celebrity Gossip Trash': 'celebrity-gossip-trash',
-            'Celebrity Spill': 'celebrity-spill',
             'The Unbreakable PD': 'the-unbreakable-pd',
             'Fading Footsteps': 'fading-footsteps'
         };
@@ -1204,4 +1151,3 @@
         });
     </script>
 </body>
-</html>
