@@ -34,6 +34,36 @@
             font-weight: 300;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
+        /* Scrolling Text Animation */
+        .scrolling-container {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 15px 0;
+            margin: 20px 0;
+            border-radius: 10px;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
+        .scrolling-text {
+            display: inline-block;
+            font-size: 1.1em;
+            font-weight: 600;
+            animation: scroll-left 25s linear infinite;
+            padding-left: 100%;
+        }
+
+        @keyframes scroll-left {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
         
         .table-wrapper {
             overflow-x: auto;
@@ -76,6 +106,16 @@
         
         tr:hover {
             background-color: #e3f2fd;
+        }
+
+        /* Late worker warning style */
+        tr.late-worker {
+            background-color: #fff3cd !important;
+            border-left: 5px solid #ffc107;
+        }
+
+        tr.late-worker:hover {
+            background-color: #ffeaa7 !important;
         }
         
         .channel-name {
@@ -142,6 +182,19 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
+        }
+
+        .stability-low {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(231, 76, 60, 0.3);
         }
         
         .stability-column {
@@ -281,67 +334,6 @@
             animation: bubbleFloat 3s ease-out forwards;
         }
 
-        .notice-popup {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            border: 2px solid #f39c12;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            z-index: 10000;
-            max-width: 500px;
-            width: 90%;
-            display: none;
-        }
-        
-        .notice-popup.show {
-            display: block;
-        }
-        
-        .notice-popup h3 {
-            margin: 0 0 15px 0;
-            color: #f39c12;
-            border-bottom: 2px solid #f39c12;
-            padding-bottom: 10px;
-        }
-        
-        .notice-popup .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-        }
-        
-        .notice-popup .close-btn:hover {
-            background: #c0392b;
-        }
-        
-        .notice-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9999;
-            display: none;
-        }
-        
-        .notice-overlay.show {
-            display: block;
-        }
-
         @keyframes blink-yellow {
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.7; transform: scale(1.05); }
@@ -435,6 +427,14 @@
 <body>
     <div class="container">
         <h1 id="main-title">Video Production Rate Table</h1>
+        
+        <!-- Scrolling Text Animation -->
+        <div class="scrolling-container">
+            <div class="scrolling-text">
+                সকাল ৮ টার পর সকল বাটন রিসেট হয়ে পেন্ডিং এ চলে যাবে সবাই এর আগে রিপোর্ট দিবেন। আর আমাদের সকল নতুন কাজ আপকামিং সেকশনে দেওয়া আছে।
+            </div>
+        </div>
+
         <div style="text-align: center; margin-bottom: 15px;">
             <div style="
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -452,25 +452,6 @@
             </div>
         </div>
         
-        <!-- Admin Reset Button -->
-        <div style="text-align: center; margin-bottom: 20px;">
-            <button id="reset-btn" style="
-                background: linear-gradient(135deg, #e74c3c, #c0392b);
-                color: white;
-                padding: 12px 25px;
-                border: none;
-                border-radius: 25px;
-                font-weight: 600;
-                font-size: 0.9em;
-                cursor: pointer;
-                box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-                transition: all 0.3s ease;
-                display: none;
-            " onclick="showResetConfirm()">
-                🔄 RESET ALL TO PENDING
-            </button>
-        </div>
-        
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -486,6 +467,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- IMRAN - 1 project -->
                     <tr>
                         <td class="channel-name">Rider Chronicles</td>
                         <td class="client-name">Jaroslav</td>
@@ -493,9 +475,11 @@
                         <td class="daily-videos">3</td>
                         <td class="rate-bdt rate-usd">240 BDT</td>
                         <td class="stability-column"><div class="stability-high">HIGH</div></td>
-                        <td class="notice-column"><div class="notice-warning" onclick="showNotice('rider-notice')">WARNING</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Imran')">PENDING</button></td>
                     </tr>
+                    
+                    <!-- MUNNA AUNTY - 1 project -->
                     <tr>
                         <td class="channel-name">Heart Blooms</td>
                         <td class="client-name">Jaroslav</td>
@@ -506,6 +490,8 @@
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Munna Aunty')">PENDING</button></td>
                     </tr>
+                    
+                    <!-- ALAMIN - 2 projects -->
                     <tr>
                         <td class="channel-name">Bruises Inside</td>
                         <td class="client-name">Jaroslav</td>
@@ -516,6 +502,18 @@
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Alamin')">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td class="channel-name">Built from Zero</td>
+                        <td class="client-name">Jaroslav P2</td>
+                        <td class="collaborator">Alamin</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">150 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Alamin')">PENDING</button></td>
+                    </tr>
+                    
+                    <!-- RAJU - 3 projects -->
                     <tr>
                         <td class="channel-name">Our Family Diary</td>
                         <td class="client-name">Jaroslav</td>
@@ -546,6 +544,8 @@
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Raju')">PENDING</button></td>
                     </tr>
+                    
+                    <!-- RAMJAN - 3 projects -->
                     <tr>
                         <td class="channel-name">The Love Letters</td>
                         <td class="client-name">Jaroslav P2</td>
@@ -555,16 +555,6 @@
                         <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
-                    </tr>
-                    <tr>
-                        <td class="channel-name">The Millionaire Files</td>
-                        <td class="client-name">Jaroslav P2</td>
-                        <td class="collaborator">Mehedi</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt rate-usd">150 BDT</td>
-                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
-                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Mehedi')">PENDING</button></td>
                     </tr>
                     <tr>
                         <td class="channel-name">She Who Dared</td>
@@ -577,16 +567,6 @@
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
                     </tr>
                     <tr>
-                        <td class="channel-name">Her War, Her Words</td>
-                        <td class="client-name">Jaroslav P2</td>
-                        <td class="collaborator">Mehedi</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt rate-usd">150 BDT</td>
-                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
-                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Mehedi')">PENDING</button></td>
-                    </tr>
-                    <tr>
                         <td class="channel-name">Dressed for Power</td>
                         <td class="client-name">Jaroslav P2</td>
                         <td class="collaborator">Ramjan</td>
@@ -596,16 +576,30 @@
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
                     </tr>
+                    
+                    <!-- MEHEDI - 2 projects -->
                     <tr>
-                        <td class="channel-name">Built from Zero</td>
+                        <td class="channel-name">The Millionaire Files</td>
                         <td class="client-name">Jaroslav P2</td>
-                        <td class="collaborator">Alamin</td>
+                        <td class="collaborator">Mehedi</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt rate-usd">150 BDT</td>
                         <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Alamin')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Mehedi')">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td class="channel-name">Her War, Her Words</td>
+                        <td class="client-name">Jaroslav P2</td>
+                        <td class="collaborator">Mehedi</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">150 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Mehedi')">PENDING</button></td>
+                    </tr>
+                    
+                    <!-- ROBIN - 2 projects -->
                     <tr>
                         <td class="channel-name">Incredible Stories</td>
                         <td class="client-name">Jason</td>
@@ -617,15 +611,29 @@
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Robin')">PENDING</button></td>
                     </tr>
                     <tr>
+                        <td class="channel-name">Social Security Stories</td>
+                        <td class="client-name">Jason</td>
+                        <td class="collaborator">Robin</td>
+                        <td class="daily-videos">2</td>
+                        <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-low">LOW</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Robin')">PENDING</button></td>
+                    </tr>
+                    
+                    <!-- RASHED - 1 project -->
+                    <tr>
                         <td class="channel-name">Western American Project</td>
                         <td class="client-name">Franco</td>
                         <td class="collaborator">Rashed</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt rate-usd">700 BDT</td>
                         <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
-                        <td class="notice-column"><div class="notice-warning" onclick="showNotice('western-notice')">WARNING</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Rashed')">PENDING</button></td>
                     </tr>
+                    
+                    <!-- RUBAT - 1 project -->
                     <tr>
                         <td class="channel-name">The Unbreakable PD</td>
                         <td class="client-name">Jason</td>
@@ -636,12 +644,24 @@
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Rubat')">PENDING</button></td>
                     </tr>
+                    
+                    <!-- HASIB - 2 projects -->
                     <tr>
                         <td class="channel-name">Fading Footsteps</td>
                         <td class="client-name">Muhammad Umair</td>
                         <td class="collaborator">Hasib</td>
                         <td class="daily-videos">2</td>
                         <td class="rate-bdt rate-usd">200 BDT</td>
+                        <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
+                        <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Hasib')">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td class="channel-name">Fading footsteps (30 Min)</td>
+                        <td class="client-name">Muhammad Umair</td>
+                        <td class="collaborator">Hasib</td>
+                        <td class="daily-videos">1</td>
+                        <td class="rate-bdt rate-usd">150 BDT</td>
                         <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
                         <td class="notice-column"><div class="notice-none">NO NOTICE</div></td>
                         <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Hasib')">PENDING</button></td>
@@ -690,25 +710,16 @@
                 <table>
                     <thead>
                         <tr>
-                            <td class="channel-name">Social Security Stories</td>
-                            <td class="client-name">Jason</td>
-                            <td class="collaborator">New Collaborator</td>
-                            <td class="daily-videos">1</td>
-                            <td class="rate-bdt rate-usd">200 BDT</td>
-                            <td class="stability-column"><div class="stability-average">AVERAGE</div></td>
-                            <td class="status-column"><div style="
-                                background: linear-gradient(135deg, #9b59b6, #8e44ad);
-                                color: white;
-                                padding: 8px 12px;
-                                border-radius: 20px;
-                                text-align: center;
-                                font-weight: 600;
-                                font-size: 0.75em;
-                                text-transform: uppercase;
-                                letter-spacing: 0.5px;
-                                box-shadow: 0 2px 8px rgba(155, 89, 182, 0.3);
-                            ">AVAILABLE</div></td>
+                            <th>Channel Name</th>
+                            <th>Client Name</th>
+                            <th>Collaborator</th>
+                            <th>Daily Videos</th>
+                            <th>Rate (BDT)</th>
+                            <th>Stability</th>
+                            <th>Status</th>
                         </tr>
+                    </thead>
+                    <tbody>
                         <tr>
                             <td class="channel-name">Social Security Documentary</td>
                             <td class="client-name">Jason</td>
@@ -777,15 +788,15 @@
         <div class="summary">
             <div class="summary-card">
                 <h3>Active Projects</h3>
-                <p class="number">16</p>
+                <p class="number">18</p>
             </div>
             <div class="summary-card">
                 <h3>Upcoming Projects</h3>
-                <p class="number">5</p>
+                <p class="number">3</p>
             </div>
             <div class="summary-card">
                 <h3>Total Daily Videos</h3>
-                <p class="number">21</p>
+                <p class="number">24</p>
             </div>
             <div class="summary-card">
                 <h3>Active Clients</h3>
@@ -797,64 +808,6 @@
     <div class="celebration" id="celebration">
         🎉 Excellent Work! 🎉<br>
         <span id="collaborator-name"></span> has completed their task!
-    </div>
-
-    <div class="notice-overlay" id="notice-overlay" onclick="hideNotice()"></div>
-    <div class="notice-popup" id="western-notice">
-        <button class="close-btn" onclick="hideNotice()">×</button>
-        <h3>🚨 Important Notice - Western American Project</h3>
-        <div style="margin-bottom: 15px;">
-            <strong>📢 English:</strong><br>
-            Client sent advance for 5 videos. If the 5th video is good and creates momentum for his channel, then everything is fine. Good luck Rashed!
-        </div>
-        <div>
-            <strong>📢 বাংলা:</strong><br>
-            ক্লায়েন্ট ৫টি ভিডিওর জন্য অগ্রিম পাঠিয়েছে। যদি ৫ম ভিডিওটি ভালো হয় এবং তার চ্যানেলে গতি সৃষ্টি করে, তাহলে সবকিছু ঠিক থাকবে। শুভকামনা রাশেদ!
-        </div>
-    </div>
-
-    <div class="notice-popup" id="rider-notice">
-        <button class="close-btn" onclick="hideNotice()">×</button>
-        <h3>⚠️ Important Warning - Rider Chronicles</h3>
-        <div style="margin-bottom: 15px;">
-            <strong>📢 English:</strong><br>
-            Imran, the views of the video are going down. Please don't rush for Eid ul Azha. It will kill the channel.
-        </div>
-        <div>
-            <strong>📢 বাংলা:</strong><br>
-            ইমরান, ভিডিওর ভিউ কমে যাচ্ছে। ঈদুল আযহার জন্য তাড়াহুড়ো করবেন না। এটি চ্যানেলটি ধ্বংস করে দেবে।
-        </div>
-    </div>
-
-    <!-- Reset Confirmation Popup -->
-    <div class="notice-popup" id="reset-confirm">
-        <button class="close-btn" onclick="hideNotice()">×</button>
-        <h3>🔄 Reset All Projects</h3>
-        <div style="margin-bottom: 20px;">
-            <strong>⚠️ Warning:</strong><br>
-            This will reset ALL projects to PENDING status. Are you sure?
-        </div>
-        <div style="text-align: center;">
-            <button onclick="resetAllProjects()" style="
-                background: linear-gradient(135deg, #e74c3c, #c0392b);
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 20px;
-                font-weight: 600;
-                margin-right: 10px;
-                cursor: pointer;
-            ">YES, RESET ALL</button>
-            <button onclick="hideNotice()" style="
-                background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 20px;
-                font-weight: 600;
-                cursor: pointer;
-            ">CANCEL</button>
-        </div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
@@ -911,9 +864,12 @@
                 timeElement.textContent = formattedTime;
                 timeElement.style.display = 'inline';
             }
+
+            // Check for 8:00 AM reset
+            checkForAutoReset(bangladeshTime);
         }
 
-        // Updated project status mapping with all projects
+        // Updated project status mapping with all projects including new ones
         const projectIds = {
             'Rider Chronicles': 'rider-chronicles',
             'Heart Blooms': 'heart-blooms',
@@ -930,8 +886,101 @@
             'Incredible Stories': 'incredible-stories',
             'Western American Project': 'western-american-project',
             'The Unbreakable PD': 'the-unbreakable-pd',
-            'Fading Footsteps': 'fading-footsteps'
+            'Fading Footsteps': 'fading-footsteps',
+            'Social Security Stories': 'social-security-stories',
+            'Fading footsteps (30 Min)': 'fading-footsteps-30min'
         };
+
+        // Auto-reset functionality
+        let lastResetDate = localStorage.getItem('lastResetDate');
+        let lateWorkers = JSON.parse(localStorage.getItem('lateWorkers') || '[]');
+
+        function checkForAutoReset(bangladeshTime) {
+            const currentDate = bangladeshTime.toDateString();
+            const currentHour = bangladeshTime.getUTCHours();
+            const currentMinute = bangladeshTime.getUTCMinutes();
+            
+            // Check if it's 8:00 AM and we haven't reset today
+            if (currentHour === 8 && currentMinute === 0 && lastResetDate !== currentDate) {
+                performAutoReset();
+                localStorage.setItem('lastResetDate', currentDate);
+            }
+        }
+
+        async function performAutoReset() {
+            try {
+                // First, identify workers who didn't complete their tasks (late workers)
+                const newLateWorkers = [];
+                
+                for (const [projectName, projectId] of Object.entries(projectIds)) {
+                    try {
+                        const docRef = db.collection('projects').doc(projectId);
+                        const docSnap = await docRef.get();
+                        
+                        if (!docSnap.exists || docSnap.data().status !== 'completed') {
+                            // This project wasn't completed - worker is late
+                            const button = findButtonByProject(projectName);
+                            if (button) {
+                                const row = button.closest('tr');
+                                const collaborator = row.querySelector('.collaborator').textContent;
+                                if (!newLateWorkers.includes(collaborator)) {
+                                    newLateWorkers.push(collaborator);
+                                }
+                            }
+                        }
+                    } catch (error) {
+                        console.log('Error checking project status:', error);
+                    }
+                }
+
+                // Store late workers
+                lateWorkers = newLateWorkers;
+                localStorage.setItem('lateWorkers', JSON.stringify(lateWorkers));
+
+                // Apply yellow background to late workers
+                applyLateWorkerStyling();
+
+                // Reset all projects to pending
+                for (const [projectName, projectId] of Object.entries(projectIds)) {
+                    await db.collection('projects').doc(projectId).set({
+                        status: 'pending',
+                        lastUpdated: new Date().toISOString(),
+                        projectName: projectName
+                    });
+                }
+
+                // Reset all buttons in UI
+                const buttons = document.querySelectorAll('.status-btn');
+                buttons.forEach((button) => {
+                    button.classList.remove('completed');
+                    button.classList.add('pending');
+                    button.textContent = 'PENDING';
+                });
+
+                console.log('Auto-reset completed at 8:00 AM');
+                
+            } catch (error) {
+                console.error('Error during auto-reset:', error);
+            }
+        }
+
+        function applyLateWorkerStyling() {
+            // Remove existing late worker styling
+            document.querySelectorAll('tr.late-worker').forEach(row => {
+                row.classList.remove('late-worker');
+            });
+
+            // Apply yellow background to late workers
+            lateWorkers.forEach(collaborator => {
+                const rows = document.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const collaboratorCell = row.querySelector('.collaborator');
+                    if (collaboratorCell && collaboratorCell.textContent === collaborator) {
+                        row.classList.add('late-worker');
+                    }
+                });
+            });
+        }
 
         // Load project statuses when page loads
         window.addEventListener('load', async () => {
@@ -939,15 +988,8 @@
             updateDateTime();
             setInterval(updateDateTime, 1000); // Update every second
 
-            // Show reset button after 3 rapid clicks on title
-            let clickCount = 0;
-            document.querySelector('h1').addEventListener('click', () => {
-                clickCount++;
-                if (clickCount >= 3) {
-                    document.getElementById('reset-btn').style.display = 'inline-block';
-                }
-                setTimeout(() => clickCount = 0, 2000);
-            });
+            // Apply late worker styling from previous day
+            applyLateWorkerStyling();
 
             for (const [projectName, projectId] of Object.entries(projectIds)) {
                 try {
@@ -1017,6 +1059,13 @@
                 button.classList.remove('pending');
                 button.classList.add('completed');
                 button.textContent = 'COMPLETED';
+                
+                // Remove from late workers if completing work
+                if (lateWorkers.includes(collaboratorName)) {
+                    lateWorkers = lateWorkers.filter(worker => worker !== collaboratorName);
+                    localStorage.setItem('lateWorkers', JSON.stringify(lateWorkers));
+                    applyLateWorkerStyling();
+                }
                 
                 // Show celebration only when completing
                 const celebration = document.getElementById('celebration');
@@ -1093,57 +1142,6 @@
             }
         }
 
-        window.showNotice = function(noticeId) {
-            document.getElementById('notice-overlay').classList.add('show');
-            document.getElementById(noticeId).classList.add('show');
-        };
-
-        window.showResetConfirm = function() {
-            window.showNotice('reset-confirm');
-        };
-
-        window.resetAllProjects = async function() {
-            try {
-                // Reset all projects in Firebase
-                for (const [projectName, projectId] of Object.entries(projectIds)) {
-                    await db.collection('projects').doc(projectId).set({
-                        status: 'pending',
-                        lastUpdated: new Date().toISOString(),
-                        projectName: projectName
-                    });
-                }
-
-                // Reset all buttons in UI
-                const buttons = document.querySelectorAll('.status-btn');
-                buttons.forEach((button) => {
-                    button.classList.remove('completed');
-                    button.classList.add('pending');
-                    button.textContent = 'PENDING';
-                    
-                    // Re-enable onclick - get collaborator name from row
-                    const row = button.closest('tr');
-                    const collaborator = row.querySelector('.collaborator').textContent;
-                    button.onclick = () => window.completeWork(button, collaborator);
-                });
-
-                window.hideNotice();
-                
-                // Show success message
-                alert('✅ All projects reset to PENDING successfully!');
-                
-            } catch (error) {
-                console.error('Error resetting projects:', error);
-                alert('❌ Error resetting projects. Please try again.');
-            }
-        };
-
-        window.hideNotice = function() {
-            document.getElementById('notice-overlay').classList.remove('show');
-            document.querySelectorAll('.notice-popup').forEach(popup => {
-                popup.classList.remove('show');
-            });
-        };
-
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 window.hideNotice();
@@ -1151,3 +1149,4 @@
         });
     </script>
 </body>
+</html>
