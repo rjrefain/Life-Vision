@@ -36,15 +36,14 @@
         }
 
         .firebase-status {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9em;
+            text-align: center;
+            margin: 20px 0;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 1em;
             font-weight: 600;
-            z-index: 1000;
             color: white;
+            display: inline-block;
         }
 
         .firebase-status.connected {
@@ -327,8 +326,6 @@
     </style>
 </head>
 <body>
-    <div class="firebase-status loading" id="firebaseStatus">🔄 Connecting...</div>
-    
     <div class="container">
         <h1>Video Production Rate Table</h1>
         
@@ -343,6 +340,10 @@
                 📅 <span id="current-date">Loading date...</span><br>
                 🕐 <span id="current-time">Loading time...</span> (Bangladesh Time)
             </div>
+        </div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <div class="firebase-status loading" id="firebaseStatus">🔄 Connecting...</div>
         </div>
         
         <div class="table-wrapper">
@@ -536,16 +537,16 @@
             onValue(testRef, (snapshot) => {
                 if (snapshot.val() === true) {
                     firebaseConnected = true;
-                    updateFirebaseStatus('connected', '🟢 Connected');
+                    updateFirebaseStatus('connected', '🟢 Firebase Server Connected');
                     loadTaskStates();
                 } else {
                     firebaseConnected = false;
-                    updateFirebaseStatus('disconnected', '🔴 Offline');
+                    updateFirebaseStatus('disconnected', '🔴 Firebase Server Disconnected');
                 }
             });
         } catch (error) {
             console.error('Firebase initialization failed:', error);
-            updateFirebaseStatus('disconnected', '🔴 Error');
+            updateFirebaseStatus('disconnected', '🔴 Firebase Server Error');
         }
 
         function updateFirebaseStatus(status, text) {
