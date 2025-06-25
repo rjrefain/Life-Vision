@@ -35,6 +35,30 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        .firebase-status {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            z-index: 1000;
+            color: white;
+        }
+
+        .firebase-status.connected {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .firebase-status.disconnected {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .firebase-status.loading {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
         .scrolling-container {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
@@ -176,57 +200,6 @@
             min-width: 40px;
         }
         
-        .stability-high {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
-        }
-        
-        .stability-average {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
-        }
-        
-        .stability-column {
-            text-align: center;
-            padding: 15px 10px;
-            min-width: 120px;
-        }
-        
-        .notice-none {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 8px 12px;
-            border-radius: 20px;
-            text-align: center;
-            font-weight: 600;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
-        }
-        
-        .notice-column {
-            text-align: center;
-            padding: 15px 10px;
-            min-width: 120px;
-        }
-
         .status-column {
             text-align: center;
             padding: 15px 10px;
@@ -249,6 +222,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            min-width: 100px;
         }
 
         .status-btn:hover {
@@ -263,6 +237,12 @@
 
         .status-btn.pending {
             animation: pulse-red 2s infinite;
+        }
+
+        .status-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         .celebration {
@@ -347,6 +327,8 @@
     </style>
 </head>
 <body>
+    <div class="firebase-status loading" id="firebaseStatus">🔄 Connecting...</div>
+    
     <div class="container">
         <h1>Video Production Rate Table</h1>
         
@@ -376,125 +358,125 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr data-task-id="rider-chronicles">
                         <td class="channel-name">Rider Chronicles</td>
                         <td class="client-name">Jaroslav</td>
                         <td class="collaborator">Imran</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">240 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Imran')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('rider-chronicles', 'Imran', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="wild-west-stories">
                         <td class="channel-name">Wild West Stories</td>
                         <td class="client-name">Jason</td>
                         <td class="collaborator">Imran</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Imran')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('wild-west-stories', 'Imran', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="built-from-zero">
                         <td class="channel-name">Built from Zero</td>
                         <td class="client-name">Jaroslav P2</td>
                         <td class="collaborator">Alamin</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Alamin')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('built-from-zero', 'Alamin', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="bruises-inside">
                         <td class="channel-name">Bruises Inside</td>
                         <td class="client-name">Jaroslav</td>
                         <td class="collaborator">Raju</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Raju')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('bruises-inside', 'Raju', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="parental-controls">
                         <td class="channel-name">Parental Controls</td>
                         <td class="client-name">Jaroslav</td>
                         <td class="collaborator">Raju</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Raju')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('parental-controls', 'Raju', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="she-who-dared">
                         <td class="channel-name">She Who Dared</td>
                         <td class="client-name">Jaroslav P2</td>
                         <td class="collaborator">Ramjan</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('she-who-dared', 'Ramjan', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="dressed-for-power">
                         <td class="channel-name">Dressed for Power</td>
                         <td class="client-name">Jaroslav P2</td>
                         <td class="collaborator">Ramjan</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">200 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('dressed-for-power', 'Ramjan', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="midnight-confession-anime">
                         <td class="channel-name">Midnight Confession Anime</td>
                         <td class="client-name">Jaroslav P2</td>
                         <td class="collaborator">Ramjan</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">200 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Ramjan')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('midnight-confession-anime', 'Ramjan', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="millionaire-files">
                         <td class="channel-name">The Millionaire Files</td>
                         <td class="client-name">Jaroslav P2</td>
                         <td class="collaborator">Mehedi</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Mehedi')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('millionaire-files', 'Mehedi', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="her-war-her-words">
                         <td class="channel-name">Her War Her Words</td>
                         <td class="client-name">Jaroslav P2</td>
                         <td class="collaborator">Mehedi</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Mehedi')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('her-war-her-words', 'Mehedi', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="wild-west-love-story">
                         <td class="channel-name">Wild West Love Story</td>
                         <td class="client-name">Jason</td>
                         <td class="collaborator">Robin</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Robin')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('wild-west-love-story', 'Robin', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="incredible-stories">
                         <td class="channel-name">Incredible Stories</td>
                         <td class="client-name">Jason</td>
                         <td class="collaborator">Robin</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Robin')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('incredible-stories', 'Robin', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="western-story-channel">
                         <td class="channel-name">Western Story Channel</td>
                         <td class="client-name">Jason</td>
                         <td class="collaborator">Robin</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Robin')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('western-story-channel', 'Robin', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="western-american-project">
                         <td class="channel-name">Western American Project</td>
                         <td class="client-name">Franco</td>
                         <td class="collaborator">Hasib</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">700 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Hasib')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('western-american-project', 'Hasib', this)">PENDING</button></td>
                     </tr>
-                    <tr>
+                    <tr data-task-id="jah-stories">
                         <td class="channel-name">Jah Stories</td>
                         <td class="client-name">Jason</td>
                         <td class="collaborator">Shakil</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="completeWork(this, 'Shakil')">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('jah-stories', 'Shakil', this)">PENDING</button></td>
                     </tr>
                 </tbody>
             </table>
@@ -525,7 +507,195 @@
         <span id="collaborator-name"></span> has completed their task!
     </div>
 
-    <script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
+            authDomain: "video-production-tracker-12c07.firebaseapp.com",
+            databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com/",
+            projectId: "video-production-tracker-12c07",
+            storageBucket: "video-production-tracker-12c07.appspot.com",
+            messagingSenderId: "126509441147",
+            appId: "1:126509441147:web:abc123def456"
+        };
+
+        // Initialize Firebase
+        let app, database;
+        let firebaseConnected = false;
+
+        try {
+            app = initializeApp(firebaseConfig);
+            database = getDatabase(app);
+            
+            // Test connection
+            const testRef = ref(database, '.info/connected');
+            onValue(testRef, (snapshot) => {
+                if (snapshot.val() === true) {
+                    firebaseConnected = true;
+                    updateFirebaseStatus('connected', '🟢 Connected');
+                    loadTaskStates();
+                } else {
+                    firebaseConnected = false;
+                    updateFirebaseStatus('disconnected', '🔴 Offline');
+                }
+            });
+        } catch (error) {
+            console.error('Firebase initialization failed:', error);
+            updateFirebaseStatus('disconnected', '🔴 Error');
+        }
+
+        function updateFirebaseStatus(status, text) {
+            const statusElement = document.getElementById('firebaseStatus');
+            statusElement.className = `firebase-status ${status}`;
+            statusElement.textContent = text;
+        }
+
+        // Load saved states when page loads
+        async function loadTaskStates() {
+            if (!firebaseConnected) return;
+            
+            try {
+                const tasksRef = ref(database, 'tasks');
+                const snapshot = await get(tasksRef);
+                
+                if (snapshot.exists()) {
+                    const tasks = snapshot.val();
+                    
+                    // Update UI based on saved states
+                    Object.keys(tasks).forEach(taskId => {
+                        const taskData = tasks[taskId];
+                        const row = document.querySelector(`tr[data-task-id="${taskId}"]`);
+                        
+                        if (row) {
+                            const button = row.querySelector('.status-btn');
+                            if (taskData.status === 'completed') {
+                                button.classList.remove('pending');
+                                button.classList.add('completed');
+                                button.textContent = 'COMPLETED';
+                                row.classList.remove('late-worker');
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading task states:', error);
+            }
+        }
+
+        // Save task state to Firebase
+        async function saveTaskState(taskId, status, collaborator) {
+            if (!firebaseConnected) return;
+            
+            try {
+                const taskRef = ref(database, `tasks/${taskId}`);
+                await set(taskRef, {
+                    status: status,
+                    collaborator: collaborator,
+                    timestamp: Date.now(),
+                    lastUpdated: new Date().toISOString()
+                });
+            } catch (error) {
+                console.error('Error saving task state:', error);
+            }
+        }
+
+        // Make function globally available
+        window.toggleTask = async function(taskId, collaboratorName, button) {
+            const isPending = button.classList.contains('pending');
+            const row = button.closest('tr');
+            
+            // Disable button temporarily
+            button.disabled = true;
+            
+            if (isPending) {
+                // Mark as completed
+                button.classList.remove('pending');
+                button.classList.add('completed');
+                button.textContent = 'COMPLETED';
+                row.classList.remove('late-worker');
+                
+                // Save to Firebase
+                await saveTaskState(taskId, 'completed', collaboratorName);
+                
+                // Show celebration
+                showCelebration(collaboratorName);
+            } else {
+                // Mark as pending
+                button.classList.remove('completed');
+                button.classList.add('pending');
+                button.textContent = 'PENDING';
+                
+                // Save to Firebase
+                await saveTaskState(taskId, 'pending', collaboratorName);
+                
+                // Check if should show late worker animation
+                checkLateWorker(row);
+            }
+            
+            // Re-enable button
+            setTimeout(() => {
+                button.disabled = false;
+            }, 1000);
+        }
+
+        function showCelebration(collaboratorName) {
+            const celebration = document.getElementById('celebration');
+            const nameSpan = document.getElementById('collaborator-name');
+            nameSpan.textContent = collaboratorName;
+            celebration.classList.add('show');
+            
+            setTimeout(() => {
+                celebration.classList.remove('show');
+            }, 3000);
+        }
+
+        function checkLateWorker(row) {
+            const bangladeshTime = new Date(new Date().getTime() + (6 * 60 * 60 * 1000));
+            const hours = bangladeshTime.getUTCHours();
+            if (hours >= 8 && hours < 14) {
+                row.classList.add('late-worker');
+            }
+        }
+
+        // Daily reset function
+        async function performDailyReset() {
+            if (!firebaseConnected) return;
+            
+            // Reset all tasks
+            const allButtons = document.querySelectorAll('.status-btn');
+            allButtons.forEach(async (button) => {
+                const row = button.closest('tr');
+                const taskId = row.getAttribute('data-task-id');
+                const collaborator = row.querySelector('.collaborator').textContent;
+                
+                button.classList.remove('completed');
+                button.classList.add('pending');
+                button.textContent = 'PENDING';
+                row.classList.remove('late-worker');
+                
+                // Save reset state to Firebase
+                await saveTaskState(taskId, 'pending', collaborator);
+            });
+            
+            showResetNotification();
+        }
+
+        function showResetNotification() {
+            const celebration = document.getElementById('celebration');
+            celebration.innerHTML = '🔄 Daily Reset Complete! 🔄<br>All tasks reset to pending';
+            celebration.classList.add('show');
+            
+            setTimeout(() => {
+                celebration.classList.remove('show');
+                celebration.innerHTML = '🎉 Excellent Work! 🎉<br><span id="collaborator-name"></span> has completed their task!';
+            }, 4000);
+        }
+
+        // Time and date functions
         function updateDateTime() {
             const now = new Date();
             
@@ -553,7 +723,7 @@
             document.getElementById('current-date').textContent = formattedDate;
             document.getElementById('current-time').textContent = formattedTime;
             
-            // Check for daily reset
+            // Check for daily reset at 8 AM Bangladesh time
             checkDailyReset(bangladeshTime);
         }
 
@@ -562,30 +732,17 @@
             const minutes = bangladeshTime.getUTCMinutes();
             const seconds = bangladeshTime.getUTCSeconds();
             
-            // Check if it's exactly 8:00:00 AM Bangladesh time
+            // Reset at exactly 8:00:00 AM Bangladesh time
             if (hours === 8 && minutes === 0 && seconds === 0) {
                 performDailyReset();
             }
             
-            // Check if we're in the 6-hour late period (8 AM - 2 PM)
+            // Show late worker animation between 8 AM - 2 PM
             if (hours >= 8 && hours < 14) {
                 markLateWorkers();
             } else {
                 clearLateWorkers();
             }
-        }
-
-        function performDailyReset() {
-            // Reset all buttons to pending
-            const allButtons = document.querySelectorAll('.status-btn');
-            allButtons.forEach(button => {
-                button.classList.remove('completed');
-                button.classList.add('pending');
-                button.textContent = 'PENDING';
-            });
-            
-            // Show reset notification
-            showResetNotification();
         }
 
         function markLateWorkers() {
@@ -607,55 +764,7 @@
             });
         }
 
-        function showResetNotification() {
-            const celebration = document.getElementById('celebration');
-            const nameSpan = document.getElementById('collaborator-name');
-            nameSpan.textContent = 'Daily Reset';
-            celebration.innerHTML = '🔄 Daily Reset Complete! 🔄<br><span id="collaborator-name">All tasks reset to pending</span>';
-            celebration.classList.add('show');
-            
-            setTimeout(() => {
-                celebration.classList.remove('show');
-                celebration.innerHTML = '🎉 Excellent Work! 🎉<br><span id="collaborator-name"></span> has completed their task!';
-            }, 4000);
-        }
-
-        function completeWork(button, collaboratorName) {
-            const isPending = button.classList.contains('pending');
-            const row = button.closest('tr');
-            
-            if (isPending) {
-                button.classList.remove('pending');
-                button.classList.add('completed');
-                button.textContent = 'COMPLETED';
-                
-                // Remove late worker blinking when completed
-                row.classList.remove('late-worker');
-                
-                // Show celebration
-                const celebration = document.getElementById('celebration');
-                const nameSpan = document.getElementById('collaborator-name');
-                nameSpan.textContent = collaboratorName;
-                celebration.classList.add('show');
-                
-                setTimeout(() => {
-                    celebration.classList.remove('show');
-                }, 3000);
-            } else {
-                button.classList.remove('completed');
-                button.classList.add('pending');
-                button.textContent = 'PENDING';
-                
-                // Check if we should add late worker blinking
-                const bangladeshTime = new Date(new Date().getTime() + (6 * 60 * 60 * 1000));
-                const hours = bangladeshTime.getUTCHours();
-                if (hours >= 8 && hours < 14) {
-                    row.classList.add('late-worker');
-                }
-            }
-        }
-
-        // Initialize
+        // Initialize everything
         updateDateTime();
         setInterval(updateDateTime, 1000);
     </script>
