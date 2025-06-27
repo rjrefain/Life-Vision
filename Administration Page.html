@@ -21,7 +21,7 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 900px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -141,6 +141,92 @@
 
         .logout-btn:hover {
             transform: scale(1.05);
+        }
+
+        .home-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+            margin-bottom: 30px;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.5);
+        }
+
+        /* Special Revenue Card */
+        .revenue-card {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(243, 156, 18, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .revenue-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        }
+
+        .revenue-card h2 {
+            margin: 0 0 20px 0;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .revenue-amounts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .currency-box {
+            background: rgba(255,255,255,0.15);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .currency-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .currency-amount {
+            font-size: 2.2em;
+            font-weight: 700;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .table-wrapper {
@@ -297,6 +383,20 @@
             font-size: 0.8em;
             z-index: 1000;
         }
+
+        .project-title {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            margin: 30px 0 20px 0;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -327,33 +427,31 @@
             </div>
         </div>
 
-        <a href="index.html" class="home-btn">🏠 Home</a>
-
-<style>
-.home-btn {
-   background: linear-gradient(135deg, #27ae60, #2ecc71);
-   color: white;
-   padding: 12px 25px;
-   text-decoration: none;
-   border-radius: 25px;
-   font-weight: 600;
-   display: inline-block;
-   transition: all 0.3s ease;
-   box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-}
-
-.home-btn:hover {
-   transform: translateY(-2px);
-   box-shadow: 0 8px 25px rgba(39, 174, 96, 0.5);
-}
-</style>
-
         <!-- Main Content (Hidden by default) -->
         <div class="main-content" id="mainContent">
             <button class="logout-btn" onclick="logout()">🚪 Logout</button>
             
+            <a href="index.html" class="home-btn">🏠 Home</a>
+
             <h1>💰 Video Production Payment Summary</h1>
             
+            <!-- Special Revenue Card -->
+            <div class="revenue-card">
+                <h2>💎 Total Company Revenue</h2>
+                <div class="revenue-amounts">
+                    <div class="currency-box">
+                        <div class="currency-label">💵 USD Amount</div>
+                        <div class="currency-amount" id="totalUSD">$1,274.50</div>
+                    </div>
+                    <div class="currency-box">
+                        <div class="currency-label">💰 BDT Amount</div>
+                        <div class="currency-amount" id="totalBDT">৳146,567.50</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project 1 Table -->
+            <div class="project-title">Jaroslav Project 1 (Refain)</div>
             <div class="table-wrapper">
                 <table>
                     <thead>
@@ -417,10 +515,109 @@
                         </tr>
                         <tr class="total-row">
                             <td><strong>TOTAL</strong></td>
-                            <td><strong>All Channels</strong></td>
+                            <td><strong>Project 1</strong></td>
                             <td><strong>151</strong></td>
                             <td><strong>$5.00</strong></td>
                             <td><strong>$755</strong></td>
+                            <td><strong>📊 Summary</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Project 2 Table -->
+            <div class="project-title">Jaroslav Project 2 (Eity)</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Channel Name</th>
+                            <th>Videos Produced</th>
+                            <th>Rate per Video</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="rank">🥇 1</td>
+                            <td class="channel-name">Her War Her Words</td>
+                            <td class="videos-count">24</td>
+                            <td class="rate">$3.50</td>
+                            <td class="amount correct">$84.00</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">🥈 2</td>
+                            <td class="channel-name">The Millionaire Files</td>
+                            <td class="videos-count">23</td>
+                            <td class="rate">$3.50</td>
+                            <td class="amount correct">$80.50</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">🥉 3</td>
+                            <td class="channel-name">Build from Zero</td>
+                            <td class="videos-count">22</td>
+                            <td class="rate">$3.50</td>
+                            <td class="amount correct">$77.00</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">🥉 3</td>
+                            <td class="channel-name">She Who Dared</td>
+                            <td class="videos-count">22</td>
+                            <td class="rate">$3.50</td>
+                            <td class="amount correct">$77.00</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">5</td>
+                            <td class="channel-name">Dressed for Power</td>
+                            <td class="videos-count">18</td>
+                            <td class="rate">$3.50</td>
+                            <td class="amount correct">$63.00</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">6</td>
+                            <td class="channel-name">Midnight Confessions Anime</td>
+                            <td class="videos-count">13</td>
+                            <td class="rate">$3.50</td>
+                            <td class="amount correct">$45.50</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">6</td>
+                            <td class="channel-name">The Love Letters</td>
+                            <td class="videos-count">13</td>
+                            <td class="rate">$3.50</td>
+                            <td class="amount correct">$45.50</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">8</td>
+                            <td class="channel-name">Raw Stories</td>
+                            <td class="videos-count">10</td>
+                            <td class="rate">$3.50</td>
+                            <td class="amount correct">$35.00</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">9</td>
+                            <td class="channel-name">Kin Stories</td>
+                            <td class="videos-count">4</td>
+                            <td class="rate">$3.50</td>
+                            <td class="amount correct">$14.00</td>
+                            <td>✅ Correct</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>Project 2</strong></td>
+                            <td><strong>149</strong></td>
+                            <td><strong>$3.50</strong></td>
+                            <td><strong>$521.50</strong></td>
                             <td><strong>📊 Summary</strong></td>
                         </tr>
                     </tbody>
@@ -438,7 +635,8 @@
         const validPasswords = [
             'LifeVision2024',
             'BrothersOnly',
-            'SecureAccess123'
+            'SecureAccess123',
+            'Life Vision'
         ];
 
         // Session management
@@ -449,7 +647,18 @@
         // Check if already authenticated on page load
         window.onload = function() {
             checkExistingSession();
+            calculateTotals();
         };
+
+        function calculateTotals() {
+            // Project 1 total: $755
+            // Project 2 total: $521.50
+            const totalUSD = 755 + 521.50;
+            const totalBDT = totalUSD * 115;
+            
+            document.getElementById('totalUSD').textContent = `$${totalUSD.toFixed(2)}`;
+            document.getElementById('totalBDT').textContent = `৳${totalBDT.toLocaleString('en-BD', {minimumFractionDigits: 2})}`;
+        }
 
         function checkExistingSession() {
             const session = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}');
