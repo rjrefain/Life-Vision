@@ -161,20 +161,19 @@
             box-shadow: 0 8px 25px rgba(39, 174, 96, 0.5);
         }
 
-        /* Special Revenue Card */
-        .revenue-card {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
+        /* Financial Summary Card */
+        .financial-summary-card {
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
             color: white;
             padding: 30px;
             border-radius: 20px;
-            text-align: center;
             margin-bottom: 40px;
-            box-shadow: 0 20px 40px rgba(243, 156, 18, 0.3);
+            box-shadow: 0 20px 40px rgba(241, 196, 15, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        .revenue-card::before {
+        .financial-summary-card::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -186,47 +185,67 @@
             animation: shine 3s infinite;
         }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-            100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-        }
-
-        .revenue-card h2 {
-            margin: 0 0 20px 0;
-            font-size: 2.5em;
+        .financial-summary-card h2 {
+            margin: 0 0 25px 0;
+            font-size: 2.2em;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 2px;
             text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            text-align: center;
         }
 
-        .revenue-amounts {
+        .financial-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
         }
 
-        .currency-box {
+        .financial-item {
             background: rgba(255,255,255,0.15);
             padding: 20px;
             border-radius: 15px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
         }
 
-        .currency-label {
+        .financial-item:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-5px);
+        }
+
+        .financial-icon {
+            font-size: 2.5em;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .financial-details {
+            flex: 1;
+        }
+
+        .financial-label {
             font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 8px;
             opacity: 0.9;
-            margin-bottom: 10px;
-            font-weight: 500;
         }
 
-        .currency-amount {
-            font-size: 2.2em;
+        .financial-amount {
+            font-size: 1.8em;
             font-weight: 700;
+            margin-bottom: 5px;
             text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .financial-bdt {
+            font-size: 1.2em;
+            font-weight: 500;
+            opacity: 0.8;
         }
         
         .table-wrapper {
@@ -514,17 +533,33 @@
 
             <h1>💰 Video Production Payment Summary</h1>
             
-            <!-- Special Revenue Card -->
-            <div class="revenue-card">
-                <h2>💎 Net Company Profit</h2>
-                <div class="revenue-amounts">
-                    <div class="currency-box">
-                        <div class="currency-label">💵 USD Profit</div>
-                        <div class="currency-amount" id="totalUSD">$1,130.41</div>
+            <!-- Financial Summary Card -->
+            <div class="financial-summary-card">
+                <h2>📊 Financial Overview</h2>
+                <div class="financial-grid">
+                    <div class="financial-item revenue">
+                        <div class="financial-icon">💰</div>
+                        <div class="financial-details">
+                            <div class="financial-label">Total Revenue</div>
+                            <div class="financial-amount">$1,276.50</div>
+                            <div class="financial-bdt">৳146,797.50</div>
+                        </div>
                     </div>
-                    <div class="currency-box">
-                        <div class="currency-label">💰 BDT Profit</div>
-                        <div class="currency-amount" id="totalBDT">৳129,997.50</div>
+                    <div class="financial-item costs">
+                        <div class="financial-icon">📉</div>
+                        <div class="financial-details">
+                            <div class="financial-label">Monthly Costs</div>
+                            <div class="financial-amount">$146.09</div>
+                            <div class="financial-bdt">৳16,800</div>
+                        </div>
+                    </div>
+                    <div class="financial-item profit">
+                        <div class="financial-icon">💎</div>
+                        <div class="financial-details">
+                            <div class="financial-label">Net Profit</div>
+                            <div class="financial-amount">$1,130.41</div>
+                            <div class="financial-bdt">৳129,997.50</div>
+                        </div>
                     </div>
                 </div>
             </div>
