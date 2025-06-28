@@ -495,6 +495,11 @@
             font-weight: 700;
             text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
     </style>
 </head>
 <body>
@@ -541,15 +546,15 @@
                         <div class="financial-icon">💰</div>
                         <div class="financial-details">
                             <div class="financial-label">Total Revenue</div>
-                            <div class="financial-amount">$1,276.50</div>
-                            <div class="financial-bdt">৳146,797.50</div>
+                            <div class="financial-amount">$2,104.95</div>
+                            <div class="financial-bdt">৳231,544.50</div>
                         </div>
                     </div>
                     <div class="financial-item costs">
                         <div class="financial-icon">📉</div>
                         <div class="financial-details">
                             <div class="financial-label">Monthly Costs</div>
-                            <div class="financial-amount">$146.09</div>
+                            <div class="financial-amount">$152.73</div>
                             <div class="financial-bdt">৳16,800</div>
                         </div>
                     </div>
@@ -557,8 +562,8 @@
                         <div class="financial-icon">💎</div>
                         <div class="financial-details">
                             <div class="financial-label">Net Profit</div>
-                            <div class="financial-amount">$1,130.41</div>
-                            <div class="financial-bdt">৳129,997.50</div>
+                            <div class="financial-amount">$1,952.22</div>
+                            <div class="financial-bdt">৳214,744.50</div>
                         </div>
                     </div>
                 </div>
@@ -738,6 +743,143 @@
                 </table>
             </div>
 
+            <!-- Jason's Production Table -->
+            <div class="project-title">Jason Hill - Individual Production</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Content Type</th>
+                            <th>Videos Produced</th>
+                            <th>Rate per Video</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="rank">🥇 1</td>
+                            <td class="channel-name">AI Story Series</td>
+                            <td class="videos-count">147</td>
+                            <td class="rate">$3.15</td>
+                            <td class="amount correct">$463.05</td>
+                            <td>✅ Premium Volume</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">🥈 2</td>
+                            <td class="channel-name">Celebrity Content</td>
+                            <td class="videos-count">30</td>
+                            <td class="rate">$3.60</td>
+                            <td class="amount correct">$108.00</td>
+                            <td>✅ High Quality</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">🥉 3</td>
+                            <td class="channel-name">Cheap AI Story</td>
+                            <td class="videos-count">16</td>
+                            <td class="rate">$2.25</td>
+                            <td class="amount correct">$36.00</td>
+                            <td>✅ Efficient</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">4</td>
+                            <td class="channel-name">Frugal Finds Daily</td>
+                            <td class="videos-count">3</td>
+                            <td class="rate">$9.00</td>
+                            <td class="amount correct">$27.00</td>
+                            <td>✅ Premium Rate</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>Jason Hill</strong></td>
+                            <td><strong>196</strong></td>
+                            <td><strong>$3.23</strong></td>
+                            <td><strong>$634.05</strong></td>
+                            <td><strong>🏆 Top Producer</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Franco Production Table -->
+            <div class="project-title">Franco - Premium Specialist</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Content Type</th>
+                            <th>Videos Produced</th>
+                            <th>Rate per Video</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="rank">🥇 1</td>
+                            <td class="channel-name">Premium Content</td>
+                            <td class="videos-count">7</td>
+                            <td class="rate">$18.00</td>
+                            <td class="amount correct">$126.00</td>
+                            <td>✅ Ultra Premium</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>Franco</strong></td>
+                            <td><strong>7</strong></td>
+                            <td><strong>$18.00</strong></td>
+                            <td><strong>$126.00</strong></td>
+                            <td><strong>💎 Specialist</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Umayer Production Table -->
+            <div class="project-title">M. Umayer - Rising Producer</div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Content Type</th>
+                            <th>Videos Produced</th>
+                            <th>Rate per Video</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="rank">🥇 1</td>
+                            <td class="channel-name">AI Video Series</td>
+                            <td class="videos-count">22</td>
+                            <td class="rate">$2.70</td>
+                            <td class="amount correct">$59.40</td>
+                            <td>✅ Volume Focus</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">🥈 2</td>
+                            <td class="channel-name">Celebrity Content</td>
+                            <td class="videos-count">2</td>
+                            <td class="rate">$4.50</td>
+                            <td class="amount correct">$9.00</td>
+                            <td>✅ Quality Work</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td><strong>TOTAL</strong></td>
+                            <td><strong>M. Umayer</strong></td>
+                            <td><strong>24</strong></td>
+                            <td><strong>$2.85</strong></td>
+                            <td><strong>$68.40</strong></td>
+                            <td><strong>⭐ Growing Star</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
             <!-- Scaling Cost Card -->
             <div class="scaling-card">
                 <h2>📊 Monthly Scaling Costs</h2>
@@ -768,7 +910,7 @@
                     </div>
                     <div class="cost-total">
                         <span class="cost-label"><strong>Total Monthly Cost</strong></span>
-                        <span class="cost-amount"><strong>৳16,800 ($146.09)</strong></span>
+                        <span class="cost-amount"><strong>৳16,800 ($152.73)</strong></span>
                     </div>
                 </div>
             </div>
@@ -796,18 +938,7 @@
         // Check if already authenticated on page load
         window.onload = function() {
             checkExistingSession();
-            calculateTotals();
         };
-
-        function calculateTotals() {
-            // Project 1 total: $755
-            // Project 2 total: $521.50
-            const totalUSD = 755 + 521.50;
-            const totalBDT = totalUSD * 115;
-            
-            document.getElementById('totalUSD').textContent = `$${totalUSD.toFixed(2)}`;
-            document.getElementById('totalBDT').textContent = `৳${totalBDT.toLocaleString('en-BD', {minimumFractionDigits: 2})}`;
-        }
 
         function checkExistingSession() {
             const session = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}');
