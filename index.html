@@ -78,6 +78,27 @@
             padding-left: 100%;
         }
 
+        /* Row scrolling containers */
+        .row-scrolling-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 0;
+            margin: 0;
+            border-radius: 5px;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .row-scrolling-text {
+            display: inline-block;
+            font-size: 0.9em;
+            font-weight: 500;
+            animation: scroll-left 30s linear infinite;
+            padding-left: 100%;
+        }
+
         @keyframes scroll-left {
             0% { transform: translateX(0); }
             100% { transform: translateX(-100%); }
@@ -98,6 +119,23 @@
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
             min-width: 400px;
+        }
+
+        .admin-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
         }
         
         .table-wrapper {
@@ -141,6 +179,25 @@
         
         tr:hover {
             background-color: #e3f2fd;
+        }
+
+        /* Custom row structure to include scrolling text */
+        .table-row-container {
+            width: 100%;
+        }
+
+        .table-row-container tr {
+            border-bottom: none;
+        }
+
+        .table-row-container tr:last-child td {
+            border-bottom: 1px solid #e8ecf0;
+            padding-bottom: 0;
+        }
+
+        .scrolling-cell {
+            padding: 0 !important;
+            border-bottom: 1px solid #e8ecf0;
         }
 
         tr.late-worker {
@@ -341,29 +398,12 @@
                 🕐 <span id="current-time">Loading time...</span> (Bangladesh Time)
             </div>
         </div>
+        
         <div style="text-align: center; margin: 20px 0; display: flex; justify-content: center; align-items: center; gap: 20px;">
-   <div class="firebase-status loading" id="firebaseStatus">🔄 Connecting...</div>
-   <a href="Administration Page.html" class="admin-btn">🔐 Administration</a>
-</div>
+            <div class="firebase-status loading" id="firebaseStatus">🔄 Connecting...</div>
+            <a href="Administration Page.html" class="admin-btn">🔐 Administration</a>
+        </div>
 
-<style>
-.admin-btn {
-   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-   color: white;
-   padding: 12px 25px;
-   text-decoration: none;
-   border-radius: 25px;
-   font-weight: 600;
-   display: inline-block;
-   transition: all 0.3s ease;
-   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-}
-
-.admin-btn:hover {
-   transform: translateY(-2px);
-   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-}
-</style>
         <div class="table-wrapper">
             <table>
                 <thead>
@@ -377,6 +417,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <!-- Rider Chronicles -->
                     <tr data-task-id="rider-chronicles">
                         <td class="channel-name">Rider Chronicles</td>
                         <td class="client-name">Jaroslav</td>
@@ -385,6 +426,17 @@
                         <td class="rate-bdt">240 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('rider-chronicles', 'Imran', this)">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Bruises Inside -->
                     <tr data-task-id="bruises-inside">
                         <td class="channel-name">Bruises Inside</td>
                         <td class="client-name">Jaroslav</td>
@@ -393,6 +445,17 @@
                         <td class="rate-bdt">250 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('bruises-inside', 'Raju', this)">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Parental Controls -->
                     <tr data-task-id="parental-controls">
                         <td class="channel-name">Parental Controls</td>
                         <td class="client-name">Jaroslav</td>
@@ -401,6 +464,17 @@
                         <td class="rate-bdt">250 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('parental-controls', 'Raju', this)">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- She Who Dared -->
                     <tr data-task-id="she-who-dared">
                         <td class="channel-name">She Who Dared</td>
                         <td class="client-name">Jaroslav P2</td>
@@ -409,6 +483,17 @@
                         <td class="rate-bdt">150 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('she-who-dared', 'Ramjan', this)">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Dressed for Power -->
                     <tr data-task-id="dressed-for-power">
                         <td class="channel-name">Dressed for Power</td>
                         <td class="client-name">Jaroslav P2</td>
@@ -417,6 +502,17 @@
                         <td class="rate-bdt">200 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('dressed-for-power', 'Ramjan', this)">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Midnight Confession Anime -->
                     <tr data-task-id="midnight-confession-anime">
                         <td class="channel-name">Midnight Confession Anime</td>
                         <td class="client-name">Jaroslav P2</td>
@@ -425,6 +521,17 @@
                         <td class="rate-bdt">200 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('midnight-confession-anime', 'Ramjan', this)">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Her War Her Words -->
                     <tr data-task-id="her-war-her-words">
                         <td class="channel-name">Her War Her Words</td>
                         <td class="client-name">Jaroslav P2</td>
@@ -433,6 +540,17 @@
                         <td class="rate-bdt">150 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('her-war-her-words', 'Mehedi', this)">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Incredible Stories -->
                     <tr data-task-id="incredible-stories">
                         <td class="channel-name">Incredible Stories</td>
                         <td class="client-name">Jason</td>
@@ -441,6 +559,17 @@
                         <td class="rate-bdt">250 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('incredible-stories', 'Robin', this)">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Western Story Channel -->
                     <tr data-task-id="western-story-channel">
                         <td class="channel-name">Western Story Channel</td>
                         <td class="client-name">Jason</td>
@@ -449,6 +578,17 @@
                         <td class="rate-bdt">250 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('western-story-channel', 'Robin', this)">PENDING</button></td>
                     </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Jah Stories -->
                     <tr data-task-id="jah-stories">
                         <td class="channel-name">Jah Stories</td>
                         <td class="client-name">Jason</td>
@@ -457,297 +597,341 @@
                         <td class="rate-bdt">250 BDT</td>
                         <td class="status-column"><button class="status-btn pending" onclick="toggleTask('jah-stories', 'Shakil', this)">PENDING</button></td>
                     </tr>
-                    <tr data-task-id="jah-stories">
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Hoa Chronicles -->
+                    <tr data-task-id="hoa-chronicles">
                         <td class="channel-name">Hoa Chronicles</td>
                         <td class="client-name">Jason</td>
                         <td class="collaborator">Alamin</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('jah-stories', 'Shakil', this)">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('hoa-chronicles', 'Alamin', this)">PENDING</button></td>
                     </tr>
-                    <tr data-task-id="jah-stories">
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- She Was Brave -->
+                    <tr data-task-id="she-was-brave">
                         <td class="channel-name">She Was Brave</td>
                         <td class="client-name">Jason</td>
                         <td class="collaborator">Hasib</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('jah-stories', 'Shakil', this)">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('she-was-brave', 'Hasib', this)">PENDING</button></td>
                     </tr>
-                    <tr data-task-id="jah-stories">
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- She Was A Hero -->
+                    <tr data-task-id="she-was-a-hero">
                         <td class="channel-name">She Was A Hero</td>
                         <td class="client-name">Jason</td>
                         <td class="collaborator">Hasib</td>
                         <td class="daily-videos">1</td>
                         <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('jah-stories', 'Shakil', this)">PENDING</button></td>
+                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('she-was-a-hero', 'Hasib', this)">PENDING</button></td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="scrolling-cell">
+                            <div class="row-scrolling-container">
+                                <div class="row-scrolling-text">
+                                    এইখানে প্রতিটা চ্যানেলে কিভাবে কাজ করবেন তা লেখা থাকবে । (ওয়েবসাইটের কাজ চলছে)
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>
-    <div class="celebration" id="celebration">
-        🎉 Excellent Work! 🎉<br>
-        <span id="collaborator-name"></span> has completed their task!
-    </div>
+        </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        <div class="celebration" id="celebration">
+            🎉 Excellent Work! 🎉<br>
+            <span id="collaborator-name"></span> has completed their task!
+        </div>
 
-        // Your Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
-            authDomain: "video-production-tracker-12c07.firebaseapp.com",
-            databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com/",
-            projectId: "video-production-tracker-12c07",
-            storageBucket: "video-production-tracker-12c07.appspot.com",
-            messagingSenderId: "126509441147",
-            appId: "1:126509441147:web:abc123def456"
-        };
+        <!-- Firebase SDK -->
+        <script type="module">
+            import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+            import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-        // Initialize Firebase
-        let app, database;
-        let firebaseConnected = false;
+            // Your Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
+                authDomain: "video-production-tracker-12c07.firebaseapp.com",
+                databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com/",
+                projectId: "video-production-tracker-12c07",
+                storageBucket: "video-production-tracker-12c07.appspot.com",
+                messagingSenderId: "126509441147",
+                appId: "1:126509441147:web:abc123def456"
+            };
 
-        try {
-            app = initializeApp(firebaseConfig);
-            database = getDatabase(app);
-            
-            // Test connection
-            const testRef = ref(database, '.info/connected');
-            onValue(testRef, (snapshot) => {
-                if (snapshot.val() === true) {
-                    firebaseConnected = true;
-                    updateFirebaseStatus('connected', '🟢 Firebase Server Connected');
-                    loadTaskStates();
-                } else {
-                    firebaseConnected = false;
-                    updateFirebaseStatus('disconnected', '🔴 Firebase Server Disconnected');
-                }
-            });
-        } catch (error) {
-            console.error('Firebase initialization failed:', error);
-            updateFirebaseStatus('disconnected', '🔴 Firebase Server Error');
-        }
+            // Initialize Firebase
+            let app, database;
+            let firebaseConnected = false;
 
-        function updateFirebaseStatus(status, text) {
-            const statusElement = document.getElementById('firebaseStatus');
-            statusElement.className = `firebase-status ${status}`;
-            statusElement.textContent = text;
-        }
-
-        // Load saved states when page loads
-        async function loadTaskStates() {
-            if (!firebaseConnected) return;
-            
             try {
-                const tasksRef = ref(database, 'tasks');
-                const snapshot = await get(tasksRef);
+                app = initializeApp(firebaseConfig);
+                database = getDatabase(app);
                 
-                if (snapshot.exists()) {
-                    const tasks = snapshot.val();
-                    
-                    // Update UI based on saved states
-                    Object.keys(tasks).forEach(taskId => {
-                        const taskData = tasks[taskId];
-                        const row = document.querySelector(`tr[data-task-id="${taskId}"]`);
-                        
-                        if (row) {
-                            const button = row.querySelector('.status-btn');
-                            if (taskData.status === 'completed') {
-                                button.classList.remove('pending');
-                                button.classList.add('completed');
-                                button.textContent = 'COMPLETED';
-                                row.classList.remove('late-worker');
-                            }
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('Error loading task states:', error);
-            }
-        }
-
-        // Save task state to Firebase
-        async function saveTaskState(taskId, status, collaborator) {
-            if (!firebaseConnected) return;
-            
-            try {
-                const taskRef = ref(database, `tasks/${taskId}`);
-                await set(taskRef, {
-                    status: status,
-                    collaborator: collaborator,
-                    timestamp: Date.now(),
-                    lastUpdated: new Date().toISOString()
+                // Test connection
+                const testRef = ref(database, '.info/connected');
+                onValue(testRef, (snapshot) => {
+                    if (snapshot.val() === true) {
+                        firebaseConnected = true;
+                        updateFirebaseStatus('connected', '🟢 Firebase Server Connected');
+                        loadTaskStates();
+                    } else {
+                        firebaseConnected = false;
+                        updateFirebaseStatus('disconnected', '🔴 Firebase Server Disconnected');
+                    }
                 });
             } catch (error) {
-                console.error('Error saving task state:', error);
+                console.error('Firebase initialization failed:', error);
+                updateFirebaseStatus('disconnected', '🔴 Firebase Server Error');
             }
-        }
 
-        // Make function globally available
-        window.toggleTask = async function(taskId, collaboratorName, button) {
-            const isPending = button.classList.contains('pending');
-            const row = button.closest('tr');
-            
-            // Disable button temporarily
-            button.disabled = true;
-            
-            if (isPending) {
-                // Mark as completed
-                button.classList.remove('pending');
-                button.classList.add('completed');
-                button.textContent = 'COMPLETED';
-                row.classList.remove('late-worker');
-                
-                // Save to Firebase
-                await saveTaskState(taskId, 'completed', collaboratorName);
-                
-                // Show celebration
-                showCelebration(collaboratorName);
-            } else {
-                // Mark as pending
-                button.classList.remove('completed');
-                button.classList.add('pending');
-                button.textContent = 'PENDING';
-                
-                // Save to Firebase
-                await saveTaskState(taskId, 'pending', collaboratorName);
-                
-                // Check if should show late worker animation
-                checkLateWorker(row);
+            function updateFirebaseStatus(status, text) {
+                const statusElement = document.getElementById('firebaseStatus');
+                statusElement.className = `firebase-status ${status}`;
+                statusElement.textContent = text;
             }
-            
-            // Re-enable button
-            setTimeout(() => {
-                button.disabled = false;
-            }, 1000);
-        }
 
-        function showCelebration(collaboratorName) {
-            const celebration = document.getElementById('celebration');
-            const nameSpan = document.getElementById('collaborator-name');
-            nameSpan.textContent = collaboratorName;
-            celebration.classList.add('show');
-            
-            setTimeout(() => {
-                celebration.classList.remove('show');
-            }, 3000);
-        }
-
-        function checkLateWorker(row) {
-            const bangladeshTime = new Date(new Date().getTime() + (6 * 60 * 60 * 1000));
-            const hours = bangladeshTime.getUTCHours();
-            if (hours >= 8 && hours < 14) {
-                row.classList.add('late-worker');
-            }
-        }
-
-        // Daily reset function
-        async function performDailyReset() {
-            if (!firebaseConnected) return;
-            
-            // Reset all tasks
-            const allButtons = document.querySelectorAll('.status-btn');
-            allButtons.forEach(async (button) => {
-                const row = button.closest('tr');
-                const taskId = row.getAttribute('data-task-id');
-                const collaborator = row.querySelector('.collaborator').textContent;
+            // Load saved states when page loads
+            async function loadTaskStates() {
+                if (!firebaseConnected) return;
                 
-                button.classList.remove('completed');
-                button.classList.add('pending');
-                button.textContent = 'PENDING';
-                row.classList.remove('late-worker');
-                
-                // Save reset state to Firebase
-                await saveTaskState(taskId, 'pending', collaborator);
-            });
-            
-            showResetNotification();
-        }
-
-        function showResetNotification() {
-            const celebration = document.getElementById('celebration');
-            celebration.innerHTML = '🔄 Daily Reset Complete! 🔄<br>All tasks reset to pending';
-            celebration.classList.add('show');
-            
-            setTimeout(() => {
-                celebration.classList.remove('show');
-                celebration.innerHTML = '🎉 Excellent Work! 🎉<br><span id="collaborator-name"></span> has completed their task!';
-            }, 4000);
-        }
-
-        // Time and date functions
-        function updateDateTime() {
-            const now = new Date();
-            
-            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            
-            const dayName = days[now.getDay()];
-            const monthName = months[now.getMonth()];
-            const date = now.getDate();
-            const year = now.getFullYear();
-            
-            // Bangladesh time (UTC+6)
-            const bangladeshTime = new Date(now.getTime() + (6 * 60 * 60 * 1000));
-            let hours = bangladeshTime.getUTCHours();
-            const minutes = bangladeshTime.getUTCMinutes().toString().padStart(2, '0');
-            const seconds = bangladeshTime.getUTCSeconds().toString().padStart(2, '0');
-            
-            const ampm = hours >= 12 ? 'PM' : 'AM';
-            hours = hours % 12;
-            hours = hours ? hours : 12;
-            
-            const formattedDate = `${dayName}, ${monthName} ${date}, ${year}`;
-            const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
-            
-            document.getElementById('current-date').textContent = formattedDate;
-            document.getElementById('current-time').textContent = formattedTime;
-            
-            // Check for daily reset at 8 AM Bangladesh time
-            checkDailyReset(bangladeshTime);
-        }
-
-        function checkDailyReset(bangladeshTime) {
-            const hours = bangladeshTime.getUTCHours();
-            const minutes = bangladeshTime.getUTCMinutes();
-            const seconds = bangladeshTime.getUTCSeconds();
-            
-            // Reset at exactly 8:00:00 AM Bangladesh time
-            if (hours === 8 && minutes === 0 && seconds === 0) {
-                performDailyReset();
-            }
-            
-            // Show late worker animation between 8 AM - 2 PM
-            if (hours >= 8 && hours < 14) {
-                markLateWorkers();
-            } else {
-                clearLateWorkers();
-            }
-        }
-
-        function markLateWorkers() {
-            const tableRows = document.querySelectorAll('tbody tr');
-            tableRows.forEach(row => {
-                const button = row.querySelector('.status-btn');
-                if (button && button.classList.contains('pending')) {
-                    row.classList.add('late-worker');
-                } else {
-                    row.classList.remove('late-worker');
+                try {
+                    const tasksRef = ref(database, 'tasks');
+                    const snapshot = await get(tasksRef);
+                    
+                    if (snapshot.exists()) {
+                        const tasks = snapshot.val();
+                        
+                        // Update UI based on saved states
+                        Object.keys(tasks).forEach(taskId => {
+                            const taskData = tasks[taskId];
+                            const row = document.querySelector(`tr[data-task-id="${taskId}"]`);
+                            
+                            if (row) {
+                                const button = row.querySelector('.status-btn');
+                                if (taskData.status === 'completed') {
+                                    button.classList.remove('pending');
+                                    button.classList.add('completed');
+                                    button.textContent = 'COMPLETED';
+                                    row.classList.remove('late-worker');
+                                }
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error loading task states:', error);
                 }
-            });
-        }
+            }
 
-        function clearLateWorkers() {
-            const tableRows = document.querySelectorAll('tbody tr');
-            tableRows.forEach(row => {
-                row.classList.remove('late-worker');
-            });
-        }
+            // Save task state to Firebase
+            async function saveTaskState(taskId, status, collaborator) {
+                if (!firebaseConnected) return;
+                
+                try {
+                    const taskRef = ref(database, `tasks/${taskId}`);
+                    await set(taskRef, {
+                        status: status,
+                        collaborator: collaborator,
+                        timestamp: Date.now(),
+                        lastUpdated: new Date().toISOString()
+                    });
+                } catch (error) {
+                    console.error('Error saving task state:', error);
+                }
+            }
 
-        // Initialize everything
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-    </script>
-</body>
+            // Make function globally available
+            window.toggleTask = async function(taskId, collaboratorName, button) {
+                const isPending = button.classList.contains('pending');
+                const row = button.closest('tr');
+                
+                // Disable button temporarily
+                button.disabled = true;
+                
+                if (isPending) {
+                    // Mark as completed
+                    button.classList.remove('pending');
+                    button.classList.add('completed');
+                    button.textContent = 'COMPLETED';
+                    row.classList.remove('late-worker');
+                    
+                    // Save to Firebase
+                    await saveTaskState(taskId, 'completed', collaboratorName);
+                    
+                    // Show celebration
+                    showCelebration(collaboratorName);
+                } else {
+                    // Mark as pending
+                    button.classList.remove('completed');
+                    button.classList.add('pending');
+                    button.textContent = 'PENDING';
+                    
+                    // Save to Firebase
+                    await saveTaskState(taskId, 'pending', collaboratorName);
+                    
+                    // Check if should show late worker animation
+                    checkLateWorker(row);
+                }
+                
+                // Re-enable button
+                setTimeout(() => {
+                    button.disabled = false;
+                }, 1000);
+            }
+
+            function showCelebration(collaboratorName) {
+                const celebration = document.getElementById('celebration');
+                const nameSpan = document.getElementById('collaborator-name');
+                nameSpan.textContent = collaboratorName;
+                celebration.classList.add('show');
+                
+                setTimeout(() => {
+                    celebration.classList.remove('show');
+                }, 3000);
+            }
+
+            function checkLateWorker(row) {
+                const bangladeshTime = new Date(new Date().getTime() + (6 * 60 * 60 * 1000));
+                const hours = bangladeshTime.getUTCHours();
+                if (hours >= 8 && hours < 14) {
+                    row.classList.add('late-worker');
+                }
+            }
+
+            // Daily reset function
+            async function performDailyReset() {
+                if (!firebaseConnected) return;
+                
+                // Reset all tasks
+                const allButtons = document.querySelectorAll('.status-btn');
+                allButtons.forEach(async (button) => {
+                    const row = button.closest('tr');
+                    const taskId = row.getAttribute('data-task-id');
+                    const collaborator = row.querySelector('.collaborator').textContent;
+                    
+                    button.classList.remove('completed');
+                    button.classList.add('pending');
+                    button.textContent = 'PENDING';
+                    row.classList.remove('late-worker');
+                    
+                    // Save reset state to Firebase
+                    await saveTaskState(taskId, 'pending', collaborator);
+                });
+                
+                showResetNotification();
+            }
+
+            function showResetNotification() {
+                const celebration = document.getElementById('celebration');
+                celebration.innerHTML = '🔄 Daily Reset Complete! 🔄<br>All tasks reset to pending';
+                celebration.classList.add('show');
+                
+                setTimeout(() => {
+                    celebration.classList.remove('show');
+                    celebration.innerHTML = '🎉 Excellent Work! 🎉<br><span id="collaborator-name"></span> has completed their task!';
+                }, 4000);
+            }
+
+            // Time and date functions
+            function updateDateTime() {
+                const now = new Date();
+                
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                
+                const dayName = days[now.getDay()];
+                const monthName = months[now.getMonth()];
+                const date = now.getDate();
+                const year = now.getFullYear();
+                
+                // Bangladesh time (UTC+6)
+                const bangladeshTime = new Date(now.getTime() + (6 * 60 * 60 * 1000));
+                let hours = bangladeshTime.getUTCHours();
+                const minutes = bangladeshTime.getUTCMinutes().toString().padStart(2, '0');
+                const seconds = bangladeshTime.getUTCSeconds().toString().padStart(2, '0');
+                
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12;
+                hours = hours ? hours : 12;
+                
+                const formattedDate = `${dayName}, ${monthName} ${date}, ${year}`;
+                const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
+                
+                document.getElementById('current-date').textContent = formattedDate;
+                document.getElementById('current-time').textContent = formattedTime;
+                
+                // Check for daily reset at 8 AM Bangladesh time
+                checkDailyReset(bangladeshTime);
+            }
+
+            function checkDailyReset(bangladeshTime) {
+                const hours = bangladeshTime.getUTCHours();
+                const minutes = bangladeshTime.getUTCMinutes();
+                const seconds = bangladeshTime.getUTCSeconds();
+                
+                // Reset at exactly 8:00:00 AM Bangladesh time
+                if (hours === 8 && minutes === 0 && seconds === 0) {
+                    performDailyReset();
+                }
+                
+                // Show late worker animation between 8 AM - 2 PM
+                if (hours >= 8 && hours < 14) {
+                    markLateWorkers();
+                } else {
+                    clearLateWorkers();
+                }
+            }
+
+            function markLateWorkers() {
+                const tableRows = document.querySelectorAll('tbody tr');
+                tableRows.forEach(row => {
+                    const button = row.querySelector('.status-btn');
+                    if (button && button.classList.contains('pending')) {
+                        row.classList.add('late-worker');
+                    } else {
+                        row.classList.remove('late-worker');
+                    }
+                });
+            }
+
+            function clearLateWorkers() {
+                const tableRows = document.querySelectorAll('tbody tr');
+                tableRows.forEach(row => {
+                    row.classList.remove('late-worker');
+                });
+            }
+
+            // Initialize everything
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
+        </script>
+    </body>
 </html>
