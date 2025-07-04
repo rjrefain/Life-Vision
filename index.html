@@ -30,7 +30,7 @@
             text-align: center;
             color: #2c3e50;
             margin-bottom: 15px;
-            font-size: 1.5em;
+            font-size: 1.8em;
             font-weight: 300;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
@@ -38,9 +38,9 @@
         .firebase-status {
             text-align: center;
             margin: 10px 0;
-            padding: 8px 15px;
+            padding: 10px 18px;
             border-radius: 20px;
-            font-size: 0.9em;
+            font-size: 1em;
             font-weight: 600;
             color: white;
             display: inline-block;
@@ -61,7 +61,7 @@
         .scrolling-container {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
-            padding: 10px 0;
+            padding: 12px 0;
             margin: 15px 0;
             border-radius: 8px;
             overflow: hidden;
@@ -72,7 +72,7 @@
 
         .scrolling-text {
             display: inline-block;
-            font-size: 0.9em;
+            font-size: 1em;
             font-weight: 600;
             animation: scroll-left 45s linear infinite;
             padding-left: 100%;
@@ -91,10 +91,10 @@
         .date-time-box {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 10px 15px;
+            padding: 12px 18px;
             border-radius: 20px;
             display: inline-block;
-            font-size: 0.85em;
+            font-size: 1em;
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
@@ -102,14 +102,14 @@
         .admin-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 8px 20px;
+            padding: 10px 22px;
             text-decoration: none;
             border-radius: 20px;
             font-weight: 600;
             display: inline-block;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            font-size: 0.9em;
+            font-size: 1em;
         }
 
         .admin-btn:hover {
@@ -131,17 +131,18 @@
             overflow-x: auto;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin: 0 -5px;
+            margin: 0;
         }
         
         table {
             width: 100%;
-            min-width: 800px;
+            max-width: 100%;
             border-collapse: collapse;
             background: white;
             border-radius: 8px;
             overflow: hidden;
-            font-size: 0.75em;
+            font-size: 1em;
+            table-layout: fixed;
         }
         
         th {
@@ -150,17 +151,26 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            padding: 8px 4px;
+            padding: 12px 8px;
             text-align: left;
-            font-size: 0.7em;
+            font-size: 0.9em;
         }
+
+        th:nth-child(1) { width: 25%; } /* Channel Name */
+        th:nth-child(2) { width: 15%; } /* Client Name */
+        th:nth-child(3) { width: 15%; } /* Collaborator */
+        th:nth-child(4) { width: 10%; } /* Daily Videos */
+        th:nth-child(5) { width: 15%; } /* Rate */
+        th:nth-child(6) { width: 20%; } /* Status */
         
         td {
-            padding: 6px 4px;
+            padding: 12px 8px;
             border-bottom: 1px solid #e8ecf0;
             transition: background-color 0.3s ease;
             position: relative;
             vertical-align: middle;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
         
         tr:nth-child(even) {
@@ -175,33 +185,34 @@
         .channel-name {
             font-weight: 600;
             color: #2c3e50;
-            font-size: 0.75em;
+            font-size: 0.9em;
             word-wrap: break-word;
+            line-height: 1.3;
         }
         
         .client-name {
             color: #7b68ee;
             font-weight: 500;
-            font-size: 0.75em;
+            font-size: 0.9em;
         }
         
         .collaborator {
             color: #20b2aa;
             font-weight: 500;
-            font-size: 0.75em;
+            font-size: 0.9em;
         }
         
         .rate-bdt {
             font-weight: 700;
             color: #27ae60;
-            font-size: 0.75em;
+            font-size: 0.9em;
         }
         
         .daily-videos {
             text-align: center;
             font-weight: 600;
             color: #8e44ad;
-            font-size: 0.75em;
+            font-size: 0.9em;
         }
 
         /* Color Y (Green) - Override with green colors */
@@ -227,17 +238,18 @@
         
         .status-column {
             text-align: center;
-            padding: 8px 4px;
+            padding: 12px 8px;
+            width: 20%;
         }
 
         .status-btn {
             background: linear-gradient(135deg, #e74c3c, #c0392b);
             color: white;
-            padding: 6px 10px;
-            border-radius: 15px;
+            padding: 12px 16px;
+            border-radius: 25px;
             text-align: center;
             font-weight: 600;
-            font-size: 0.65em;
+            font-size: 0.85em;
             text-transform: uppercase;
             letter-spacing: 0.5px;
             box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
@@ -246,7 +258,8 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            min-width: 70px;
+            width: 100%;
+            max-width: 120px;
         }
 
         .status-btn:hover {
@@ -298,7 +311,7 @@
 
         .row-scrolling-text {
             display: inline-block;
-            font-size: 0.8em;
+            font-size: 1em;
             font-weight: 700;
             animation: scroll-left 30s linear infinite;
             padding-left: 100%;
@@ -390,13 +403,13 @@
             }
             
             h1 {
-                font-size: 1.2em;
+                font-size: 1.4em;
                 margin-bottom: 10px;
             }
             
             .date-time-box {
-                font-size: 0.75em;
-                padding: 8px 12px;
+                font-size: 0.9em;
+                padding: 10px 15px;
             }
             
             .controls-container {
@@ -404,46 +417,45 @@
             }
             
             .firebase-status {
-                font-size: 0.8em;
-                padding: 6px 12px;
+                font-size: 0.9em;
+                padding: 8px 15px;
             }
             
             .admin-btn {
-                font-size: 0.8em;
-                padding: 6px 15px;
+                font-size: 0.9em;
+                padding: 8px 18px;
             }
             
             .scrolling-container {
                 margin: 10px 0;
-                padding: 8px 0;
+                padding: 10px 0;
             }
             
             .scrolling-text {
-                font-size: 0.8em;
+                font-size: 0.9em;
             }
             
             table {
-                font-size: 0.65em;
-                min-width: 700px;
+                font-size: 0.85em;
             }
             
             th {
-                padding: 6px 3px;
-                font-size: 0.65em;
+                padding: 8px 4px;
+                font-size: 0.8em;
             }
             
             td {
-                padding: 4px 3px;
+                padding: 8px 4px;
             }
             
             .status-btn {
-                padding: 4px 8px;
-                font-size: 0.6em;
-                min-width: 60px;
+                padding: 8px 10px;
+                font-size: 0.75em;
+                max-width: 100px;
             }
             
             .row-scrolling-text {
-                font-size: 0.7em;
+                font-size: 0.85em;
             }
             
             .celebration {
@@ -459,36 +471,35 @@
             }
             
             h1 {
-                font-size: 1.1em;
+                font-size: 1.2em;
             }
             
             .date-time-box {
-                font-size: 0.7em;
-                padding: 6px 10px;
+                font-size: 0.8em;
+                padding: 8px 12px;
             }
             
             table {
-                font-size: 0.6em;
-                min-width: 600px;
+                font-size: 0.8em;
             }
             
             th {
-                padding: 4px 2px;
-                font-size: 0.6em;
+                padding: 6px 3px;
+                font-size: 0.75em;
             }
             
             td {
-                padding: 3px 2px;
+                padding: 6px 3px;
             }
             
             .status-btn {
-                padding: 3px 6px;
-                font-size: 0.55em;
-                min-width: 50px;
+                padding: 6px 8px;
+                font-size: 0.7em;
+                max-width: 85px;
             }
             
             .row-scrolling-text {
-                font-size: 0.65em;
+                font-size: 0.8em;
             }
         }
     </style>
