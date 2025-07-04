@@ -1,518 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Production Tracker</title>
-    <style>
-        :root {
-            --primary-color: #667eea;
-            --secondary-color: #764ba2;
-            --success-color: #27ae60;
-            --danger-color: #e74c3c;
-            --light-color: #f8f9fa;
-            --dark-color: #2c3e50;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            min-height: 100vh;
-            color: var(--dark-color);
-        }
-        
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        h1 {
-            color: var(--dark-color);
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        /* Header Section */
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-        
-        /* Status Indicator */
-        .status-container {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        #firebaseStatus {
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 600;
-            color: white;
-            display: inline-block;
-            background: linear-gradient(135deg, var(--success-color), #2ecc71);
-        }
-        
-        /* Date-Time Display */
-        #currentDateTime {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            display: inline-block;
-        }
-        
-        /* Admin Button */
-        .admin-btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .admin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-        }
-        
-        /* Table Styles */
-        .table-wrapper {
-            overflow-x: auto;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #e8ecf0;
-        }
-        
-        th {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-        }
-        
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        
-        tr:hover {
-            background-color: #e3f2fd;
-        }
-        
-        /* Button Styles */
-        .status-btn {
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-        }
-        
-        .status-btn.completed {
-            background: linear-gradient(135deg, var(--success-color), #2ecc71);
-        }
-        
-        /* Status Badges */
-        .status-badge {
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 0.85em;
-            text-transform: uppercase;
-            display: inline-block;
-        }
-        
-        .status-pending {
-            background-color: #ffecb3;
-            color: #ff9800;
-        }
-        
-        .status-completed {
-            background-color: #c8e6c9;
-            color: #388e3c;
-        }
-        
-        /* Late Worker Highlight */
-        .late-worker {
-            animation: late-pulse 1.5s infinite alternate;
-            border-left: 3px solid var(--danger-color);
-        }
-        
-        @keyframes late-pulse {
-            0% { background-color: #ffebee; }
-            100% { background-color: #ffcdd2; }
-        }
-        
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-            
-            .header-section {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            th, td {
-                padding: 8px 10px;
-                font-size: 0.9em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Video Production Tracker</title>
+  <style>
+    :root {
+      --primary-color: #667eea;
+      --secondary-color: #764ba2;
+      --success-color: #27ae60;
+      --danger-color: #e74c3c;
+      --light-color: #f8f9fa;
+      --dark-color: #2c3e50;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      min-height: 100vh;
+      color: var(--dark-color);
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      color: var(--dark-color);
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .status-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #firebaseStatus {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      color: white;
+      display: inline-block;
+      background: linear-gradient(135deg, var(--success-color), #2ecc71);
+    }
+
+    #currentDateTime {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+
+    .admin-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .admin-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+    }
+
+    .form-section {
+      margin-bottom: 30px;
+    }
+
+    .form-section input, .form-section textarea {
+      margin: 5px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: calc(100% - 20px);
+      max-width: 280px;
+    }
+
+    .form-section button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: var(--success-color);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .form-section button:hover {
+      background: #219150;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border-bottom: 1px solid #e8ecf0;
+    }
+
+    th {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      position: sticky;
+      top: 0;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f8f9fa;
+    }
+
+    tr:hover {
+      background-color: #e3f2fd;
+    }
+
+    .status-btn {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+    }
+
+    .status-btn.completed {
+      background: linear-gradient(135deg, var(--success-color), #2ecc71);
+    }
+
+    .delete-btn {
+      background: var(--danger-color);
+      color: white;
+      margin-left: 5px;
+    }
+
+    .status-badge {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.85em;
+      text-transform: uppercase;
+      display: inline-block;
+    }
+
+    .status-pending {
+      background-color: #ffecb3;
+      color: #ff9800;
+    }
+
+    .status-completed {
+      background-color: #c8e6c9;
+      color: #388e3c;
+    }
+
+    .late-worker {
+      animation: late-pulse 1.5s infinite alternate;
+      border-left: 3px solid var(--danger-color);
+    }
+
+    @keyframes late-pulse {
+      0% { background-color: #ffebee; }
+      100% { background-color: #ffcdd2; }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+
+      .header-section {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      th, td {
+        padding: 8px 10px;
+        font-size: 0.9em;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Video Production Tracker</h1>
-        
-        <!-- Header Section -->
-        <div class="header-section">
-            <div id="currentDateTime">Loading Bangladesh time...</div>
-            <a href="admin.html" class="admin-btn">🔐 Administration</a>
-        </div>
-        
-        <!-- Status Indicator -->
-        <div class="status-container">
-            <div id="firebaseStatus">🟢 Connected to Database</div>
-        </div>
-        
-        <!-- Main Table -->
-        <div class="table-wrapper">
-            <table id="tasksTable">
-                <thead>
-                    <tr>
-                        <th>Channel Name</th>
-                        <th>Client</th>
-                        <th>Collaborator</th>
-                        <th>Daily Videos</th>
-                        <th>Rate (BDT)</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="tasksBody">
-                    <!-- Tasks will load here -->
-                </tbody>
-            </table>
-        </div>
+  <div class="container">
+    <h1>Video Production Tracker</h1>
+
+    <div class="header-section">
+      <div id="currentDateTime">Loading time...</div>
+      <a href="admin.html" class="admin-btn">🔐 Administration</a>
     </div>
 
-    <!-- Firebase and App Scripts -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-        
-        // Firebase Config (Replace with your actual config)
-        const firebaseConfig = {
-            apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
-            authDomain: "video-production-tracker-12c07.firebaseapp.com",
-            databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com",
-            projectId: "video-production-tracker-12c07",
-            storageBucket: "video-production-tracker-12c07.appspot.com",
-            messagingSenderId: "126509441147",
-            appId: "1:126509441147:web:abc123def456"
-        };
-        
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-        
-        // DOM Elements
-        const tasksBody = document.getElementById('tasksBody');
-        const currentDateTime = document.getElementById('currentDateTime');
-        
-        // All your original channels
-        const sampleTasks = [
-            {
-                id: "rider-chronicles",
-                channel: "Rider Chronicles",
-                client: "Jaroslav",
-                collaborator: "Imran",
-                dailyVideos: 1,
-                rate: 200,
-                description: "Script from inspirational videos, use CapCut Peter voice, 10-12 images."
-            },
-            {
-                id: "bruises-inside",
-                channel: "Bruises Inside",
-                client: "Jaroslav",
-                collaborator: "Raju",
-                dailyVideos: 1,
-                rate: 250,
-                description: "Script from inspirational videos, thumbnail required."
-            },
-            {
-                id: "parental-controls",
-                channel: "Parental Controls",
-                client: "Jaroslav",
-                collaborator: "Raju",
-                dailyVideos: 1,
-                rate: 250,
-                description: "Script from inspirational videos, use ElevenLabs Cassidy voice."
-            },
-            {
-                id: "she-who-dared",
-                channel: "She Who Dared",
-                client: "Jaroslav P2",
-                collaborator: "Ramjan",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Script from inspirational videos, use CapCut Peter voice."
-            },
-            {
-                id: "dressed-for-power",
-                channel: "Dressed for Power",
-                client: "Jaroslav P2",
-                collaborator: "Munmun",
-                dailyVideos: 1,
-                rate: 200,
-                description: "Script from inspirational videos, use ElevenLabs Cassidy voice."
-            },
-            {
-                id: "midnight-confession-anime",
-                channel: "Midnight Confession Anime",
-                client: "Jaroslav P2",
-                collaborator: "Ramjan",
-                dailyVideos: 1,
-                rate: 200,
-                description: "Script from inspirational videos, use CapCut Leo Emotion voice."
-            },
-            {
-                id: "her-war-her-words",
-                channel: "Her War Her Words",
-                client: "Jaroslav P2",
-                collaborator: "Mehedi",
-                dailyVideos: 2,
-                rate: 150,
-                description: "Script from inspirational videos, use CapCut Peter voice."
-            },
-            {
-                id: "incredible-stories",
-                channel: "Incredible Stories",
-                client: "Jason",
-                collaborator: "Robin",
-                dailyVideos: 1,
-                rate: 250,
-                description: "Follow Jaroslav's format, use ElevenLabs Brian voice."
-            },
-            {
-                id: "western-story-channel",
-                channel: "Western Story Channel",
-                client: "Jason",
-                collaborator: "Imran",
-                dailyVideos: 1,
-                rate: 250,
-                description: "Follow Jaroslav's format, use ElevenLabs Brian voice."
-            },
-            {
-                id: "jah-stories",
-                channel: "Jah Stories",
-                client: "Jason",
-                collaborator: "Shakil",
-                dailyVideos: 1,
-                rate: 250,
-                description: "Follow Jaroslav's format, use ElevenLabs Brian voice."
-            },
-            {
-                id: "hoa-chronicles",
-                channel: "Hoa Chronicles",
-                client: "Jason",
-                collaborator: "Alamin",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Follow Jaroslav's format, use CapCut Peter voice."
-            },
-            {
-                id: "she-was-brave",
-                channel: "She Was Brave",
-                client: "Jason",
-                collaborator: "Hasib",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Follow Jaroslav's format, use CapCut Peter voice."
-            },
-            {
-                id: "she-was-a-hero",
-                channel: "She Was A Hero",
-                client: "Jason",
-                collaborator: "Hasib",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Follow Jaroslav's format, use CapCut Peter voice."
-            },
-            {
-                id: "her-fight-continues",
-                channel: "Her Fight Continues",
-                client: "Jaroslav P1",
-                collaborator: "Raju",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Script from inspirational videos."
-            },
-            {
-                id: "stories-in-camo",
-                channel: "Stories in Camo",
-                client: "Jaroslav P1",
-                collaborator: "Shakil",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Follow Jaroslav's format."
-            },
-            {
-                id: "she-carried-honor",
-                channel: "She Carried Honor",
-                client: "Jaroslav P1",
-                collaborator: "Hasib",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Follow Jaroslav's format."
-            },
-            {
-                id: "post-combat-soul",
-                channel: "Post-Combat Soul",
-                client: "Jaroslav P2",
-                collaborator: "Robin",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Follow Jaroslav's format."
-            },
-            {
-                id: "royer-moron",
-                channel: "Royer Moron",
-                client: "Jaroslav P2",
-                collaborator: "Robin",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Follow Jaroslav's format."
-            },
-            {
-                id: "behind-her-medals",
-                channel: "Behind Her Medals",
-                client: "Jaroslav P2",
-                collaborator: "Mehedi",
-                dailyVideos: 1,
-                rate: 150,
-                description: "Follow Jaroslav's format."
-            }
-        ];
-        
-        // Load tasks from Firebase
-        function loadTasks() {
-            const tasksRef = ref(db, 'tasks');
-            
-            onValue(tasksRef, (snapshot) => {
-                const tasksData = snapshot.val() || {};
-                renderTasks(tasksData);
-            });
-        }
-        
-        // Render tasks to the table
-        function renderTasks(tasksData) {
-            tasksBody.innerHTML = '';
-            
-            sampleTasks.forEach(task => {
-                const taskId = task.id;
-                const taskStatus = tasksData[taskId]?.status || 'pending';
-                const isLate = checkIfLate(taskStatus);
-                
-                const row = document.createElement('tr');
-                if (isLate) row.classList.add('late-worker');
-                
-                row.innerHTML = `
-                    <td>${task.channel}</td>
-                    <td>${task.client}</td>
-                    <td>${task.collaborator}</td>
-                    <td>${task.dailyVideos}</td>
-                    <td>${task.rate} BDT</td>
-                    <td><span class="status-badge status-${taskStatus}">${taskStatus.toUpperCase()}</span></td>
-                    <td>
-                        <button class="status-btn ${taskStatus === 'completed' ? 'completed' : ''}" 
-                            onclick="window.toggleTask('${taskId}')">
-                            ${taskStatus === 'completed' ? 'Completed' : 'Mark Complete'}
-                        </button>
-                    </td>
-                `;
-                
-                tasksBody.appendChild(row);
-            });
-        }
-        
-        // Toggle task status
-        window.toggleTask = async function(taskId) {
-            const taskRef = ref(db, `tasks/${taskId}`);
-            const snapshot = await get(taskRef);
-            const currentStatus = snapshot.exists() ? snapshot.val().status : 'pending';
-            const newStatus = currentStatus === 'completed' ? 'pending' : 'completed';
-            
-            await set(taskRef, {
-                status: newStatus,
-                lastUpdated: new Date().toISOString()
-            });
-        };
-        
-        // Check if task is late (after 8 AM Bangladesh time)
-        function checkIfLate(status) {
-            if (status === 'completed') return false;
-            
-            const now = new Date();
-            const bangladeshTime = new Date(now.getTime() + (6 * 60 * 60 * 1000)); // UTC+6
-            const hours = bangladeshTime.getUTCHours();
-            
-            return hours >= 8 && hours < 14; // Between 8 AM - 2 PM
-        }
-        
-        // Update date and time display
-        function updateDateTime() {
-            const now = new Date();
-            const bangladeshTime = new Date(now.getTime() + (6 * 60 * 60 * 1000)); // UTC+6
-            
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                timeZone: 'UTC'
-            };
-            
-            currentDateTime.textContent = bangladeshTime.toLocaleDateString('en-US', options);
-        }
-        
-        // Initialize the app
-        updateDateTime();
-        setInterval(updateDateTime, 1000);
-        loadTasks();
-    </script>
+    <div class="form-section">
+      <h3>Add New Channel</h3>
+      <input type="text" id="channelId" placeholder="Channel ID (e.g. my-channel)" />
+      <input type="text" id="channelName" placeholder="Channel Name" />
+      <input type="text" id="client" placeholder="Client" />
+      <input type="text" id="collaborator" placeholder="Collaborator" />
+      <input type="number" id="dailyVideos" placeholder="Daily Videos" />
+      <input type="number" id="rate" placeholder="Rate (BDT)" />
+      <textarea id="description" placeholder="Description"></textarea><br/>
+      <button onclick="addChannel()">➕ Add Channel</button>
+    </div>
+
+    <div class="status-container">
+      <div id="firebaseStatus">🟢 Connected to Database</div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Client</th>
+            <th>Collaborator</th>
+            <th>Videos/Day</th>
+            <th>Rate</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="tasksBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getDatabase, ref, set, remove, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
+      authDomain: "video-production-tracker-12c07.firebaseapp.com",
+      databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com",
+      projectId: "video-production-tracker-12c07",
+      storageBucket: "video-production-tracker-12c07.appspot.com",
+      messagingSenderId: "126509441147",
+      appId: "1:126509441147:web:abc123def456"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const tasksBody = document.getElementById('tasksBody');
+    const currentDateTime = document.getElementById('currentDateTime');
+
+    function loadTasks() {
+      const tasksRef = ref(db, 'tasks');
+      onValue(tasksRef, (snapshot) => {
+        const tasks = snapshot.val() || {};
+        renderTasks(tasks);
+      });
+    }
+
+    function renderTasks(tasks) {
+      tasksBody.innerHTML = '';
+      Object.entries(tasks).forEach(([id, task]) => {
+        const isLate = checkIfLate(task.status);
+        const row = document.createElement('tr');
+        if (isLate) row.classList.add('late-worker');
+
+        row.innerHTML = `
+          <td>${task.channel}</td>
+          <td>${task.client}</td>
+          <td>${task.collaborator}</td>
+          <td>${task.dailyVideos}</td>
+          <td>${task.rate} BDT</td>
+          <td><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
+          <td>
+            <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${id}')">
+              ${task.status === 'completed' ? 'Completed' : 'Mark Complete'}
+            </button>
+            <button class="status-btn delete-btn" onclick="deleteChannel('${id}')">🗑️ Delete</button>
+          </td>
+        `;
+        tasksBody.appendChild(row);
+      });
+    }
+
+    window.toggleTask = async function(id) {
+      const taskRef = ref(db, 'tasks/' + id);
+      const snapshot = await get(taskRef);
+      if (snapshot.exists()) {
+        const task = snapshot.val();
+        const newStatus = task.status === 'completed' ? 'pending' : 'completed';
+        await set(taskRef, { ...task, status: newStatus, lastUpdated: new Date().toISOString() });
+      }
+    };
+
+    window.deleteChannel = async function(id) {
+      if (confirm("Are you sure you want to delete this channel?")) {
+        await remove(ref(db, 'tasks/' + id));
+      }
+    };
+
+    window.addChannel = async function() {
+      const id = document.getElementById('channelId').value.trim();
+      const channel = document.getElementById('channelName').value;
+      const client = document.getElementById('client').value;
+      const collaborator = document.getElementById('collaborator').value;
+      const dailyVideos = +document.getElementById('dailyVideos').value;
+      const rate = +document.getElementById('rate').value;
+      const description = document.getElementById('description').value;
+
+      if (!id || !channel) return alert("Channel ID and Name are required.");
+
+      await set(ref(db, 'tasks/' + id), {
+        channel, client, collaborator, dailyVideos, rate, description,
+        status: 'pending',
+        lastUpdated: new Date().toISOString()
+      });
+
+      document.querySelectorAll('.form-section input, .form-section textarea').forEach(i => i.value = '');
+    };
+
+    function checkIfLate(status) {
+      if (status === 'completed') return false;
+      const now = new Date();
+      const bdt = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
+      const hour = bdt.getHours();
+      return hour >= 8 && hour < 14;
+    }
+
+    function updateDateTime() {
+      const now = new Date();
+      const bdt = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
+      currentDateTime.textContent = bdt.toLocaleString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    }
+
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+    loadTasks();
+  </script>
 </body>
 </html>
