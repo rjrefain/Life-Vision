@@ -38,15 +38,55 @@
             margin-bottom: 20px;
         }
         
+        /* Header Section */
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
         /* Status Indicator */
+        .status-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
         #firebaseStatus {
             padding: 8px 15px;
             border-radius: 20px;
             font-weight: 600;
             color: white;
             display: inline-block;
-            margin-bottom: 15px;
             background: linear-gradient(135deg, var(--success-color), #2ecc71);
+        }
+        
+        /* Date-Time Display */
+        #currentDateTime {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        /* Admin Button */
+        .admin-btn {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
         }
         
         /* Table Styles */
@@ -132,20 +172,15 @@
             100% { background-color: #ffcdd2; }
         }
         
-        /* Time Display */
-        #currentDateTime {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-top: 20px;
-        }
-        
         /* Responsive Styles */
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
+            }
+            
+            .header-section {
+                flex-direction: column;
+                align-items: center;
             }
             
             th, td {
@@ -158,8 +193,19 @@
 <body>
     <div class="container">
         <h1>Video Production Tracker</h1>
-        <div id="firebaseStatus">🟢 Connected to Database</div>
         
+        <!-- Header Section -->
+        <div class="header-section">
+            <div id="currentDateTime">Loading Bangladesh time...</div>
+            <a href="admin.html" class="admin-btn">🔐 Administration</a>
+        </div>
+        
+        <!-- Status Indicator -->
+        <div class="status-container">
+            <div id="firebaseStatus">🟢 Connected to Database</div>
+        </div>
+        
+        <!-- Main Table -->
         <div class="table-wrapper">
             <table id="tasksTable">
                 <thead>
@@ -177,10 +223,6 @@
                     <!-- Tasks will load here -->
                 </tbody>
             </table>
-        </div>
-        
-        <div style="text-align: center;">
-            <div id="currentDateTime">Loading Bangladesh time...</div>
         </div>
     </div>
 
