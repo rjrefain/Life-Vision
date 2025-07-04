@@ -3,174 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Production Rate Table</title>
+    <title>Video Production Tracker</title>
     <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --light-color: #f8f9fa;
+            --dark-color: #2c3e50;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 5px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             min-height: 100vh;
-            color: #333;
-            box-sizing: border-box;
+            color: var(--dark-color);
         }
         
         .container {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
-            padding: 15px;
+            padding: 20px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
         h1 {
+            color: var(--dark-color);
             text-align: center;
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 1.8em;
-            font-weight: 300;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .firebase-status {
-            text-align: center;
-            margin: 10px 0;
-            padding: 10px 18px;
-            border-radius: 20px;
-            font-size: 1em;
-            font-weight: 600;
-            color: white;
-            display: inline-block;
-        }
-
-        .firebase-status.connected {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-        }
-
-        .firebase-status.disconnected {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-        }
-
-        .firebase-status.loading {
-            background: linear-gradient(135deg, #f39c12, #e67e22);
-        }
-
-        .scrolling-container {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-            padding: 12px 0;
-            margin: 15px 0;
-            border-radius: 8px;
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-        }
-
-        .scrolling-text {
-            display: inline-block;
-            font-size: 1em;
-            font-weight: 600;
-            animation: scroll-left 45s linear infinite;
-            padding-left: 100%;
-        }
-
-        @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
+            margin-bottom: 20px;
         }
         
-        .date-time-display {
-            text-align: center;
+        /* Status Indicator */
+        #firebaseStatus {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
             margin-bottom: 15px;
-        }
-
-        .date-time-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 18px;
-            border-radius: 20px;
-            display: inline-block;
-            font-size: 1em;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .admin-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 10px 22px;
-            text-decoration: none;
-            border-radius: 20px;
-            font-weight: 600;
-            display: inline-block;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-            font-size: 1em;
-        }
-
-        .admin-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
-        }
-
-        .controls-container {
-            text-align: center;
-            margin: 15px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
+            background: linear-gradient(135deg, var(--success-color), #2ecc71);
         }
         
+        /* Table Styles */
         .table-wrapper {
             overflow-x: auto;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin: 0;
+            margin-bottom: 20px;
         }
         
         table {
             width: 100%;
-            max-width: 100%;
             border-collapse: collapse;
             background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            font-size: 1em;
-            table-layout: fixed;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e8ecf0;
         }
         
         th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 12px 8px;
-            text-align: left;
-            font-size: 0.9em;
-        }
-
-        th:nth-child(1) { width: 25%; } /* Channel Name */
-        th:nth-child(2) { width: 15%; } /* Client Name */
-        th:nth-child(3) { width: 15%; } /* Collaborator */
-        th:nth-child(4) { width: 10%; } /* Daily Videos */
-        th:nth-child(5) { width: 15%; } /* Rate */
-        th:nth-child(6) { width: 20%; } /* Status */
-        
-        td {
-            padding: 12px 8px;
-            border-bottom: 1px solid #e8ecf0;
-            transition: background-color 0.3s ease;
-            position: relative;
-            vertical-align: middle;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
+            position: sticky;
+            top: 0;
         }
         
         tr:nth-child(even) {
@@ -180,990 +84,393 @@
         tr:hover {
             background-color: #e3f2fd;
         }
-
-        /* Default text colors (Color X - Blue) */
-        .channel-name {
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 0.9em;
-            word-wrap: break-word;
-            line-height: 1.3;
-        }
         
-        .client-name {
-            color: #7b68ee;
-            font-weight: 500;
-            font-size: 0.9em;
-        }
-        
-        .collaborator {
-            color: #20b2aa;
-            font-weight: 500;
-            font-size: 0.9em;
-        }
-        
-        .rate-bdt {
-            font-weight: 700;
-            color: #27ae60;
-            font-size: 0.9em;
-        }
-        
-        .daily-videos {
-            text-align: center;
-            font-weight: 600;
-            color: #8e44ad;
-            font-size: 0.9em;
-        }
-
-        /* Color Y (Green) - Override with green colors */
-        .color-y .channel-name {
-            color: #27ae60 !important;
-        }
-        
-        .color-y .client-name {
-            color: #2ecc71 !important;
-        }
-        
-        .color-y .collaborator {
-            color: #16a085 !important;
-        }
-        
-        .color-y .rate-bdt {
-            color: #27ae60 !important;
-        }
-        
-        .color-y .daily-videos {
-            color: #2ecc71 !important;
-        }
-        
-        .status-column {
-            text-align: center;
-            padding: 12px 8px;
-            width: 20%;
-        }
-
+        /* Button Styles */
         .status-btn {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
-            padding: 12px 16px;
-            border-radius: 25px;
-            text-align: center;
+        }
+        
+        .status-btn.completed {
+            background: linear-gradient(135deg, var(--success-color), #2ecc71);
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
             font-weight: 600;
             font-size: 0.85em;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            max-width: 120px;
-        }
-
-        .status-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .status-btn.completed {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            box-shadow: 0 2px 6px rgba(39, 174, 96, 0.3);
-            animation: none;
-        }
-
-        .status-btn.pending {
-            animation: pulse-red 2s infinite;
-        }
-
-        .status-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* Scrolling text under rows */
-        .scrolling-cell {
-            padding: 0 !important;
-            border-bottom: 1px solid #e8ecf0;
-        }
-
-        .row-scrolling-container {
-            padding: 6px 0;
-            margin: 0;
-            border-radius: 4px;
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-        }
-
-        /* Color X scrolling text - Blue */
-        .color-x .row-scrolling-container {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            box-shadow: 0 1px 4px rgba(102, 126, 234, 0.3);
-        }
-
-        /* Color Y scrolling text - Green */
-        .color-y .row-scrolling-container {
-            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-            box-shadow: 0 1px 4px rgba(39, 174, 96, 0.3);
-        }
-
-        .row-scrolling-text {
             display: inline-block;
-            font-size: 1em;
-            font-weight: 700;
-            animation: scroll-left 30s linear infinite;
-            padding-left: 100%;
+        }
+        
+        .status-pending {
+            background-color: #ffecb3;
+            color: #ff9800;
+        }
+        
+        .status-completed {
+            background-color: #c8e6c9;
+            color: #388e3c;
+        }
+        
+        /* Late Worker Highlight */
+        .late-worker {
+            animation: late-pulse 1.5s infinite alternate;
+            border-left: 3px solid var(--danger-color);
+        }
+        
+        @keyframes late-pulse {
+            0% { background-color: #ffebee; }
+            100% { background-color: #ffcdd2; }
+        }
+        
+        /* Time Display */
+        #currentDateTime {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 20px;
         }
-
-        .celebration {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 15px;
-            font-size: 1.2em;
-            font-weight: bold;
-            text-align: center;
-            z-index: 15000;
-            display: none;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: celebrationBounce 0.8s ease-out;
-        }
-
-        .celebration.show {
-            display: block;
-        }
-
-        @keyframes pulse-red {
-            0% { 
-                transform: scale(1);
-                box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
-            }
-            50% { 
-                transform: scale(1.05);
-                box-shadow: 0 4px 12px rgba(231, 76, 60, 0.6);
-            }
-            100% { 
-                transform: scale(1);
-                box-shadow: 0 2px 6px rgba(231, 76, 60, 0.3);
-            }
-        }
-
-        @keyframes celebrationBounce {
-            0% { 
-                transform: translate(-50%, -50%) scale(0.5);
-                opacity: 0;
-            }
-            50% { 
-                transform: translate(-50%, -50%) scale(1.1);
-                opacity: 1;
-            }
-            100% { 
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 1;
-            }
-        }
-
-        tr.late-worker {
-            background-color: #fff3cd !important;
-            border-left: 3px solid #ffc107;
-            animation: late-blink 1s infinite alternate;
-        }
-
-        tr.late-worker:hover {
-            background-color: #ffeaa7 !important;
-        }
-
-        @keyframes late-blink {
-            0% { 
-                background-color: #ffebee !important;
-                border-left: 3px solid #f44336;
-            }
-            100% { 
-                background-color: #ffcdd2 !important;
-                border-left: 3px solid #d32f2f;
-            }
-        }
-
-        /* Mobile Responsive */
+        
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            body {
-                padding: 2px;
-            }
-            
             .container {
-                padding: 10px;
-                border-radius: 10px;
+                padding: 15px;
             }
             
-            h1 {
-                font-size: 1.4em;
-                margin-bottom: 10px;
-            }
-            
-            .date-time-box {
-                font-size: 0.9em;
-                padding: 10px 15px;
-            }
-            
-            .controls-container {
-                gap: 10px;
-            }
-            
-            .firebase-status {
-                font-size: 0.9em;
-                padding: 8px 15px;
-            }
-            
-            .admin-btn {
-                font-size: 0.9em;
-                padding: 8px 18px;
-            }
-            
-            .scrolling-container {
-                margin: 10px 0;
-                padding: 10px 0;
-            }
-            
-            .scrolling-text {
-                font-size: 0.9em;
-            }
-            
-            table {
-                font-size: 0.85em;
-            }
-            
-            th {
-                padding: 8px 4px;
-                font-size: 0.8em;
-            }
-            
-            td {
-                padding: 8px 4px;
-            }
-            
-            .status-btn {
+            th, td {
                 padding: 8px 10px;
-                font-size: 0.75em;
-                max-width: 100px;
-            }
-            
-            .row-scrolling-text {
-                font-size: 0.85em;
-            }
-            
-            .celebration {
-                padding: 15px 20px;
-                font-size: 1em;
-            }
-        }
-
-        /* Very small screens */
-        @media (max-width: 480px) {
-            .container {
-                padding: 8px;
-            }
-            
-            h1 {
-                font-size: 1.2em;
-            }
-            
-            .date-time-box {
-                font-size: 0.8em;
-                padding: 8px 12px;
-            }
-            
-            table {
-                font-size: 0.8em;
-            }
-            
-            th {
-                padding: 6px 3px;
-                font-size: 0.75em;
-            }
-            
-            td {
-                padding: 6px 3px;
-            }
-            
-            .status-btn {
-                padding: 6px 8px;
-                font-size: 0.7em;
-                max-width: 85px;
-            }
-            
-            .row-scrolling-text {
-                font-size: 0.8em;
+                font-size: 0.9em;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Video Production Rate Table</h1>
+        <h1>Video Production Tracker</h1>
+        <div id="firebaseStatus">🟢 Connected to Database</div>
         
-        <div class="scrolling-container">
-            <div class="scrolling-text">
-                সকাল ৮ টার পর সকল বাটন রিসেট হয়ে পেন্ডিং এ চলে যাবে সবাই এর আগে রিপোর্ট দিবেন। সবাই ক্যাপকাট থেকে এডোবি প্রিমিয়ার প্রো তে শিফট হন যদি এই লাইনে সত্যিকার অর্থে কিছু গড়তে চান। আমার নতুন ইউটিউব চ্যানেল লার্ন ২ আর্ন এ সাবস্ক্রাইব করে সাপোর্ট করেন। অইখানে ফ্রিতে ফ্রিল্যান্সিং মাস্টার কোর্স শেখানো হবে । নিচে লিংক দেওয়া আছে। আর যাদের আরো কাজ দরকার একটু অপেক্ষা করেন জেরোস্লাভ এর ৩য় প্রোজেক্ট আসলে আরো কাজ দেওয়া হবে আপনাদের।
-            </div>
-        </div>
-
-        <div class="date-time-display">
-            <div class="date-time-box">
-                📅 <span id="current-date">Loading date...</span><br>
-                🕐 <span id="current-time">Loading time...</span> (Bangladesh Time)
-            </div>
-        </div>
-        
-        <div class="controls-container">
-            <div class="firebase-status loading" id="firebaseStatus">🔄 Connecting...</div>
-            <a href="Administration Page.html" class="admin-btn">🔐 Administration</a>
-        </div>
-
         <div class="table-wrapper">
-            <table>
+            <table id="tasksTable">
                 <thead>
                     <tr>
                         <th>Channel Name</th>
-                        <th>Client Name</th>
+                        <th>Client</th>
                         <th>Collaborator</th>
                         <th>Daily Videos</th>
                         <th>Rate (BDT)</th>
                         <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <!-- Rider Chronicles - Color X (Blue) -->
-                    <tr data-task-id="rider-chronicles" class="color-x">
-                        <td class="channel-name">Rider Chronicles</td>
-                        <td class="client-name">Jaroslav</td>
-                        <td class="collaborator">Imran</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">200 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('rider-chronicles', 'Imran', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-x">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                  এই চ্যানেল এর স্ক্রিপ্ট করবেন ইন্সপাইরেশনাল ভিডিও থেকে সামারি করে, ভয়েস করবেন ক্যাপকাট এর পিটার দিয়ে, ছবি ব্যবহার করবেন ১০ থেকে ১২ টা। থাম্বনেইল করতে হবে না। বাজেট ২০০ টাকা প্রতি ভিডিও। ভিডিও ছাড়তে হবে রাত বাংলাদেশ টাইম ১১ টা।
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Bruises Inside - Color Y (Green) -->
-                    <tr data-task-id="bruises-inside" class="color-y">
-                        <td class="channel-name">Bruises Inside</td>
-                        <td class="client-name">Jaroslav</td>
-                        <td class="collaborator">Raju</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('bruises-inside', 'Raju', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-y">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                  এই চ্যানেল এর স্ক্রিপ্ট করবেন ইন্সপাইরেশনাল ভিডিও থেকে সামারি করে, ভয়েস করবেন ক্যাপকাট এর পিটার দিয়ে, ছবি ব্যবহার করবেন ১০ থেকে ১২ টা। থাম্বনেইল করতে হবে। বাজেট ২৫০ টাকা প্রতি ভিডিও। ভিডিও ছাড়তে হবে রাত বাংলাদেশ টাইম ১১ টা। 
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Parental Controls - Color X (Blue) -->
-                    <tr data-task-id="parental-controls" class="color-x">
-                        <td class="channel-name">Parental Controls</td>
-                        <td class="client-name">Jaroslav</td>
-                        <td class="collaborator">Raju</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('parental-controls', 'Raju', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-x">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                  এই চ্যানেল এর স্ক্রিপ্ট করবেন ইন্সপাইরেশনাল ভিডিও থেকে সামারি করে, ভয়েস করবেন এলিভেন ল্যাবস এর ক্যাসিডি, ছবি ব্যবহার করবেন ১০ থেকে ১২ টা। থাম্বনেইল করতে হবে। বাজেট ২৫০ টাকা প্রতি ভিডিও। ভিডিও ছাড়তে হবে রাত বাংলাদেশ টাইম ১১ টা।
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- She Who Dared - Color Y (Green) -->
-                    <tr data-task-id="she-who-dared" class="color-y">
-                        <td class="channel-name">She Who Dared</td>
-                        <td class="client-name">Jaroslav P2</td>
-                        <td class="collaborator">Ramjan</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('she-who-dared', 'Ramjan', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-y">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                  এই চ্যানেল এর স্ক্রিপ্ট করবেন ইন্সপাইরেশনাল ভিডিও থেকে সামারি করে, ভয়েস করবেন ক্যাপকাট এর পিটার , ছবি ব্যবহার করবেন ১টা । থাম্বনেইল করতে হবে। বাজেট ১৫০ টাকা প্রতি ভিডিও। ভিডিও ছাড়তে হবে রাত বাংলাদেশ টাইম ১১ টা।
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Dressed for Power - Color X (Blue) -->
-                    <tr data-task-id="dressed-for-power" class="color-x">
-                        <td class="channel-name">Dressed for Power</td>
-                        <td class="client-name">Jaroslav P2</td>
-                        <td class="collaborator">MunMun</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">200 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('dressed-for-power', 'Munmun', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-x">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                  এই চ্যানেল এর স্ক্রিপ্ট করবেন ইন্সপাইরেশনাল ভিডিও থেকে সামারি করে, ভয়েস করবেন এলিভেন ল্যাবস এর ক্যাসেডি , ছবি ব্যবহার করবেন ১টা । থাম্বনেইল করতে হবে। বাজেট ২০০ টাকা প্রতি ভিডিও। ভিডিও ছাড়তে হবে রাত বাংলাদেশ টাইম ১১ টা।
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Midnight Confession Anime - Color Y (Green) -->
-                    <tr data-task-id="midnight-confession-anime" class="color-y">
-                        <td class="channel-name">Midnight Confession Anime</td>
-                        <td class="client-name">Jaroslav P2</td>
-                        <td class="collaborator">Ramjan</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">200 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('midnight-confession-anime', 'Ramjan', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-y">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                  এই চ্যানেল এর ধরন টা আলাদা এর স্ক্রিপ্ট করবেন ইন্সপাইরেশনাল ভিডিও থেকে সামারি করে, ভয়েস করবেন ক্যাপকাট এর লিও ইমোশন, ছবি ব্যবহার করবেন ১০-১২টা । থাম্বনেইল করতে হবে। বাজেট ২০০ টাকা প্রতি ভিডিও। ভিডিও ছাড়তে হবে রাত বাংলাদেশ টাইম ১১ টা।
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Her War Her Words - Color X (Blue) -->
-                    <tr data-task-id="her-war-her-words" class="color-x">
-                        <td class="channel-name">Her War Her Words</td>
-                        <td class="client-name">Jaroslav P2</td>
-                        <td class="collaborator">Mehedi</td>
-                        <td class="daily-videos">2</td>
-                        <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('her-war-her-words', 'Mehedi', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-x">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                    এই চ্যানেল এর স্ক্রিপ্ট করতে হবে ইন্সপাইরেশনাল ভিডিও এর সামারি নিয়ে। ভয়েস ব্যবহার করবেন ক্যাপকাট এর পিটার। একটা ইমেজ থাকবে পুরো গল্পে। থাম্বনেইল সেম ইমেজ টাই তবে ক্যানভায় নিয়ে একটু হাই টেনশন করে নিতে হবে। প্রতিদিন ২ টা করে ভিডিও ছাড়তে হবে । প্রথম টা রাত ১০ টা পরের টা রাত ৩ টা । 
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Incredible Stories - Color Y (Green) -->
-                    <tr data-task-id="incredible-stories" class="color-y">
-                        <td class="channel-name">Incredible Stories</td>
-                        <td class="client-name">Jason</td>
-                        <td class="collaborator">Robin</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('incredible-stories', 'Robin', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-y">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                    হুবহু জেরোস্লাভ এর নিয়মে গল্প জেনারেট করবেন। গল্প লেখার পর ভয়েস করতে হবে এলিভেন ল্যাবস এর ব্রায়ান দিয়ে। ছবি থাকবে ১০-১২ টা। প্রতিদিন বাংলাদেশ টাইম রাত ১১ টায় ভিডিও পাবলিশ করতে হবে। থামবনেইল করতে হবে। বাজেট ২৫০ টাকা
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Western Story Channel - Color X (Blue) -->
-                    <tr data-task-id="western-story-channel" class="color-x">
-                        <td class="channel-name">Western Story Channel</td>
-                        <td class="client-name">Jason</td>
-                        <td class="collaborator">Imran</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('western-story-channel', 'Robin', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-x">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                    হুবহু জেরোস্লাভ এর নিয়মে গল্প জেনারেট করবেন। ভয়েস করতে হবে এলিভেন ল্যাবস ব্রায়ান। থাম্বনেইল সেম থাকবে তবে ক্যানভা দিয়ে মডিফাই করে নিতে হবে। বাজেট ২৫০ টাকা। 
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Jah Stories - Color Y (Green) -->
-                    <tr data-task-id="jah-stories" class="color-y">
-                        <td class="channel-name">Jah Stories</td>
-                        <td class="client-name">Jason</td>
-                        <td class="collaborator">Shakil</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">250 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('jah-stories', 'Shakil', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-y">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                  হুবহু জেরোস্লাভ এর নিয়মে গল্প জেনারেট করবেন। ভয়েস করতে হবে এলিভেন ল্যাবস ব্রায়ান। ছবি করতে হবে ১০ থেকে ১২ টা । থাম্বনেইল সেম থাকবে তবে ক্যানভা দিয়ে মডিফাই করে নিতে হবে। বাজেট ২৫০ টাকা। 
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Hoa Chronicles - Color X (Blue) -->
-                    <tr data-task-id="hoa-chronicles" class="color-x">
-                        <td class="channel-name">Hoa Chronicles</td>
-                        <td class="client-name">Jason</td>
-                        <td class="collaborator">Alamin</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('hoa-chronicles', 'Alamin', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-x">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                    হুবহু জেরোস্লাভ এর নিয়মে গল্প জেনারেট করবেন। ভয়েস করতে হবে ক্যাপকাট এর পিটার। একটা ছবি থাকবে পুরো গল্প জুড়ে। থাম্বনেইল সেম থাকবে তবে ক্যানভা দিয়ে মডিফাই করে নিতে হবে। বাজেট ১৫০ টাকা।
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- She Was Brave - Color Y (Green) -->
-                    <tr data-task-id="she-was-brave" class="color-y">
-                        <td class="channel-name">She Was Brave</td>
-                        <td class="client-name">Jason</td>
-                        <td class="collaborator">Hasib</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('she-was-brave', 'Hasib', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-y">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                     হুবহু জেরোস্লাভ এর নিয়মে গল্প জেনারেট করবেন। ভয়েস করতে হবে ক্যাপকাট এর পিটার। একটা ছবি থাকবে পুরো গল্প জুড়ে। থাম্বনেইল সেম থাকবে তবে ক্যানভা দিয়ে মডিফাই করে নিতে হবে। বাজেট ১৫০ টাকা।
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- She Was A Hero - Color X (Blue) -->
-                    <tr data-task-id="she-was-a-hero" class="color-x">
-                        <td class="channel-name">She Was A Hero</td>
-                        <td class="client-name">Jason</td>
-                        <td class="collaborator">Hasib</td>
-                        <td class="daily-videos">1</td>
-                        <td class="rate-bdt">150 BDT</td>
-                        <td class="status-column"><button class="status-btn pending" onclick="toggleTask('she-was-a-hero', 'Hasib', this)">PENDING</button></td>
-                    </tr>
-                    <tr class="color-x">
-                        <td colspan="6" class="scrolling-cell">
-                            <div class="row-scrolling-container">
-                                <div class="row-scrolling-text">
-                                     হুবহু জেরোস্লাভ এর নিয়মে গল্প জেনারেট করবেন। ভয়েস করতে হবে ক্যাপকাট এর পিটার। একটা ছবি থাকবে পুরো গল্প জুড়ে। থাম্বনেইল সেম থাকবে তবে ক্যানভা দিয়ে মডিফাই করে নিতে হবে। বাজেট ১৫০ টাকা।
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <!-- Her Fight Continues - Color Y (Green) -->
-<tr data-task-id="new-channel-1" class="color-y">
-    <td class="channel-name">Her Fight Continues</td>
-    <td class="client-name">Jaroslav P1</td>
-    <td class="collaborator">Raju</td>
-    <td class="daily-videos">1</td>
-    <td class="rate-bdt">150 BDT</td>
-    <td class="status-column"><button class="status-btn pending" onclick="toggleTask('new-channel-1', 'Collaborator Name', this)">PENDING</button></td>
-</tr>
-<tr class="color-y">
-    <td colspan="6" class="scrolling-cell">
-        <div class="row-scrolling-container">
-            <div class="row-scrolling-text">
-                Description for Channel 1. Example: Script from inspirational videos, use CapCut Peter voice, 10-12 images. Budget 200 BDT. Publish at 11 PM Bangladesh Time.
-            </div>
-        </div>
-    </td>
-</tr>
-
-<!-- Stories in Camo - Color X (Blue) -->
-<tr data-task-id="Stories in Camo " class="color-x">
-    <td class="channel-name">Stories in Camo</td>
-    <td class="client-name">Jaroslav P1</td>
-    <td class="collaborator">Shakil Akon</td>
-    <td class="daily-videos">1</td>
-    <td class="rate-bdt">150 BDT</td>
-    <td class="status-column"><button class="status-btn pending" onclick="toggleTask('new-channel-2', 'Skakil Akon', this)">PENDING</button></td>
-</tr>
-<tr class="color-x">
-    <td colspan="6" class="scrolling-cell">
-        <div class="row-scrolling-container">
-            <div class="row-scrolling-text">
-                Description for Channel 2. Example: Follow Jaroslav's format, use ElevenLabs Brian voice, create thumbnail in Canva. Budget 250 BDT.
-            </div>
-        </div>
-    </td>
-</tr>
-
-<!-- She Carried Honor - Color Y (Green) -->
-<tr data-task-id="She Carried Honor" class="color-y">
-    <td class="channel-name">She Carried Honor</td>
-    <td class="client-name">Jarolav P1</td>
-    <td class="collaborator">Hasib</td>
-    <td class="daily-videos">1</td>
-    <td class="rate-bdt">150 BDT</td>
-    <td class="status-column"><button class="status-btn pending" onclick="toggleTask('new-channel-3', 'Hasib', this)">PENDING</button></td>
-</tr>
-<tr class="color-y">
-    <td colspan="6" class="scrolling-cell">
-        <div class="row-scrolling-container">
-            <div class="row-scrolling-text">
-                Description for Channel 3. Example: Two videos daily (10 PM & 3 AM Bangladesh Time), single image throughout, modify thumbnail in Canva. Budget 150 BDT per video.
-            </div>
-        </div>
-    </td>
-</tr>
-                    <!-- Post-Combat Soul - Color X (Blue) -->
-<tr data-task-id="Post-Combat Soul" class="color-x">
-    <td class="channel-name">Post-Combat Soul</td>
-    <td class="client-name">Jaroslav P2</td>
-    <td class="collaborator">Robin </td>
-    <td class="daily-videos">1</td>
-    <td class="rate-bdt">150 BDT</td>
-    <td class="status-column"><button class="status-btn pending" onclick="toggleTask('new-channel-2', 'Skakil Akon', this)">PENDING</button></td>
-</tr>
-<tr class="color-x">
-    <td colspan="6" class="scrolling-cell">
-        <div class="row-scrolling-container">
-            <div class="row-scrolling-text">
-                Description for Channel 2. Example: Follow Jaroslav's format, use ElevenLabs Brian voice, create thumbnail in Canva. Budget 250 BDT.
-            </div>
-        </div>
-    </td>
-</tr>
-                                        <!-- Royer Moron - Color X (Blue) -->
-<tr data-task-id="Royer Moron" class="color-x">
-    <td class="channel-name">Royer Moron</td>
-    <td class="client-name">Jaroslav P2</td>
-    <td class="collaborator">Robin </td>
-    <td class="daily-videos">1</td>
-    <td class="rate-bdt">150 BDT</td>
-    <td class="status-column"><button class="status-btn pending" onclick="toggleTask('new-channel-2', 'Skakil Akon', this)">PENDING</button></td>
-</tr>
-<tr class="color-x">
-    <td colspan="6" class="scrolling-cell">
-        <div class="row-scrolling-container">
-            <div class="row-scrolling-text">
-                Description for Channel 2. Example: Follow Jaroslav's format, use ElevenLabs Brian voice, create thumbnail in Canva. Budget 250 BDT.
-            </div>
-        </div>
-    </td>
-</tr>
-                                                            <!-- Behind Her Me - Color X (Blue) -->
-<tr data-task-id="Behind Her Medals" class="color-x">
-    <td class="Behind Her Medals">Behind Her Medals</td>
-    <td class="client-name">Jaroslav P2</td>
-    <td class="collaborator"> Mehedi </td>
-    <td class="daily-videos">1</td>
-    <td class="rate-bdt">150 BDT</td>
-    <td class="status-column"><button class="status-btn pending" onclick="toggleTask('new-channel-2', 'Skakil Akon', this)">PENDING</button></td>
-</tr>
-<tr class="color-x">
-    <td colspan="6" class="scrolling-cell">
-        <div class="row-scrolling-container">
-            <div class="row-scrolling-text">
-                Description for Channel 2. Example: Follow Jaroslav's format, use ElevenLabs Brian voice, create thumbnail in Canva. Budget 250 BDT.
-            </div>
-        </div>
-    </td>
-</tr>
+                <tbody id="tasksBody">
+                    <!-- Tasks will load here -->
                 </tbody>
             </table>
         </div>
-
-        <div class="celebration" id="celebration">
-            🎉 Excellent Work! 🎉<br>
-            <span id="collaborator-name"></span> has completed their task!
+        
+        <div style="text-align: center;">
+            <div id="currentDateTime">Loading Bangladesh time...</div>
         </div>
+    </div>
 
-        <!-- Firebase SDK -->
-        <script type="module">
-            import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-            import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-
-            // Your Firebase configuration
-            const firebaseConfig = {
-                apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
-                authDomain: "video-production-tracker-12c07.firebaseapp.com",
-                databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com/",
-                projectId: "video-production-tracker-12c07",
-                storageBucket: "video-production-tracker-12c07.appspot.com",
-                messagingSenderId: "126509441147",
-                appId: "1:126509441147:web:abc123def456"
+    <!-- Firebase and App Scripts -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, set, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        
+        // Firebase Config (Replace with your actual config)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
+            authDomain: "video-production-tracker-12c07.firebaseapp.com",
+            databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com",
+            projectId: "video-production-tracker-12c07",
+            storageBucket: "video-production-tracker-12c07.appspot.com",
+            messagingSenderId: "126509441147",
+            appId: "1:126509441147:web:abc123def456"
+        };
+        
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        
+        // DOM Elements
+        const tasksBody = document.getElementById('tasksBody');
+        const currentDateTime = document.getElementById('currentDateTime');
+        
+        // All your original channels
+        const sampleTasks = [
+            {
+                id: "rider-chronicles",
+                channel: "Rider Chronicles",
+                client: "Jaroslav",
+                collaborator: "Imran",
+                dailyVideos: 1,
+                rate: 200,
+                description: "Script from inspirational videos, use CapCut Peter voice, 10-12 images."
+            },
+            {
+                id: "bruises-inside",
+                channel: "Bruises Inside",
+                client: "Jaroslav",
+                collaborator: "Raju",
+                dailyVideos: 1,
+                rate: 250,
+                description: "Script from inspirational videos, thumbnail required."
+            },
+            {
+                id: "parental-controls",
+                channel: "Parental Controls",
+                client: "Jaroslav",
+                collaborator: "Raju",
+                dailyVideos: 1,
+                rate: 250,
+                description: "Script from inspirational videos, use ElevenLabs Cassidy voice."
+            },
+            {
+                id: "she-who-dared",
+                channel: "She Who Dared",
+                client: "Jaroslav P2",
+                collaborator: "Ramjan",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Script from inspirational videos, use CapCut Peter voice."
+            },
+            {
+                id: "dressed-for-power",
+                channel: "Dressed for Power",
+                client: "Jaroslav P2",
+                collaborator: "Munmun",
+                dailyVideos: 1,
+                rate: 200,
+                description: "Script from inspirational videos, use ElevenLabs Cassidy voice."
+            },
+            {
+                id: "midnight-confession-anime",
+                channel: "Midnight Confession Anime",
+                client: "Jaroslav P2",
+                collaborator: "Ramjan",
+                dailyVideos: 1,
+                rate: 200,
+                description: "Script from inspirational videos, use CapCut Leo Emotion voice."
+            },
+            {
+                id: "her-war-her-words",
+                channel: "Her War Her Words",
+                client: "Jaroslav P2",
+                collaborator: "Mehedi",
+                dailyVideos: 2,
+                rate: 150,
+                description: "Script from inspirational videos, use CapCut Peter voice."
+            },
+            {
+                id: "incredible-stories",
+                channel: "Incredible Stories",
+                client: "Jason",
+                collaborator: "Robin",
+                dailyVideos: 1,
+                rate: 250,
+                description: "Follow Jaroslav's format, use ElevenLabs Brian voice."
+            },
+            {
+                id: "western-story-channel",
+                channel: "Western Story Channel",
+                client: "Jason",
+                collaborator: "Imran",
+                dailyVideos: 1,
+                rate: 250,
+                description: "Follow Jaroslav's format, use ElevenLabs Brian voice."
+            },
+            {
+                id: "jah-stories",
+                channel: "Jah Stories",
+                client: "Jason",
+                collaborator: "Shakil",
+                dailyVideos: 1,
+                rate: 250,
+                description: "Follow Jaroslav's format, use ElevenLabs Brian voice."
+            },
+            {
+                id: "hoa-chronicles",
+                channel: "Hoa Chronicles",
+                client: "Jason",
+                collaborator: "Alamin",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Follow Jaroslav's format, use CapCut Peter voice."
+            },
+            {
+                id: "she-was-brave",
+                channel: "She Was Brave",
+                client: "Jason",
+                collaborator: "Hasib",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Follow Jaroslav's format, use CapCut Peter voice."
+            },
+            {
+                id: "she-was-a-hero",
+                channel: "She Was A Hero",
+                client: "Jason",
+                collaborator: "Hasib",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Follow Jaroslav's format, use CapCut Peter voice."
+            },
+            {
+                id: "her-fight-continues",
+                channel: "Her Fight Continues",
+                client: "Jaroslav P1",
+                collaborator: "Raju",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Script from inspirational videos."
+            },
+            {
+                id: "stories-in-camo",
+                channel: "Stories in Camo",
+                client: "Jaroslav P1",
+                collaborator: "Shakil",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Follow Jaroslav's format."
+            },
+            {
+                id: "she-carried-honor",
+                channel: "She Carried Honor",
+                client: "Jaroslav P1",
+                collaborator: "Hasib",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Follow Jaroslav's format."
+            },
+            {
+                id: "post-combat-soul",
+                channel: "Post-Combat Soul",
+                client: "Jaroslav P2",
+                collaborator: "Robin",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Follow Jaroslav's format."
+            },
+            {
+                id: "royer-moron",
+                channel: "Royer Moron",
+                client: "Jaroslav P2",
+                collaborator: "Robin",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Follow Jaroslav's format."
+            },
+            {
+                id: "behind-her-medals",
+                channel: "Behind Her Medals",
+                client: "Jaroslav P2",
+                collaborator: "Mehedi",
+                dailyVideos: 1,
+                rate: 150,
+                description: "Follow Jaroslav's format."
+            }
+        ];
+        
+        // Load tasks from Firebase
+        function loadTasks() {
+            const tasksRef = ref(db, 'tasks');
+            
+            onValue(tasksRef, (snapshot) => {
+                const tasksData = snapshot.val() || {};
+                renderTasks(tasksData);
+            });
+        }
+        
+        // Render tasks to the table
+        function renderTasks(tasksData) {
+            tasksBody.innerHTML = '';
+            
+            sampleTasks.forEach(task => {
+                const taskId = task.id;
+                const taskStatus = tasksData[taskId]?.status || 'pending';
+                const isLate = checkIfLate(taskStatus);
+                
+                const row = document.createElement('tr');
+                if (isLate) row.classList.add('late-worker');
+                
+                row.innerHTML = `
+                    <td>${task.channel}</td>
+                    <td>${task.client}</td>
+                    <td>${task.collaborator}</td>
+                    <td>${task.dailyVideos}</td>
+                    <td>${task.rate} BDT</td>
+                    <td><span class="status-badge status-${taskStatus}">${taskStatus.toUpperCase()}</span></td>
+                    <td>
+                        <button class="status-btn ${taskStatus === 'completed' ? 'completed' : ''}" 
+                            onclick="window.toggleTask('${taskId}')">
+                            ${taskStatus === 'completed' ? 'Completed' : 'Mark Complete'}
+                        </button>
+                    </td>
+                `;
+                
+                tasksBody.appendChild(row);
+            });
+        }
+        
+        // Toggle task status
+        window.toggleTask = async function(taskId) {
+            const taskRef = ref(db, `tasks/${taskId}`);
+            const snapshot = await get(taskRef);
+            const currentStatus = snapshot.exists() ? snapshot.val().status : 'pending';
+            const newStatus = currentStatus === 'completed' ? 'pending' : 'completed';
+            
+            await set(taskRef, {
+                status: newStatus,
+                lastUpdated: new Date().toISOString()
+            });
+        };
+        
+        // Check if task is late (after 8 AM Bangladesh time)
+        function checkIfLate(status) {
+            if (status === 'completed') return false;
+            
+            const now = new Date();
+            const bangladeshTime = new Date(now.getTime() + (6 * 60 * 60 * 1000)); // UTC+6
+            const hours = bangladeshTime.getUTCHours();
+            
+            return hours >= 8 && hours < 14; // Between 8 AM - 2 PM
+        }
+        
+        // Update date and time display
+        function updateDateTime() {
+            const now = new Date();
+            const bangladeshTime = new Date(now.getTime() + (6 * 60 * 60 * 1000)); // UTC+6
+            
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                timeZone: 'UTC'
             };
-
-            // Initialize Firebase
-            let app, database;
-            let firebaseConnected = false;
-
-            try {
-                app = initializeApp(firebaseConfig);
-                database = getDatabase(app);
-                
-                // Test connection
-                const testRef = ref(database, '.info/connected');
-                onValue(testRef, (snapshot) => {
-                    if (snapshot.val() === true) {
-                        firebaseConnected = true;
-                        updateFirebaseStatus('connected', '🟢 Firebase Server Connected');
-                        loadTaskStates();
-                    } else {
-                        firebaseConnected = false;
-                        updateFirebaseStatus('disconnected', '🔴 Firebase Server Disconnected');
-                    }
-                });
-            } catch (error) {
-                console.error('Firebase initialization failed:', error);
-                updateFirebaseStatus('disconnected', '🔴 Firebase Server Error');
-            }
-
-            function updateFirebaseStatus(status, text) {
-                const statusElement = document.getElementById('firebaseStatus');
-                statusElement.className = `firebase-status ${status}`;
-                statusElement.textContent = text;
-            }
-
-            // Load saved states when page loads
-            async function loadTaskStates() {
-                if (!firebaseConnected) return;
-                
-                try {
-                    const tasksRef = ref(database, 'tasks');
-                    const snapshot = await get(tasksRef);
-                    
-                    if (snapshot.exists()) {
-                        const tasks = snapshot.val();
-                        
-                        // Update UI based on saved states
-                        Object.keys(tasks).forEach(taskId => {
-                            const taskData = tasks[taskId];
-                            const row = document.querySelector(`tr[data-task-id="${taskId}"]`);
-                            
-                            if (row) {
-                                const button = row.querySelector('.status-btn');
-                                if (taskData.status === 'completed') {
-                                    button.classList.remove('pending');
-                                    button.classList.add('completed');
-                                    button.textContent = 'COMPLETED';
-                                    row.classList.remove('late-worker');
-                                }
-                            }
-                        });
-                    }
-                } catch (error) {
-                    console.error('Error loading task states:', error);
-                }
-            }
-
-            // Save task state to Firebase
-            async function saveTaskState(taskId, status, collaborator) {
-                if (!firebaseConnected) return;
-                
-                try {
-                    const taskRef = ref(database, `tasks/${taskId}`);
-                    await set(taskRef, {
-                        status: status,
-                        collaborator: collaborator,
-                        timestamp: Date.now(),
-                        lastUpdated: new Date().toISOString()
-                    });
-                } catch (error) {
-                    console.error('Error saving task state:', error);
-                }
-            }
-
-            // Make function globally available
-            window.toggleTask = async function(taskId, collaboratorName, button) {
-                const isPending = button.classList.contains('pending');
-                const row = button.closest('tr');
-                
-                // Disable button temporarily
-                button.disabled = true;
-                
-                if (isPending) {
-                    // Mark as completed
-                    button.classList.remove('pending');
-                    button.classList.add('completed');
-                    button.textContent = 'COMPLETED';
-                    row.classList.remove('late-worker');
-                    
-                    // Save to Firebase
-                    await saveTaskState(taskId, 'completed', collaboratorName);
-                    
-                    // Show celebration
-                    showCelebration(collaboratorName);
-                } else {
-                    // Mark as pending
-                    button.classList.remove('completed');
-                    button.classList.add('pending');
-                    button.textContent = 'PENDING';
-                    
-                    // Save to Firebase
-                    await saveTaskState(taskId, 'pending', collaboratorName);
-                    
-                    // Check if should show late worker animation
-                    checkLateWorker(row);
-                }
-                
-                // Re-enable button
-                setTimeout(() => {
-                    button.disabled = false;
-                }, 1000);
-            }
-
-            function showCelebration(collaboratorName) {
-                const celebration = document.getElementById('celebration');
-                const nameSpan = document.getElementById('collaborator-name');
-                nameSpan.textContent = collaboratorName;
-                celebration.classList.add('show');
-                
-                setTimeout(() => {
-                    celebration.classList.remove('show');
-                }, 3000);
-            }
-
-            function checkLateWorker(row) {
-                const bangladeshTime = new Date(new Date().getTime() + (6 * 60 * 60 * 1000));
-                const hours = bangladeshTime.getUTCHours();
-                if (hours >= 8 && hours < 14) {
-                    row.classList.add('late-worker');
-                }
-            }
-
-            // Daily reset function
-            async function performDailyReset() {
-                if (!firebaseConnected) return;
-                
-                // Reset all tasks
-                const allButtons = document.querySelectorAll('.status-btn');
-                allButtons.forEach(async (button) => {
-                    const row = button.closest('tr');
-                    const taskId = row.getAttribute('data-task-id');
-                    const collaborator = row.querySelector('.collaborator').textContent;
-                    
-                    button.classList.remove('completed');
-                    button.classList.add('pending');
-                    button.textContent = 'PENDING';
-                    row.classList.remove('late-worker');
-                    
-                    // Save reset state to Firebase
-                    await saveTaskState(taskId, 'pending', collaborator);
-                });
-                
-                showResetNotification();
-            }
-
-            function showResetNotification() {
-                const celebration = document.getElementById('celebration');
-                celebration.innerHTML = '🔄 Daily Reset Complete! 🔄<br>All tasks reset to pending';
-                celebration.classList.add('show');
-                
-                setTimeout(() => {
-                    celebration.classList.remove('show');
-                    celebration.innerHTML = '🎉 Excellent Work! 🎉<br><span id="collaborator-name"></span> has completed their task!';
-                }, 4000);
-            }
-
-            // Time and date functions
-            function updateDateTime() {
-                const now = new Date();
-                
-                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-                
-                const dayName = days[now.getDay()];
-                const monthName = months[now.getMonth()];
-                const date = now.getDate();
-                const year = now.getFullYear();
-                
-                // Bangladesh time (UTC+6)
-                const bangladeshTime = new Date(now.getTime() + (6 * 60 * 60 * 1000));
-                let hours = bangladeshTime.getUTCHours();
-                const minutes = bangladeshTime.getUTCMinutes().toString().padStart(2, '0');
-                const seconds = bangladeshTime.getUTCSeconds().toString().padStart(2, '0');
-                
-                const ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12;
-                hours = hours ? hours : 12;
-                
-                const formattedDate = `${dayName}, ${monthName} ${date}, ${year}`;
-                const formattedTime = `${hours}:${minutes}:${seconds} ${ampm}`;
-                
-                document.getElementById('current-date').textContent = formattedDate;
-                document.getElementById('current-time').textContent = formattedTime;
-                
-                // Check for daily reset at 8 AM Bangladesh time
-                checkDailyReset(bangladeshTime);
-            }
-
-            function checkDailyReset(bangladeshTime) {
-                const hours = bangladeshTime.getUTCHours();
-                const minutes = bangladeshTime.getUTCMinutes();
-                const seconds = bangladeshTime.getUTCSeconds();
-                
-                // Reset at exactly 8:00:00 AM Bangladesh time
-                if (hours === 8 && minutes === 0 && seconds === 0) {
-                    performDailyReset();
-                }
-                
-                // Show late worker animation between 8 AM - 2 PM
-                if (hours >= 8 && hours < 14) {
-                    markLateWorkers();
-                } else {
-                    clearLateWorkers();
-                }
-            }
-
-            function markLateWorkers() {
-                const tableRows = document.querySelectorAll('tbody tr');
-                tableRows.forEach(row => {
-                    const button = row.querySelector('.status-btn');
-                    if (button && button.classList.contains('pending')) {
-                        row.classList.add('late-worker');
-                    } else {
-                        row.classList.remove('late-worker');
-                    }
-                });
-            }
-
-            function clearLateWorkers() {
-                const tableRows = document.querySelectorAll('tbody tr');
-                tableRows.forEach(row => {
-                    row.classList.remove('late-worker');
-                });
-            }
-
-            // Initialize everything
-            updateDateTime();
-            setInterval(updateDateTime, 1000);
-        </script>
-    </body>
+            
+            currentDateTime.textContent = bangladeshTime.toLocaleDateString('en-US', options);
+        }
+        
+        // Initialize the app
+        updateDateTime();
+        setInterval(updateDateTime, 1000);
+        loadTasks();
+    </script>
+</body>
 </html>
