@@ -215,17 +215,125 @@
 
     @media (max-width: 768px) {
       .container {
-        padding: 15px;
+        padding: 10px;
       }
 
       .header-section {
         flex-direction: column;
         align-items: center;
+        gap: 10px;
       }
 
-      th, td {
-        padding: 8px 10px;
-        font-size: 0.9em;
+      .form-section {
+        padding: 15px;
+      }
+
+      .form-section input, .form-section textarea {
+        width: 100%;
+        max-width: 100%;
+        margin: 5px 0;
+      }
+
+      /* Hide table headers on mobile */
+      .table-wrapper table,
+      .table-wrapper thead,
+      .table-wrapper tbody,
+      .table-wrapper th,
+      .table-wrapper td,
+      .table-wrapper tr {
+        display: block;
+      }
+
+      .table-wrapper thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+      .table-wrapper tr {
+        background: white;
+        border: 1px solid #e8ecf0;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .table-wrapper tr:nth-child(even) {
+        background: white;
+      }
+
+      .table-wrapper tr:hover {
+        background: white;
+        transform: none;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      }
+
+      .table-wrapper td {
+        border: none;
+        padding: 8px 0;
+        text-align: left;
+        font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .table-wrapper td::before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: var(--primary-color);
+        flex-shrink: 0;
+        margin-right: 10px;
+        min-width: 80px;
+      }
+
+      .table-wrapper td:last-child {
+        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 10px;
+        border-top: 1px solid #e8ecf0;
+        padding-top: 15px;
+      }
+
+      .table-wrapper td:last-child::before {
+        display: none;
+      }
+
+      .status-btn {
+        width: 100%;
+        max-width: 200px;
+        padding: 10px;
+        font-size: 14px;
+      }
+
+      .delete-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+        margin-left: 0;
+        margin-top: 5px;
+      }
+
+      .late-worker {
+        border-left: 4px solid var(--danger-color);
+        animation: late-pulse 1.5s infinite alternate;
+      }
+
+      h1 {
+        font-size: 1.8em;
+        margin-bottom: 15px;
+      }
+
+      #currentDateTime {
+        font-size: 12px;
+        padding: 8px 15px;
+      }
+
+      .admin-btn {
+        font-size: 14px;
+        padding: 8px 15px;
       }
     }
   </style>
@@ -309,12 +417,12 @@
         if (isLate) row.classList.add('late-worker');
 
         row.innerHTML = `
-          <td>${task.channel}</td>
-          <td>${task.client}</td>
-          <td>${task.collaborator}</td>
-          <td>${task.dailyVideos}</td>
-          <td>${task.rate} BDT</td>
-          <td><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
+          <td data-label="Channel">${task.channel}</td>
+          <td data-label="Client">${task.client}</td>
+          <td data-label="Collaborator">${task.collaborator}</td>
+          <td data-label="Videos/Day">${task.dailyVideos}</td>
+          <td data-label="Rate">${task.rate} BDT</td>
+          <td data-label="Status"><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
           <td>
             <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${id}')">
               ${task.status === 'completed' ? 'Completed' : 'Mark Complete'}
