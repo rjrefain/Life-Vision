@@ -12,8 +12,6 @@
       --danger-color: #e74c3c;
       --light-color: #f8f9fa;
       --dark-color: #2c3e50;
-      --accent-color: #3498db;
-      --warning-color: #f39c12;
     }
 
     body {
@@ -38,8 +36,6 @@
       color: var(--dark-color);
       text-align: center;
       margin-bottom: 20px;
-      font-size: 2.5em;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .header-section {
@@ -71,8 +67,6 @@
       padding: 10px 20px;
       border-radius: 20px;
       display: inline-block;
-      font-weight: 600;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
 
     .admin-btn {
@@ -93,121 +87,68 @@
 
     .form-section {
       margin-bottom: 30px;
-      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-section h3 {
-      color: var(--dark-color);
-      margin-bottom: 15px;
-      font-size: 1.3em;
     }
 
     .form-section input, .form-section textarea {
       margin: 5px;
-      padding: 12px;
+      padding: 8px;
       border-radius: 8px;
-      border: 2px solid #e9ecef;
+      border: 1px solid #ccc;
       width: calc(100% - 20px);
       max-width: 280px;
-      transition: all 0.3s ease;
-      font-size: 14px;
-    }
-
-    .form-section input:focus, .form-section textarea:focus {
-      outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
     }
 
     .form-section button {
-      margin-top: 15px;
-      padding: 12px 25px;
-      background: linear-gradient(135deg, var(--success-color), #2ecc71);
+      margin-top: 10px;
+      padding: 10px 20px;
+      background: var(--success-color);
       color: white;
       border: none;
       border-radius: 20px;
       font-weight: bold;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
     }
 
     .form-section button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(39, 174, 96, 0.4);
+      background: #219150;
     }
 
     .table-wrapper {
       overflow-x: auto;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
-      background: white;
-      width: 100%;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       background: white;
-      border-radius: 15px;
-      overflow: hidden;
-      table-layout: fixed;
     }
 
     th, td {
       padding: 12px 15px;
       text-align: left;
       border-bottom: 1px solid #e8ecf0;
-      font-size: 14px;
     }
-
-    td {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    th {
-      white-space: nowrap;
-    }
-
-    th:nth-child(1), td:nth-child(1) { width: 20%; } /* Channel */
-    th:nth-child(2), td:nth-child(2) { width: 15%; } /* Client */
-    th:nth-child(3), td:nth-child(3) { width: 15%; } /* Collaborator */
-    th:nth-child(4), td:nth-child(4) { width: 10%; } /* Videos/Day */
-    th:nth-child(5), td:nth-child(5) { width: 12%; } /* Rate */
-    th:nth-child(6), td:nth-child(6) { width: 12%; } /* Status */
-    th:nth-child(7), td:nth-child(7) { width: 16%; } /* Actions */
 
     th {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
       position: sticky;
       top: 0;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      font-size: 13px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
     tr:nth-child(even) {
-      background: linear-gradient(135deg, #f8f9fa, #ffffff);
+      background-color: #f8f9fa;
     }
 
     tr:hover {
-      background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-      transform: scale(1.01);
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      background-color: #e3f2fd;
     }
 
     .status-btn {
-      padding: 6px 12px;
+      padding: 8px 15px;
       border-radius: 20px;
       font-weight: 600;
       border: none;
@@ -215,54 +156,30 @@
       transition: all 0.3s ease;
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      font-size: 11px;
-      box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-      width: 100%;
-      max-width: 120px;
-      text-align: center;
-    }
-
-    .status-btn:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
     }
 
     .status-btn.completed {
       background: linear-gradient(135deg, var(--success-color), #2ecc71);
-      box-shadow: 0 3px 10px rgba(39, 174, 96, 0.3);
-    }
-
-    .status-btn.completed:hover {
-      box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
     }
 
     .delete-icon {
-      background: linear-gradient(135deg, var(--danger-color), #c0392b);
+      background: var(--danger-color);
       color: white;
       border: none;
       border-radius: 50%;
-      width: 35px;
-      height: 35px;
+      width: 30px;
+      height: 30px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s ease;
       margin-left: 10px;
-      box-shadow: 0 3px 10px rgba(231, 76, 60, 0.3);
+      transition: all 0.3s ease;
     }
 
     .delete-icon:hover {
-      transform: scale(1.1) rotate(10deg);
-      box-shadow: 0 5px 15px rgba(231, 76, 60, 0.5);
-      background: linear-gradient(135deg, #c0392b, #a93226);
-    }
-
-    .action-cell {
-      display: flex;
-      align-items: center;
-      gap: 5px;
+      background: #c0392b;
+      transform: scale(1.1);
     }
 
     .status-badge {
@@ -272,59 +189,26 @@
       font-size: 0.85em;
       text-transform: uppercase;
       display: inline-block;
-      letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .status-pending {
-      background: linear-gradient(135deg, #fff3cd, #ffeaa7);
-      color: #856404;
+      background-color: #ffecb3;
+      color: #ff9800;
     }
 
     .status-completed {
-      background: linear-gradient(135deg, #d4edda, #a8e6cf);
-      color: #155724;
-    }
-
-    .channel-name {
-      font-weight: 600;
-      color: var(--primary-color);
-    }
-
-    .rate-cell {
-      font-weight: 600;
-      color: var(--success-color);
-    }
-
-    .videos-cell {
-      font-weight: 600;
-      color: var(--accent-color);
+      background-color: #c8e6c9;
+      color: #388e3c;
     }
 
     .late-worker {
-      animation: late-pulse 2s infinite alternate;
-      border-left: 4px solid var(--danger-color);
-      background: linear-gradient(135deg, #ffebee, #ffcdd2) !important;
+      animation: late-pulse 1.5s infinite alternate;
+      border-left: 3px solid var(--danger-color);
     }
 
     @keyframes late-pulse {
-      0% { 
-        background: linear-gradient(135deg, #ffebee, #ffcdd2) !important;
-      }
-      100% { 
-        background: linear-gradient(135deg, #ffcdd2, #ef9a9a) !important;
-      }
-    }
-
-    .table-header {
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: white;
-      padding: 15px 20px;
-      border-radius: 15px 15px 0 0;
-      font-size: 1.2em;
-      font-weight: 600;
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      0% { background-color: #ffebee; }
+      100% { background-color: #ffcdd2; }
     }
 
     @media (max-width: 768px) {
@@ -338,26 +222,15 @@
       }
 
       th, td {
-        padding: 10px 12px;
+        padding: 8px 10px;
         font-size: 0.9em;
-      }
-
-      .action-cell {
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .delete-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 14px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>🎬 Video Production Tracker</h1>
+    <h1>Video Production Tracker</h1>
 
     <div class="header-section">
       <div id="currentDateTime">Loading time...</div>
@@ -365,7 +238,7 @@
     </div>
 
     <div class="form-section">
-      <h3>📝 Add New Channel</h3>
+      <h3>Add New Channel</h3>
       <input type="text" id="channelId" placeholder="Channel ID (e.g. my-channel)" />
       <input type="text" id="channelName" placeholder="Channel Name" />
       <input type="text" id="client" placeholder="Client" />
@@ -381,19 +254,16 @@
     </div>
 
     <div class="table-wrapper">
-      <div class="table-header">
-        📊 Production Channels Overview
-      </div>
       <table>
         <thead>
           <tr>
-            <th>📺 Channel</th>
-            <th>👤 Client</th>
-            <th>🤝 Collaborator</th>
-            <th>📹 Videos/Day</th>
-            <th>💰 Rate</th>
-            <th>📈 Status</th>
-            <th>⚡ Actions</th>
+            <th>Channel</th>
+            <th>Client</th>
+            <th>Collaborator</th>
+            <th>Videos/Day</th>
+            <th>Rate</th>
+            <th>Status</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody id="tasksBody"></tbody>
@@ -437,17 +307,17 @@
         if (isLate) row.classList.add('late-worker');
 
         row.innerHTML = `
-          <td class="channel-name">${task.channel}</td>
+          <td>${task.channel}</td>
           <td>${task.client}</td>
           <td>${task.collaborator}</td>
-          <td class="videos-cell">${task.dailyVideos}</td>
-          <td class="rate-cell">${task.rate} BDT</td>
+          <td>${task.dailyVideos}</td>
+          <td>${task.rate} BDT</td>
           <td><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
-          <td class="action-cell">
+          <td>
             <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${id}')">
-              ${task.status === 'completed' ? '✅ Completed' : '⏳ Mark Complete'}
+              ${task.status === 'completed' ? 'Completed' : 'Mark Complete'}
             </button>
-            <button class="delete-icon" onclick="deleteChannel('${id}')" title="Delete Channel">🗑️</button>
+            <button class="delete-icon" onclick="deleteChannel('${id}')">🗑️</button>
           </td>
         `;
         tasksBody.appendChild(row);
@@ -501,10 +371,10 @@
     function updateDateTime() {
       const now = new Date();
       const bdt = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
-      currentDateTime.textContent = `🕐 ${bdt.toLocaleString('en-US', {
+      currentDateTime.textContent = bdt.toLocaleString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
         hour: '2-digit', minute: '2-digit', second: '2-digit'
-      })}`;
+      });
     }
 
     updateDateTime();
