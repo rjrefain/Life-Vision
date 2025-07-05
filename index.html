@@ -146,6 +146,7 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
       margin-bottom: 20px;
       background: white;
+      width: 100%;
     }
 
     table {
@@ -154,10 +155,11 @@
       background: white;
       border-radius: 15px;
       overflow: hidden;
+      table-layout: fixed;
     }
 
     th, td {
-      padding: 15px 20px;
+      padding: 12px 15px;
       text-align: left;
       border-bottom: 1px solid #e8ecf0;
       font-size: 14px;
@@ -167,13 +169,19 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 200px;
     }
 
     th {
       white-space: nowrap;
-      min-width: 120px;
     }
+
+    th:nth-child(1), td:nth-child(1) { width: 20%; } /* Channel */
+    th:nth-child(2), td:nth-child(2) { width: 15%; } /* Client */
+    th:nth-child(3), td:nth-child(3) { width: 15%; } /* Collaborator */
+    th:nth-child(4), td:nth-child(4) { width: 10%; } /* Videos/Day */
+    th:nth-child(5), td:nth-child(5) { width: 12%; } /* Rate */
+    th:nth-child(6), td:nth-child(6) { width: 12%; } /* Status */
+    th:nth-child(7), td:nth-child(7) { width: 16%; } /* Actions */
 
     th {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -199,7 +207,7 @@
     }
 
     .status-btn {
-      padding: 8px 15px;
+      padding: 6px 12px;
       border-radius: 20px;
       font-weight: 600;
       border: none;
@@ -207,9 +215,10 @@
       transition: all 0.3s ease;
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      font-size: 12px;
+      font-size: 11px;
       box-shadow: 0 3px 10px rgba(102, 126, 234, 0.3);
-      width: 140px;
+      width: 100%;
+      max-width: 120px;
       text-align: center;
     }
 
