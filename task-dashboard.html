@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Management Dashboard</title>
+  <title>Task Management Dashboard - Cloud Sync</title>
   <style>
     * {
       margin: 0;
@@ -45,6 +45,7 @@
       margin-bottom: 30px;
       border-radius: 8px;
       padding: 20px;
+      position: relative;
     }
 
     h1 {
@@ -56,6 +57,42 @@
     .datetime {
       color: var(--gray-600);
       font-size: 14px;
+    }
+
+    .sync-status {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .sync-status.connected {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .sync-status.disconnected {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .sync-status.syncing {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .sync-icon {
+      animation: spin 1s linear infinite;
     }
 
     .stats {
@@ -135,6 +172,11 @@
       background: var(--primary-dark);
     }
 
+    button:disabled {
+      background: var(--gray-400);
+      cursor: not-allowed;
+    }
+
     .task-filters {
       background: white;
       padding: 15px;
@@ -168,6 +210,15 @@
       border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.1);
       overflow: hidden;
+      min-height: 200px;
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      color: var(--gray-600);
     }
 
     .task-item {
@@ -272,6 +323,11 @@
         padding: 10px;
       }
 
+      .sync-status {
+        position: static;
+        margin-top: 10px;
+      }
+
       .form-grid {
         grid-template-columns: 1fr;
       }
@@ -296,6 +352,10 @@
     <header>
       <h1>📋 Task Management Dashboard</h1>
       <div class="datetime" id="datetime">Loading...</div>
+      <div class="sync-status disconnected" id="syncStatus">
+        <span id="syncIcon">⚡</span>
+        <span id="syncText">Connecting...</span>
+      </div>
     </header>
 
     <div class="stats">
@@ -330,7 +390,7 @@
         <input type="date" id="taskDueDate">
       </div>
       <textarea id="taskDescription" placeholder="Task description..." rows="2"></textarea>
-      <button onclick="addTask()" style="margin-top: 10px;">+ Add Task</button>
+      <button onclick="addTask()" id="addTaskBtn" style="margin-top: 10px;">+ Add Task</button>
     </div>
 
     <div class="task-filters">
@@ -341,40 +401,98 @@
     </div>
 
     <div class="tasks-container" id="tasksContainer">
-      <div class="empty-state">
-        <h3>No tasks yet</h3>
-        <p>Add your first task to get started!</p>
+      <div class="loading">
+        <span class="sync-icon">⚡</span> Loading tasks...
       </div>
     </div>
   </div>
 
-  <script>
-    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    let currentFilter = 'all';
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getDatabase, ref, set, remove, onValue, push } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-    function updateDateTime() {
-      const now = new Date();
-      document.getElementById('datetime').textContent = now.toLocaleString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
+    // Firebase configuration - Using your existing Firebase project
+    const firebaseConfig = {
+      apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
+      authDomain: "video-production-tracker-12c07.firebaseapp.com",
+      databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com",
+      projectId: "video-production-tracker-12c07",
+      storageBucket: "video-production-tracker-12c07.appspot.com",
+      messagingSenderId: "126509441147",
+      appId: "1:126509441147:web:abc123def456"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    
+    let tasks = [];
+    let currentFilter = 'all';
+    let isConnected = false;
+
+    // Update sync status
+    function updateSyncStatus(status) {
+      const syncStatus = document.getElementById('syncStatus');
+      const syncIcon = document.getElementById('syncIcon');
+      const syncText = document.getElementById('syncText');
+      
+      syncStatus.className = 'sync-status ' + status;
+      
+      switch(status) {
+        case 'connected':
+          syncIcon.textContent = '✅';
+          syncText.textContent = 'Connected';
+          isConnected = true;
+          break;
+        case 'disconnected':
+          syncIcon.textContent = '❌';
+          syncText.textContent = 'Disconnected';
+          isConnected = false;
+          break;
+        case 'syncing':
+          syncIcon.textContent = '🔄';
+          syncIcon.classList.add('sync-icon');
+          syncText.textContent = 'Syncing...';
+          break;
+      }
+    }
+
+    // Monitor connection status
+    const connectedRef = ref(db, '.info/connected');
+    onValue(connectedRef, (snapshot) => {
+      if (snapshot.val() === true) {
+        updateSyncStatus('connected');
+      } else {
+        updateSyncStatus('disconnected');
+      }
+    });
+
+    // Load tasks from Firebase
+    function loadTasks() {
+      const tasksRef = ref(db, 'adminTasks');
+      onValue(tasksRef, (snapshot) => {
+        const data = snapshot.val() || {};
+        tasks = Object.entries(data).map(([id, task]) => ({
+          ...task,
+          id
+        })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+        updateStats();
+        renderTasks();
+        updateSyncStatus('connected');
+      }, (error) => {
+        console.error('Error loading tasks:', error);
+        updateSyncStatus('disconnected');
       });
     }
 
-    function saveTasks() {
-      localStorage.setItem('tasks', JSON.stringify(tasks));
-      updateStats();
-      renderTasks();
-    }
+    // Add task to Firebase
+    window.addTask = async function() {
+      if (!isConnected) {
+        alert('No connection to database. Please check your internet connection.');
+        return;
+      }
 
-    function generateId() {
-      return '_' + Math.random().toString(36).substr(2, 9);
-    }
-
-    function addTask() {
       const title = document.getElementById('taskTitle').value.trim();
       const assignee = document.getElementById('taskAssignee').value.trim();
       const priority = document.getElementById('taskPriority').value;
@@ -386,51 +504,88 @@
         return;
       }
 
-      const task = {
-        id: generateId(),
-        title,
-        assignee,
-        priority,
-        dueDate,
-        description,
-        completed: false,
-        createdAt: new Date().toISOString()
-      };
+      updateSyncStatus('syncing');
+      document.getElementById('addTaskBtn').disabled = true;
 
-      tasks.unshift(task);
-      saveTasks();
+      try {
+        const newTaskRef = push(ref(db, 'adminTasks'));
+        await set(newTaskRef, {
+          title,
+          assignee,
+          priority,
+          dueDate,
+          description,
+          completed: false,
+          createdAt: new Date().toISOString()
+        });
 
-      // Clear form
-      document.getElementById('taskTitle').value = '';
-      document.getElementById('taskAssignee').value = '';
-      document.getElementById('taskPriority').value = 'medium';
-      document.getElementById('taskDueDate').value = '';
-      document.getElementById('taskDescription').value = '';
-    }
+        // Clear form
+        document.getElementById('taskTitle').value = '';
+        document.getElementById('taskAssignee').value = '';
+        document.getElementById('taskPriority').value = 'medium';
+        document.getElementById('taskDueDate').value = '';
+        document.getElementById('taskDescription').value = '';
+        
+        updateSyncStatus('connected');
+      } catch (error) {
+        console.error('Error adding task:', error);
+        alert('Failed to add task. Please try again.');
+        updateSyncStatus('connected');
+      } finally {
+        document.getElementById('addTaskBtn').disabled = false;
+      }
+    };
 
-    function toggleTask(id) {
+    // Toggle task completion
+    window.toggleTask = async function(id) {
+      if (!isConnected) {
+        alert('No connection to database. Please check your internet connection.');
+        return;
+      }
+
       const task = tasks.find(t => t.id === id);
       if (task) {
-        task.completed = !task.completed;
-        saveTasks();
+        updateSyncStatus('syncing');
+        try {
+          await set(ref(db, 'adminTasks/' + id + '/completed'), !task.completed);
+          updateSyncStatus('connected');
+        } catch (error) {
+          console.error('Error updating task:', error);
+          alert('Failed to update task. Please try again.');
+          updateSyncStatus('connected');
+        }
       }
-    }
+    };
 
-    function deleteTask(id) {
+    // Delete task from Firebase
+    window.deleteTask = async function(id) {
+      if (!isConnected) {
+        alert('No connection to database. Please check your internet connection.');
+        return;
+      }
+
       if (confirm('Are you sure you want to delete this task?')) {
-        tasks = tasks.filter(t => t.id !== id);
-        saveTasks();
+        updateSyncStatus('syncing');
+        try {
+          await remove(ref(db, 'adminTasks/' + id));
+          updateSyncStatus('connected');
+        } catch (error) {
+          console.error('Error deleting task:', error);
+          alert('Failed to delete task. Please try again.');
+          updateSyncStatus('connected');
+        }
       }
-    }
+    };
 
-    function filterTasks(filter) {
+    // Filter tasks
+    window.filterTasks = function(filter) {
       currentFilter = filter;
       document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.classList.remove('active');
       });
       event.target.classList.add('active');
       renderTasks();
-    }
+    };
 
     function getFilteredTasks() {
       switch (currentFilter) {
@@ -491,16 +646,27 @@
       document.getElementById('highPriorityTasks').textContent = highPriority;
     }
 
+    function updateDateTime() {
+      const now = new Date();
+      document.getElementById('datetime').textContent = now.toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
     // Initialize
     updateDateTime();
     setInterval(updateDateTime, 1000);
-    updateStats();
-    renderTasks();
+    loadTasks();
 
     // Add Enter key support for task title
     document.getElementById('taskTitle').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
-        addTask();
+        window.addTask();
       }
     });
   </script>
