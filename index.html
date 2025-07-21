@@ -354,7 +354,6 @@
       <input type="text" id="client" placeholder="Client" />
       <input type="text" id="collaborator" placeholder="Collaborator" />
       <input type="number" id="dailyVideos" placeholder="Daily Videos" />
-      <input type="number" id="rate" placeholder="Rate (BDT)" />
       <textarea id="description" placeholder="Description"></textarea><br/>
       <button onclick="addChannel()">➕ Add Channel</button>
     </div>
@@ -371,7 +370,6 @@
             <th>Client</th>
             <th>Collaborator</th>
             <th>Videos/Day</th>
-            <th>Rate</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -421,7 +419,6 @@
           <td data-label="Client">${task.client}</td>
           <td data-label="Collaborator">${task.collaborator}</td>
           <td data-label="Videos/Day">${task.dailyVideos}</td>
-          <td data-label="Rate">${task.rate} BDT</td>
           <td data-label="Status"><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
           <td>
             <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${id}')">
@@ -456,13 +453,12 @@
       const client = document.getElementById('client').value;
       const collaborator = document.getElementById('collaborator').value;
       const dailyVideos = +document.getElementById('dailyVideos').value;
-      const rate = +document.getElementById('rate').value;
       const description = document.getElementById('description').value;
 
       if (!id || !channel) return alert("Channel ID and Name are required.");
 
       await set(ref(db, 'tasks/' + id), {
-        channel, client, collaborator, dailyVideos, rate, description,
+        channel, client, collaborator, dailyVideos, description,
         status: 'pending',
         lastUpdated: new Date().toISOString()
       });
