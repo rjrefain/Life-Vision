@@ -496,6 +496,17 @@
             text-shadow: 0 1px 3px rgba(0,0,0,0.3);
         }
 
+        .exclusion-note {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid rgba(255,255,255,0.5);
+            font-size: 0.95em;
+            font-style: italic;
+        }
+
         @keyframes shine {
             0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
             100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
@@ -569,79 +580,35 @@
                 </div>
             </div>
 
-            <!-- Project 1 Table -->
+            <!-- Project 1 Table - Simplified -->
             <div class="project-title">Jaroslav Project 1 (Refain)</div>
             <div class="table-wrapper">
                 <table>
                     <thead>
                         <tr>
-                            <th>Rank</th>
-                            <th>Channel Name</th>
-                            <th>Videos Produced</th>
-                            <th>Rate per Video</th>
-                            <th>Total Amount</th>
+                            <th>Project</th>
+                            <th>Payment Type</th>
+                            <th>Amount (USD)</th>
+                            <th>Amount (BDT)</th>
                             <th>Status</th>
+                            <th>Notes</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="rank">🥇 1</td>
-                            <td class="channel-name">Rider Chronicles</td>
-                            <td class="videos-count">57</td>
-                            <td class="rate">$5.00</td>
-                            <td class="amount correct">$285</td>
-                            <td>✅ Correct</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">🥈 2</td>
-                            <td class="channel-name">Parental Controls</td>
-                            <td class="videos-count">29</td>
-                            <td class="rate">$5.00</td>
-                            <td class="amount correct">$145</td>
-                            <td>✅ Correct</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">🥉 3</td>
-                            <td class="channel-name">Heart Blooms</td>
-                            <td class="videos-count">24</td>
-                            <td class="rate">$5.00</td>
-                            <td class="amount correct">$120</td>
-                            <td>✅ Correct</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">4</td>
-                            <td class="channel-name">Bruises Inside</td>
-                            <td class="videos-count">18</td>
-                            <td class="rate">$5.00</td>
-                            <td class="amount correct">$90</td>
-                            <td>✅ Correct</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">5</td>
-                            <td class="channel-name">Our Family Dairy</td>
-                            <td class="videos-count">13</td>
-                            <td class="rate">$5.00</td>
-                            <td class="amount correct">$65</td>
-                            <td>✅ Correct</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">6</td>
-                            <td class="channel-name">Family Group Chat</td>
-                            <td class="videos-count">10</td>
-                            <td class="rate">$5.00</td>
-                            <td class="amount correct">$50</td>
-                            <td>✅ Correct</td>
-                        </tr>
                         <tr class="total-row">
-                            <td><strong>TOTAL</strong></td>
-                            <td><strong>Project 1</strong></td>
-                            <td><strong>151</strong></td>
-                            <td><strong>$5.00</strong></td>
-                            <td><strong>$755</strong></td>
-                            <td><strong>📊 Summary</strong></td>
+                            <td><strong>Jaroslav Project 1</strong></td>
+                            <td><strong>Monthly Payment</strong></td>
+                            <td><strong>$618.00</strong></td>
+                            <td><strong>৳67,980</strong></td>
+                            <td><strong>✅ Complete</strong></td>
+                            <td><strong>📊 Total Payment</strong></td>
                         </tr>
                     </tbody>
                 </table>
+            </div>
+
+            <div class="exclusion-note" style="background: #e3f2fd; color: #1565c0; border-left-color: #2196f3;">
+                💡 <strong>Note:</strong> This payment amount excludes Claude AI subscription charges, which are handled separately.
             </div>
 
             <!-- Project 2 Table -->
