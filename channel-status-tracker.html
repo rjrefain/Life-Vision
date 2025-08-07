@@ -178,8 +178,39 @@
       background: white;
     }
 
+    /* Color background overlays */
+    .channel-item.condition-green {
+      background: linear-gradient(135deg, rgba(39, 174, 96, 0.08), rgba(46, 204, 113, 0.05));
+      border-left: 4px solid var(--success);
+    }
+
+    .channel-item.condition-yellow {
+      background: linear-gradient(135deg, rgba(243, 156, 18, 0.08), rgba(245, 171, 53, 0.05));
+      border-left: 4px solid var(--warning);
+    }
+
+    .channel-item.condition-red {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.08), rgba(192, 57, 43, 0.05));
+      border-left: 4px solid var(--danger);
+    }
+
     .channel-item:hover {
-      background: var(--gray-100);
+      transform: translateX(3px);
+    }
+
+    .channel-item.condition-green:hover {
+      background: linear-gradient(135deg, rgba(39, 174, 96, 0.12), rgba(46, 204, 113, 0.08));
+      box-shadow: 0 5px 20px rgba(39, 174, 96, 0.2);
+    }
+
+    .channel-item.condition-yellow:hover {
+      background: linear-gradient(135deg, rgba(243, 156, 18, 0.12), rgba(245, 171, 53, 0.08));
+      box-shadow: 0 5px 20px rgba(243, 156, 18, 0.2);
+    }
+
+    .channel-item.condition-red:hover {
+      background: linear-gradient(135deg, rgba(231, 76, 60, 0.12), rgba(192, 57, 43, 0.08));
+      box-shadow: 0 5px 20px rgba(231, 76, 60, 0.2);
     }
 
     .channel-item:last-child {
@@ -677,7 +708,7 @@
         const visitStatus = getVisitStatus(channel);
         
         return `
-          <div class="channel-item" data-id="${channel.id}">
+          <div class="channel-item condition-${channel.condition}" data-id="${channel.id}">
             <div class="priority-badge priority-${channel.condition}"></div>
             <div class="channel-info">
               <div>
