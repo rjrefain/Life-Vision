@@ -252,6 +252,72 @@
       display: flex;
       align-items: center;
       gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .visit-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9em;
+      font-weight: 500;
+      padding: 5px 10px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .visit-checkbox.visited {
+      background: rgba(39, 174, 96, 0.1);
+      color: var(--success);
+    }
+
+    .visit-checkbox.warning {
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--danger);
+      animation: warningPulse 2s infinite;
+    }
+
+    @keyframes warningPulse {
+      0%, 100% { background: rgba(231, 76, 60, 0.1); }
+      50% { background: rgba(231, 76, 60, 0.2); }
+    }
+
+    .visit-check {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .visit-check.checked {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+
+    .visit-check:hover {
+      border-color: var(--primary);
+    }
+
+    .warning-badge {
+      background: var(--danger);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.75em;
+      font-weight: bold;
+      animation: warningBlink 1.5s infinite;
+    }
+
+    @keyframes warningBlink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.6; }
     }
 
     .topic-toggle {
@@ -448,6 +514,10 @@
         <div class="stat-number topic-stat" id="topicAvailableCount">0</div>
         <div class="stat-label">Topics Available</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-number red-stat" id="needVisitCount">0</div>
+        <div class="stat-label">Need Visit</div>
+      </div>
     </div>
 
     <div class="sync-status">
@@ -524,16 +594,58 @@
             id,
             condition: statusData[id]?.condition || 'yellow',
             topicAvailable: statusData[id]?.topicAvailable || false,
-            lastUpdated: statusData[id]?.lastUpdated || task.lastUpdated
+            lastUpdated: statusData[id]?.lastUpdated || task.lastUpdated,
+            lastVisited: statusData[id]?.lastVisited || null,
+            visitedAt: statusData[id]?.visitedAt || null
           }));
 
+          // Check for visit warnings
+          updateVisitWarnings();
           renderChannels();
           updateStats();
         });
       });
+    // Check visit warnings and auto-reset after 48 hours
+    function updateVisitWarnings() {
+      const now = new Date().getTime();
+      const FORTY_EIGHT_HOURS = 48 * 60 * 60 * 1000;
+
+      channels.forEach(channel => {
+        if (channel.visitedAt) {
+          const visitTime = new Date(channel.visitedAt).getTime();
+          const timeDiff = now - visitTime;
+          
+          // Auto-reset if more than 48 hours have passed
+          if (timeDiff > FORTY_EIGHT_HOURS && channel.lastVisited) {
+            // Reset visit status in database
+            update(ref(db, `channelStatus/${channel.id}`), {
+              lastVisited: false,
+              visitedAt: null
+            }).catch(error => {
+              console.error('Error resetting visit status:', error);
+            });
+          }
+        }
+      });
     }
 
-    // Sort channels by condition priority with stable positioning
+    function getVisitStatus(channel) {
+      if (!channel.visitedAt || !channel.lastVisited) {
+        return { status: 'warning', message: 'Need to visit' };
+      }
+
+      const now = new Date().getTime();
+      const visitTime = new Date(channel.visitedAt).getTime();
+      const timeDiff = now - visitTime;
+      const FORTY_EIGHT_HOURS = 48 * 60 * 60 * 1000;
+
+      if (timeDiff > FORTY_EIGHT_HOURS) {
+        return { status: 'warning', message: 'Need to visit' };
+      } else {
+        const hoursLeft = Math.ceil((FORTY_EIGHT_HOURS - timeDiff) / (60 * 60 * 1000));
+        return { status: 'visited', message: `Visited (${hoursLeft}h left)` };
+      }
+    }
     function sortChannels(channelsList) {
       const priorityOrder = { 'green': 0, 'yellow': 1, 'red': 2 };
       return channelsList.sort((a, b) => {
@@ -562,43 +674,82 @@
 
       const sortedChannels = sortChannels([...channels]);
       
-      channelsBody.innerHTML = sortedChannels.map(channel => `
-        <div class="channel-item" data-id="${channel.id}">
-          <div class="priority-badge priority-${channel.condition}"></div>
-          <div class="channel-info">
-            <div>
-              <div class="channel-name">${channel.channel}</div>
-              <div class="channel-client">Client: ${channel.client || 'Not specified'}</div>
-            </div>
-            <div class="channel-collaborator">
-              👤 ${channel.collaborator || 'Unassigned'}
-            </div>
-            <div style="color: var(--gray-600); font-size: 0.9em;">
-              📹 ${channel.dailyVideos || 0} videos/day
-            </div>
-            <div class="channel-controls">
-              <div class="topic-toggle">
-                <span>Topic:</span>
-                <div class="toggle-switch ${channel.topicAvailable ? 'active' : ''}" onclick="toggleTopic('${channel.id}')">
-                  <div class="toggle-slider"></div>
+      channelsBody.innerHTML = sortedChannels.map(channel => {
+        const visitStatus = getVisitStatus(channel);
+        
+        return `
+          <div class="channel-item" data-id="${channel.id}">
+            <div class="priority-badge priority-${channel.condition}"></div>
+            <div class="channel-info">
+              <div>
+                <div class="channel-name">
+                  ${channel.channel}
+                  ${visitStatus.status === 'warning' ? '<span class="warning-badge">⚠️ VISIT</span>' : ''}
                 </div>
-                <span style="font-weight: 600; color: ${channel.topicAvailable ? 'var(--success)' : 'var(--danger)'};">
-                  ${channel.topicAvailable ? 'YES' : 'NO'}
-                </span>
+                <div class="channel-client">Client: ${channel.client || 'Not specified'}</div>
               </div>
-              <div class="condition-selector">
-                <div class="condition-btn green ${channel.condition === 'green' ? 'active' : ''}" 
-                     onclick="setCondition('${channel.id}', 'green')" title="Green - All Good"></div>
-                <div class="condition-btn yellow ${channel.condition === 'yellow' ? 'active' : ''}" 
-                     onclick="setCondition('${channel.id}', 'yellow')" title="Yellow - Attention Needed"></div>
-                <div class="condition-btn red ${channel.condition === 'red' ? 'active' : ''}" 
-                     onclick="setCondition('${channel.id}', 'red')" title="Red - Issues"></div>
+              <div class="channel-collaborator">
+                👤 ${channel.collaborator || 'Unassigned'}
+              </div>
+              <div style="color: var(--gray-600); font-size: 0.9em;">
+                📹 ${channel.dailyVideos || 0} videos/day
+              </div>
+              <div class="channel-controls">
+                <div class="visit-checkbox ${visitStatus.status}">
+                  <div class="visit-check ${channel.lastVisited ? 'checked' : ''}" 
+                       onclick="toggleVisit('${channel.id}')"
+                       title="Mark as visited for 48 hours">
+                    ${channel.lastVisited ? '✓' : ''}
+                  </div>
+                  <span>Visited: ${visitStatus.message}</span>
+                </div>
+                <div class="topic-toggle">
+                  <span>Topic:</span>
+                  <div class="toggle-switch ${channel.topicAvailable ? 'active' : ''}" onclick="toggleTopic('${channel.id}')">
+                    <div class="toggle-slider"></div>
+                  </div>
+                  <span style="font-weight: 600; color: ${channel.topicAvailable ? 'var(--success)' : 'var(--danger)'};">
+                    ${channel.topicAvailable ? 'YES' : 'NO'}
+                  </span>
+                </div>
+                <div class="condition-selector">
+                  <div class="condition-btn green ${channel.condition === 'green' ? 'active' : ''}" 
+                       onclick="setCondition('${channel.id}', 'green')" title="Green - All Good"></div>
+                  <div class="condition-btn yellow ${channel.condition === 'yellow' ? 'active' : ''}" 
+                       onclick="setCondition('${channel.id}', 'yellow')" title="Yellow - Attention Needed"></div>
+                  <div class="condition-btn red ${channel.condition === 'red' ? 'active' : ''}" 
+                       onclick="setCondition('${channel.id}', 'red')" title="Red - Issues"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
+
+    // Toggle visit status
+    window.toggleVisit = async function(channelId) {
+      if (!isConnected) {
+        alert('No database connection. Please check your internet.');
+        return;
+      }
+
+      const channel = channels.find(c => c.id === channelId);
+      if (channel) {
+        const newVisitStatus = !channel.lastVisited;
+        const visitedAt = newVisitStatus ? new Date().toISOString() : null;
+        
+        try {
+          await update(ref(db, `channelStatus/${channelId}`), {
+            lastVisited: newVisitStatus,
+            visitedAt: visitedAt
+          });
+        } catch (error) {
+          console.error('Error updating visit status:', error);
+          alert('Failed to update visit status. Please try again.');
+        }
+      }
+    };
 
     // Toggle topic availability
     window.toggleTopic = async function(channelId) {
@@ -665,6 +816,13 @@
         if (channel.topicAvailable) {
           acc.topicAvailable = (acc.topicAvailable || 0) + 1;
         }
+        
+        // Count channels that need visits
+        const visitStatus = getVisitStatus(channel);
+        if (visitStatus.status === 'warning') {
+          acc.needVisit = (acc.needVisit || 0) + 1;
+        }
+        
         return acc;
       }, {});
 
@@ -672,10 +830,20 @@
       document.getElementById('yellowCount').textContent = stats.yellow || 0;
       document.getElementById('redCount').textContent = stats.red || 0;
       document.getElementById('topicAvailableCount').textContent = stats.topicAvailable || 0;
+      document.getElementById('needVisitCount').textContent = stats.needVisit || 0;
     }
 
-    // Initialize the page
+    // Initialize the page and set up periodic checks
     loadChannels();
+    
+    // Check for expired visits every hour
+    setInterval(() => {
+      if (channels.length > 0) {
+        updateVisitWarnings();
+        renderChannels();
+        updateStats();
+      }
+    }, 60 * 60 * 1000); // Check every hour
   </script>
 </body>
 </html>
