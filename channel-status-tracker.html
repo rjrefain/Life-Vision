@@ -156,6 +156,7 @@
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       overflow: hidden;
       min-height: 400px;
+      position: relative;
     }
 
     .channels-header {
@@ -175,39 +176,7 @@
       justify-content: space-between;
       transition: all 0.3s ease;
       position: relative;
-      transform: translateY(0);
-    }
-
-    .channel-item.floating {
-      position: absolute;
-      z-index: 100;
       background: white;
-      border-radius: 15px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-      transform: translateY(-10px) scale(1.05);
-      border: 2px solid var(--primary);
-      animation: floatAndMove 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    }
-
-    @keyframes floatAndMove {
-      0% {
-        transform: translateY(-10px) scale(1.05);
-        opacity: 1;
-        z-index: 100;
-      }
-      50% {
-        transform: translateY(-30px) scale(1.08);
-        opacity: 0.9;
-        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
-      }
-      100% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-        z-index: 1;
-        position: relative;
-        border: none;
-        box-shadow: none;
-      }
     }
 
     .channel-item:hover {
@@ -216,6 +185,42 @@
 
     .channel-item:last-child {
       border-bottom: none;
+    }
+
+    /* Spectacular floating animation */
+    .channel-item.floating {
+      position: relative;
+      z-index: 1000;
+      background: white;
+      border-radius: 15px;
+      border: 3px solid var(--primary);
+      box-shadow: 0 25px 80px rgba(102, 126, 234, 0.4);
+      animation: spectacularFloat 2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    }
+
+    @keyframes spectacularFloat {
+      0% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+      }
+      25% {
+        transform: translateY(-20px) scale(1.03);
+        box-shadow: 0 35px 60px rgba(102, 126, 234, 0.4);
+      }
+      50% {
+        transform: translateY(-40px) scale(1.05);
+        box-shadow: 0 50px 100px rgba(102, 126, 234, 0.5);
+      }
+      75% {
+        transform: translateY(-30px) scale(1.03);
+        box-shadow: 0 40px 80px rgba(102, 126, 234, 0.4);
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        border: none;
+        border-radius: 0;
+      }
     }
 
     .channel-info {
@@ -374,7 +379,7 @@
       }
     }
 
-    .channel-item {
+    .channel-item:not(.floating) {
       animation: slideIn 0.3s ease;
     }
 
@@ -625,14 +630,14 @@
 
       const channelElement = document.querySelector(`[data-id="${channelId}"]`);
       
-      // Add floating animation
+      // Add spectacular floating animation
       if (channelElement) {
         channelElement.classList.add('floating');
         
         // Remove the animation class after it completes
         setTimeout(() => {
           channelElement.classList.remove('floating');
-        }, 1500);
+        }, 2000);
       }
 
       try {
