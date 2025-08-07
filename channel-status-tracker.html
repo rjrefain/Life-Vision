@@ -173,8 +173,17 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      transition: all 0.5s ease;
+      transition: all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
       position: relative;
+      transform: translateY(0);
+    }
+
+    .channel-item.moving {
+      z-index: 10;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      background: white;
+      border-radius: 10px;
+      margin: 5px 0;
     }
 
     .channel-item:hover {
@@ -188,7 +197,7 @@
     .channel-info {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr auto;
+      grid-template-columns: 1fr 1fr 1fr 1fr auto;
       gap: 20px;
       align-items: center;
     }
@@ -208,6 +217,16 @@
       color: var(--gray-600);
       font-size: 0.95em;
       font-style: italic;
+    }
+
+    .channel-project {
+      color: var(--primary);
+      font-size: 0.95em;
+      font-weight: 500;
+      background: rgba(102, 126, 234, 0.1);
+      padding: 4px 8px;
+      border-radius: 12px;
+      text-align: center;
     }
 
     .channel-controls {
@@ -333,16 +352,46 @@
     @keyframes slideIn {
       from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateX(-20px);
       }
       to {
         opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes moveUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0.7;
+      }
+      to {
         transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes moveDown {
+      from {
+        transform: translateY(-20px);
+        opacity: 0.7;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
       }
     }
 
     .channel-item {
-      animation: slideIn 0.3s ease;
+      animation: slideIn 0.4s ease;
+    }
+
+    .channel-item.slide-up {
+      animation: moveUp 0.6s ease;
+    }
+
+    .channel-item.slide-down {
+      animation: moveDown 0.6s ease;
     }
 
     @media (max-width: 768px) {
@@ -458,6 +507,27 @@
       updateSyncStatus();
     });
 
+    // Auto-detect project name based on channel and client
+    function getProjectFromChannel(channelName, client) {
+      if (!client) return 'Unassigned Project';
+      
+      if (client.toLowerCase().includes('jaroslav')) {
+        if (channelName && channelName.toLowerCase().includes('refain')) {
+          return 'Jaroslav Project 1';
+        } else if (channelName && channelName.toLowerCase().includes('eity')) {
+          return 'Jaroslav Project 2';
+        } else if (channelName && channelName.toLowerCase().includes('reon')) {
+          return 'Jaroslav Project 3';
+        } else {
+          return 'Jaroslav Project';
+        }
+      } else if (client.toLowerCase().includes('jason')) {
+        return 'Jason Hill Project 1';
+      } else {
+        return `${client} Project`;
+      }
+    }
+
     function updateSyncStatus() {
       const syncStatus = document.getElementById('syncStatus');
       if (isConnected) {
@@ -485,27 +555,32 @@
             ...task,
             id,
             condition: statusData[id]?.condition || 'yellow',
-            topicAvailable: statusData[id]?.topicAvailable || false
+            topicAvailable: statusData[id]?.topicAvailable || false,
+            project: statusData[id]?.project || getProjectFromChannel(task.channel, task.client),
+            lastUpdated: statusData[id]?.lastUpdated || task.lastUpdated
           }));
 
-          renderChannels();
+          renderChannels(true); // Enable animations for data updates
           updateStats();
         });
       });
     }
 
-    // Sort channels by condition priority
+    // Sort channels by condition priority with stable positioning
     function sortChannels(channelsList) {
       const priorityOrder = { 'green': 0, 'yellow': 1, 'red': 2 };
       return channelsList.sort((a, b) => {
         const priorityDiff = priorityOrder[a.condition] - priorityOrder[b.condition];
         if (priorityDiff !== 0) return priorityDiff;
-        // If same condition, sort by channel name
-        return a.channel.localeCompare(b.channel);
+        
+        // Within same condition, maintain creation order (newest at bottom of group)
+        const aTime = new Date(a.lastUpdated || a.createdAt || 0).getTime();
+        const bTime = new Date(b.lastUpdated || b.createdAt || 0).getTime();
+        return aTime - bTime; // Older items first, newer items at bottom of group
       });
     }
 
-    function renderChannels() {
+    function renderChannels(animateChanges = false) {
       const channelsBody = document.getElementById('channelsBody');
       
       if (channels.length === 0) {
@@ -520,42 +595,61 @@
 
       const sortedChannels = sortChannels([...channels]);
       
-      channelsBody.innerHTML = sortedChannels.map(channel => `
-        <div class="channel-item" data-id="${channel.id}">
-          <div class="priority-badge priority-${channel.condition}"></div>
-          <div class="channel-info">
-            <div>
-              <div class="channel-name">${channel.channel}</div>
-              <div class="channel-client">Client: ${channel.client || 'Not specified'}</div>
-            </div>
-            <div class="channel-collaborator">
-              👤 ${channel.collaborator || 'Unassigned'}
-            </div>
-            <div style="color: var(--gray-600); font-size: 0.9em;">
-              📹 ${channel.dailyVideos || 0} videos/day
-            </div>
-            <div class="channel-controls">
-              <div class="topic-toggle">
-                <span>Topic:</span>
-                <div class="toggle-switch ${channel.topicAvailable ? 'active' : ''}" onclick="toggleTopic('${channel.id}')">
-                  <div class="toggle-slider"></div>
-                </div>
-                <span style="font-weight: 600; color: ${channel.topicAvailable ? 'var(--success)' : 'var(--danger)'};">
-                  ${channel.topicAvailable ? 'YES' : 'NO'}
-                </span>
+      // Store previous positions for animation
+      const previousOrder = Array.from(channelsBody.children).map(el => el.dataset.id);
+      
+      channelsBody.innerHTML = sortedChannels.map((channel, index) => {
+        const previousIndex = previousOrder.indexOf(channel.id);
+        let animationClass = '';
+        
+        if (animateChanges && previousIndex !== -1) {
+          if (previousIndex > index) {
+            animationClass = 'slide-up';
+          } else if (previousIndex < index) {
+            animationClass = 'slide-down';
+          }
+        }
+        
+        return `
+          <div class="channel-item ${animationClass}" data-id="${channel.id}">
+            <div class="priority-badge priority-${channel.condition}"></div>
+            <div class="channel-info">
+              <div>
+                <div class="channel-name">${channel.channel}</div>
+                <div class="channel-client">Client: ${channel.client || 'Not specified'}</div>
               </div>
-              <div class="condition-selector">
-                <div class="condition-btn green ${channel.condition === 'green' ? 'active' : ''}" 
-                     onclick="setCondition('${channel.id}', 'green')" title="Green - All Good"></div>
-                <div class="condition-btn yellow ${channel.condition === 'yellow' ? 'active' : ''}" 
-                     onclick="setCondition('${channel.id}', 'yellow')" title="Yellow - Attention Needed"></div>
-                <div class="condition-btn red ${channel.condition === 'red' ? 'active' : ''}" 
-                     onclick="setCondition('${channel.id}', 'red')" title="Red - Issues"></div>
+              <div class="channel-collaborator">
+                👤 ${channel.collaborator || 'Unassigned'}
+              </div>
+              <div class="channel-project">
+                📁 ${channel.project || 'No Project'}
+              </div>
+              <div style="color: var(--gray-600); font-size: 0.9em;">
+                📹 ${channel.dailyVideos || 0} videos/day
+              </div>
+              <div class="channel-controls">
+                <div class="topic-toggle">
+                  <span>Topic:</span>
+                  <div class="toggle-switch ${channel.topicAvailable ? 'active' : ''}" onclick="toggleTopic('${channel.id}')">
+                    <div class="toggle-slider"></div>
+                  </div>
+                  <span style="font-weight: 600; color: ${channel.topicAvailable ? 'var(--success)' : 'var(--danger)'};">
+                    ${channel.topicAvailable ? 'YES' : 'NO'}
+                  </span>
+                </div>
+                <div class="condition-selector">
+                  <div class="condition-btn green ${channel.condition === 'green' ? 'active' : ''}" 
+                       onclick="setCondition('${channel.id}', 'green')" title="Green - All Good"></div>
+                  <div class="condition-btn yellow ${channel.condition === 'yellow' ? 'active' : ''}" 
+                       onclick="setCondition('${channel.id}', 'yellow')" title="Yellow - Attention Needed"></div>
+                  <div class="condition-btn red ${channel.condition === 'red' ? 'active' : ''}" 
+                       onclick="setCondition('${channel.id}', 'red')" title="Red - Issues"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     // Toggle topic availability
@@ -586,22 +680,35 @@
         return;
       }
 
+      const channelElement = document.querySelector(`[data-id="${channelId}"]`);
+      
+      // Add moving class for visual feedback
+      if (channelElement) {
+        channelElement.classList.add('moving');
+      }
+
       try {
+        // Update the timestamp to ensure it goes to bottom of its color group
         await update(ref(db, `channelStatus/${channelId}`), {
-          condition: condition
+          condition: condition,
+          lastUpdated: new Date().toISOString()
         });
         
-        // Add visual feedback
-        const channelElement = document.querySelector(`[data-id="${channelId}"]`);
-        if (channelElement) {
-          channelElement.style.transform = 'scale(1.02)';
-          setTimeout(() => {
-            channelElement.style.transform = '';
-          }, 200);
-        }
+        // Small delay to show the moving effect
+        setTimeout(() => {
+          if (channelElement) {
+            channelElement.classList.remove('moving');
+          }
+        }, 300);
+        
       } catch (error) {
         console.error('Error updating condition:', error);
         alert('Failed to update channel condition. Please try again.');
+        
+        // Remove moving class on error
+        if (channelElement) {
+          channelElement.classList.remove('moving');
+        }
       }
     };
 
