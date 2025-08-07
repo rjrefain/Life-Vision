@@ -82,7 +82,7 @@
 
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 20px;
       margin-bottom: 30px;
     }
@@ -91,7 +91,7 @@
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(10px);
       border-radius: 15px;
-      padding: 25px;
+      padding: 20px;
       text-align: center;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s ease;
@@ -109,7 +109,7 @@
 
     .stat-label {
       color: var(--gray-600);
-      font-size: 0.9em;
+      font-size: 0.85em;
       text-transform: uppercase;
       letter-spacing: 1px;
     }
@@ -156,7 +156,6 @@
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
       overflow: hidden;
       min-height: 400px;
-      position: relative;
     }
 
     .channels-header {
@@ -187,9 +186,8 @@
       border-bottom: none;
     }
 
-    /* Spectacular floating animation */
+    /* Floating animation for color changes */
     .channel-item.floating {
-      position: relative;
       z-index: 1000;
       background: white;
       border-radius: 15px;
@@ -235,6 +233,9 @@
       font-weight: 600;
       font-size: 1.1em;
       color: var(--gray-900);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .channel-client {
@@ -255,15 +256,17 @@
       flex-wrap: wrap;
     }
 
+    /* Visit checkbox styles */
     .visit-checkbox {
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.9em;
+      font-size: 0.85em;
       font-weight: 500;
-      padding: 5px 10px;
+      padding: 6px 10px;
       border-radius: 8px;
       transition: all 0.3s ease;
+      min-width: 140px;
     }
 
     .visit-checkbox.visited {
@@ -293,6 +296,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
     }
 
     .visit-check.checked {
@@ -308,9 +313,9 @@
     .warning-badge {
       background: var(--danger);
       color: white;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 0.75em;
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-size: 0.7em;
       font-weight: bold;
       animation: warningBlink 1.5s infinite;
     }
@@ -324,14 +329,14 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      font-size: 0.9em;
+      font-size: 0.85em;
       font-weight: 500;
     }
 
     .toggle-switch {
       position: relative;
-      width: 50px;
-      height: 25px;
+      width: 45px;
+      height: 22px;
       background: #ccc;
       border-radius: 25px;
       cursor: pointer;
@@ -346,8 +351,8 @@
       position: absolute;
       top: 2px;
       left: 2px;
-      width: 21px;
-      height: 21px;
+      width: 18px;
+      height: 18px;
       background: white;
       border-radius: 50%;
       transition: transform 0.3s ease;
@@ -355,7 +360,7 @@
     }
 
     .toggle-switch.active .toggle-slider {
-      transform: translateX(25px);
+      transform: translateX(23px);
     }
 
     .condition-selector {
@@ -364,13 +369,12 @@
     }
 
     .condition-btn {
-      width: 35px;
-      height: 35px;
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
       border: 3px solid transparent;
       cursor: pointer;
       transition: all 0.3s ease;
-      position: relative;
     }
 
     .condition-btn.green {
@@ -388,26 +392,11 @@
     .condition-btn.active {
       border-color: var(--gray-900);
       transform: scale(1.2);
-      box-shadow: 0 0 0 2px white, 0 0 20px rgba(0,0,0,0.3);
+      box-shadow: 0 0 0 2px white, 0 0 15px rgba(0,0,0,0.3);
     }
 
     .condition-btn:hover:not(.active) {
       transform: scale(1.1);
-    }
-
-    .loading-state {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 60px 20px;
-      color: var(--gray-600);
-      font-size: 1.1em;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--gray-600);
     }
 
     .priority-badge {
@@ -434,19 +423,14 @@
       box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
     }
 
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .channel-item:not(.floating) {
-      animation: slideIn 0.3s ease;
+    .loading-state, .empty-state {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 60px 20px;
+      color: var(--gray-600);
+      font-size: 1.1em;
+      text-align: center;
     }
 
     @media (max-width: 768px) {
@@ -541,7 +525,7 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getDatabase, ref, set, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+    import { getDatabase, ref, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
@@ -559,7 +543,7 @@
     let channels = [];
     let isConnected = false;
 
-    // Connection status monitoring
+    // Connection monitoring
     const connectedRef = ref(db, '.info/connected');
     onValue(connectedRef, (snapshot) => {
       isConnected = snapshot.val() === true;
@@ -577,47 +561,61 @@
       }
     }
 
-    // Load channels and their status data
+    // Load channels data
     function loadChannels() {
       const tasksRef = ref(db, 'tasks');
       onValue(tasksRef, (snapshot) => {
-        const tasksData = snapshot.val() || {};
+        const tasksData = snapshot.val();
         
-        // Load channel status data
+        if (!tasksData) {
+          channels = [];
+          renderChannels();
+          updateStats();
+          return;
+        }
+        
+        // Load status data
         const statusRef = ref(db, 'channelStatus');
         onValue(statusRef, (statusSnapshot) => {
           const statusData = statusSnapshot.val() || {};
           
-          // Combine task data with status data
+          // Combine data
           channels = Object.entries(tasksData).map(([id, task]) => ({
             ...task,
             id,
             condition: statusData[id]?.condition || 'yellow',
             topicAvailable: statusData[id]?.topicAvailable || false,
-            lastUpdated: statusData[id]?.lastUpdated || task.lastUpdated,
-            lastVisited: statusData[id]?.lastVisited || null,
+            lastVisited: statusData[id]?.lastVisited || false,
             visitedAt: statusData[id]?.visitedAt || null
           }));
 
-          // Check for visit warnings
           updateVisitWarnings();
           renderChannels();
           updateStats();
         });
+      }, (error) => {
+        console.error('Error loading channels:', error);
+        document.getElementById('channelsBody').innerHTML = `
+          <div class="empty-state">
+            <h3>Error Loading Channels</h3>
+            <p>Please check your connection and try again.</p>
+          </div>
+        `;
       });
-    // Check visit warnings and auto-reset after 48 hours
+    }
+
+    // Check and update visit warnings
     function updateVisitWarnings() {
       const now = new Date().getTime();
       const FORTY_EIGHT_HOURS = 48 * 60 * 60 * 1000;
 
       channels.forEach(channel => {
-        if (channel.visitedAt) {
+        if (channel.visitedAt && channel.lastVisited) {
           const visitTime = new Date(channel.visitedAt).getTime();
           const timeDiff = now - visitTime;
           
-          // Auto-reset if more than 48 hours have passed
-          if (timeDiff > FORTY_EIGHT_HOURS && channel.lastVisited) {
-            // Reset visit status in database
+          if (timeDiff > FORTY_EIGHT_HOURS) {
+            // Auto-reset expired visits
             update(ref(db, `channelStatus/${channel.id}`), {
               lastVisited: false,
               visitedAt: null
@@ -631,7 +629,7 @@
 
     function getVisitStatus(channel) {
       if (!channel.visitedAt || !channel.lastVisited) {
-        return { status: 'warning', message: 'Need to visit' };
+        return { status: 'warning', message: 'Need visit' };
       }
 
       const now = new Date().getTime();
@@ -640,22 +638,23 @@
       const FORTY_EIGHT_HOURS = 48 * 60 * 60 * 1000;
 
       if (timeDiff > FORTY_EIGHT_HOURS) {
-        return { status: 'warning', message: 'Need to visit' };
+        return { status: 'warning', message: 'Need visit' };
       } else {
         const hoursLeft = Math.ceil((FORTY_EIGHT_HOURS - timeDiff) / (60 * 60 * 1000));
-        return { status: 'visited', message: `Visited (${hoursLeft}h left)` };
+        return { status: 'visited', message: `${hoursLeft}h left` };
       }
     }
+
+    // Sort channels
     function sortChannels(channelsList) {
       const priorityOrder = { 'green': 0, 'yellow': 1, 'red': 2 };
       return channelsList.sort((a, b) => {
         const priorityDiff = priorityOrder[a.condition] - priorityOrder[b.condition];
         if (priorityDiff !== 0) return priorityDiff;
         
-        // Within same condition, maintain creation order (newest at bottom of group)
-        const aTime = new Date(a.lastUpdated || a.createdAt || 0).getTime();
-        const bTime = new Date(b.lastUpdated || b.createdAt || 0).getTime();
-        return aTime - bTime; // Older items first, newer items at bottom of group
+        const aTime = new Date(a.lastUpdated || 0).getTime();
+        const bTime = new Date(b.lastUpdated || 0).getTime();
+        return aTime - bTime;
       });
     }
 
@@ -701,14 +700,14 @@
                        title="Mark as visited for 48 hours">
                     ${channel.lastVisited ? '✓' : ''}
                   </div>
-                  <span>Visited: ${visitStatus.message}</span>
+                  <span>${visitStatus.message}</span>
                 </div>
                 <div class="topic-toggle">
                   <span>Topic:</span>
                   <div class="toggle-switch ${channel.topicAvailable ? 'active' : ''}" onclick="toggleTopic('${channel.id}')">
                     <div class="toggle-slider"></div>
                   </div>
-                  <span style="font-weight: 600; color: ${channel.topicAvailable ? 'var(--success)' : 'var(--danger)'};">
+                  <span style="font-weight: 600; color: ${channel.topicAvailable ? 'var(--success)' : 'var(--danger)'}; font-size: 0.8em;">
                     ${channel.topicAvailable ? 'YES' : 'NO'}
                   </span>
                 </div>
@@ -727,7 +726,7 @@
       }).join('');
     }
 
-    // Toggle visit status
+    // Global functions
     window.toggleVisit = async function(channelId) {
       if (!isConnected) {
         alert('No database connection. Please check your internet.');
@@ -751,7 +750,6 @@
       }
     };
 
-    // Toggle topic availability
     window.toggleTopic = async function(channelId) {
       if (!isConnected) {
         alert('No database connection. Please check your internet.');
@@ -760,10 +758,9 @@
 
       const channel = channels.find(c => c.id === channelId);
       if (channel) {
-        const newTopicStatus = !channel.topicAvailable;
         try {
           await update(ref(db, `channelStatus/${channelId}`), {
-            topicAvailable: newTopicStatus
+            topicAvailable: !channel.topicAvailable
           });
         } catch (error) {
           console.error('Error updating topic status:', error);
@@ -772,7 +769,6 @@
       }
     };
 
-    // Set channel condition with spectacular animation
     window.setCondition = async function(channelId, condition) {
       if (!isConnected) {
         alert('No database connection. Please check your internet.');
@@ -781,35 +777,27 @@
 
       const channelElement = document.querySelector(`[data-id="${channelId}"]`);
       
-      // Add spectacular floating animation
       if (channelElement) {
         channelElement.classList.add('floating');
-        
-        // Remove the animation class after it completes
         setTimeout(() => {
           channelElement.classList.remove('floating');
         }, 2000);
       }
 
       try {
-        // Update the timestamp to ensure it goes to bottom of its color group
         await update(ref(db, `channelStatus/${channelId}`), {
           condition: condition,
           lastUpdated: new Date().toISOString()
         });
-        
       } catch (error) {
         console.error('Error updating condition:', error);
         alert('Failed to update channel condition. Please try again.');
-        
-        // Remove floating class on error
         if (channelElement) {
           channelElement.classList.remove('floating');
         }
       }
     };
 
-    // Update statistics
     function updateStats() {
       const stats = channels.reduce((acc, channel) => {
         acc[channel.condition] = (acc[channel.condition] || 0) + 1;
@@ -817,7 +805,6 @@
           acc.topicAvailable = (acc.topicAvailable || 0) + 1;
         }
         
-        // Count channels that need visits
         const visitStatus = getVisitStatus(channel);
         if (visitStatus.status === 'warning') {
           acc.needVisit = (acc.needVisit || 0) + 1;
@@ -833,17 +820,15 @@
       document.getElementById('needVisitCount').textContent = stats.needVisit || 0;
     }
 
-    // Initialize the page and set up periodic checks
+    // Initialize
     loadChannels();
     
     // Check for expired visits every hour
     setInterval(() => {
       if (channels.length > 0) {
         updateVisitWarnings();
-        renderChannels();
-        updateStats();
       }
-    }, 60 * 60 * 1000); // Check every hour
+    }, 60 * 60 * 1000);
   </script>
 </body>
 </html>
