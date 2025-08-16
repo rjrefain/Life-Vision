@@ -754,20 +754,12 @@
       }
     };
 
-    // Edit Collaborator Functions
+    // Edit Collaborator Functions - FIXED
     window.editCollaborator = function(id, event) {
       if (event) event.stopPropagation();
       
-      // Find the row containing this collaborator
-      const rows = document.querySelectorAll('#tasksBody tr');
-      let targetRow = null;
-      
-      rows.forEach(row => {
-        const displayDiv = row.querySelector('.collaborator-display');
-        if (displayDiv && displayDiv.getAttribute('onclick').includes(id)) {
-          targetRow = row;
-        }
-      });
+      // Find the correct row by data attribute
+      const targetRow = document.querySelector(`tr[data-channel-id="${id}"]`);
       
       if (targetRow) {
         const collaboratorCell = targetRow.querySelector('.collaborator-cell');
@@ -794,16 +786,8 @@
     window.saveCollaborator = async function(id, event) {
       if (event) event.stopPropagation();
       
-      // Find the row containing this collaborator
-      const rows = document.querySelectorAll('#tasksBody tr');
-      let targetRow = null;
-      
-      rows.forEach(row => {
-        const saveBtn = row.querySelector('.save-collaborator-btn');
-        if (saveBtn && saveBtn.getAttribute('onclick').includes(id)) {
-          targetRow = row;
-        }
-      });
+      // Find the correct row by data attribute
+      const targetRow = document.querySelector(`tr[data-channel-id="${id}"]`);
       
       if (targetRow) {
         const collaboratorCell = targetRow.querySelector('.collaborator-cell');
@@ -843,16 +827,8 @@
     window.cancelEdit = function(id, event) {
       if (event) event.stopPropagation();
       
-      // Find the row containing this collaborator
-      const rows = document.querySelectorAll('#tasksBody tr');
-      let targetRow = null;
-      
-      rows.forEach(row => {
-        const cancelBtn = row.querySelector('.cancel-collaborator-btn');
-        if (cancelBtn && cancelBtn.getAttribute('onclick').includes(id)) {
-          targetRow = row;
-        }
-      });
+      // Find the correct row by data attribute
+      const targetRow = document.querySelector(`tr[data-channel-id="${id}"]`);
       
       if (targetRow) {
         const collaboratorCell = targetRow.querySelector('.collaborator-cell');
