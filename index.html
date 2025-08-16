@@ -10,6 +10,7 @@
       --secondary-color: #764ba2;
       --success-color: #27ae60;
       --danger-color: #e74c3c;
+      --warning-color: #f39c12;
       --light-color: #f8f9fa;
       --dark-color: #2c3e50;
     }
@@ -113,6 +114,50 @@
       background: #219150;
     }
 
+    /* Reset Button Styles */
+    .reset-section {
+      text-align: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(243, 156, 18, 0.1);
+      border-radius: 15px;
+      border: 2px solid var(--warning-color);
+    }
+
+    .reset-btn {
+      background: linear-gradient(135deg, var(--warning-color), #e67e22);
+      color: white;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 25px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .reset-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(243, 156, 18, 0.5);
+    }
+
+    .reset-btn:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .reset-warning {
+      color: var(--warning-color);
+      font-size: 14px;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
     .table-wrapper {
       overflow-x: auto;
       border-radius: 8px;
@@ -208,6 +253,75 @@
       border-left: 3px solid var(--danger-color);
     }
 
+    /* Editable Collaborator Styles */
+    .collaborator-cell {
+      position: relative;
+    }
+
+    .collaborator-display {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      padding: 5px;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .collaborator-display:hover {
+      background-color: rgba(102, 126, 234, 0.1);
+    }
+
+    .edit-icon {
+      color: var(--primary-color);
+      font-size: 14px;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .collaborator-display:hover .edit-icon {
+      opacity: 1;
+    }
+
+    .collaborator-input {
+      width: 100%;
+      padding: 5px 8px;
+      border: 2px solid var(--primary-color);
+      border-radius: 5px;
+      font-size: 14px;
+      background: white;
+      display: none;
+    }
+
+    .collaborator-input:focus {
+      outline: none;
+      box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+    }
+
+    .save-collaborator-btn {
+      background: var(--success-color);
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-left: 5px;
+      display: none;
+    }
+
+    .cancel-collaborator-btn {
+      background: var(--danger-color);
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-left: 3px;
+      display: none;
+    }
+
     @keyframes late-pulse {
       0% { background-color: #ffebee; }
       100% { background-color: #ffcdd2; }
@@ -232,6 +346,11 @@
         width: 100%;
         max-width: 100%;
         margin: 5px 0;
+      }
+
+      .reset-btn {
+        padding: 12px 25px;
+        font-size: 14px;
       }
 
       /* Hide table headers on mobile */
@@ -335,6 +454,11 @@
         font-size: 14px;
         padding: 8px 15px;
       }
+
+      .collaborator-display {
+        flex-direction: column;
+        gap: 5px;
+      }
     }
   </style>
 </head>
@@ -361,6 +485,17 @@
       <button onclick="addChannel()">➕ Add Channel</button>
     </div>
 
+    <!-- Reset Button Section -->
+    <div class="reset-section">
+      <h3>🔄 Daily Reset</h3>
+      <button class="reset-btn" onclick="resetAllChannels()" id="resetBtn">
+        🔄 Reset All Channels to Pending
+      </button>
+      <div class="reset-warning">
+        ⚠️ This will change all completed channels back to "Mark Complete" status
+      </div>
+    </div>
+
     <div class="status-container">
       <div id="firebaseStatus">🟢 Connected to Database</div>
     </div>
@@ -384,7 +519,7 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getDatabase, ref, set, remove, get, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+    import { getDatabase, ref, set, remove, get, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
@@ -420,7 +555,17 @@
         row.innerHTML = `
           <td data-label="Channel">${task.channel}</td>
           <td data-label="Client">${task.client}</td>
-          <td data-label="Collaborator">${task.collaborator}</td>
+          <td data-label="Collaborator" class="collaborator-cell">
+            <div class="collaborator-display" onclick="editCollaborator('${id}')">
+              <span class="collaborator-name">${task.collaborator || 'Unassigned'}</span>
+              <span class="edit-icon">✏️</span>
+            </div>
+            <div class="collaborator-edit-section" style="display: none;">
+              <input type="text" class="collaborator-input" value="${task.collaborator || ''}" />
+              <button class="save-collaborator-btn" onclick="saveCollaborator('${id}')">✅</button>
+              <button class="cancel-collaborator-btn" onclick="cancelEdit('${id}')">❌</button>
+            </div>
+          </td>
           <td data-label="Videos/Day">${task.dailyVideos}</td>
           <td data-label="Status"><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
           <td>
@@ -467,6 +612,107 @@
       });
 
       document.querySelectorAll('.form-section input, .form-section textarea').forEach(i => i.value = '');
+    };
+
+    // Reset All Channels Function
+    window.resetAllChannels = async function() {
+      const confirmation = confirm(
+        "🔄 Are you sure you want to reset ALL channels from 'Completed' to 'Pending'?\n\n" +
+        "This action will:\n" +
+        "• Change all completed channels to pending status\n" +
+        "• Allow you to mark them as complete again\n" +
+        "• This is typically done at the start of each day\n\n" +
+        "Continue with reset?"
+      );
+      
+      if (!confirmation) return;
+
+      const resetBtn = document.getElementById('resetBtn');
+      resetBtn.disabled = true;
+      resetBtn.textContent = '🔄 Resetting...';
+
+      try {
+        const tasksRef = ref(db, 'tasks');
+        const snapshot = await get(tasksRef);
+        
+        if (snapshot.exists()) {
+          const tasks = snapshot.val();
+          const updates = {};
+          let resetCount = 0;
+
+          // Prepare updates for all completed tasks
+          Object.entries(tasks).forEach(([id, task]) => {
+            if (task.status === 'completed') {
+              updates[`tasks/${id}/status`] = 'pending';
+              updates[`tasks/${id}/lastUpdated`] = new Date().toISOString();
+              resetCount++;
+            }
+          });
+
+          if (resetCount > 0) {
+            // Batch update all changes
+            await update(ref(db), updates);
+            alert(`✅ Successfully reset ${resetCount} channel(s) from completed to pending status!`);
+          } else {
+            alert('ℹ️ No completed channels found to reset.');
+          }
+        }
+      } catch (error) {
+        console.error('Error resetting channels:', error);
+        alert('❌ Error resetting channels. Please try again.');
+      } finally {
+        resetBtn.disabled = false;
+        resetBtn.textContent = '🔄 Reset All Channels to Pending';
+      }
+    };
+
+    // Edit Collaborator Functions
+    window.editCollaborator = function(id) {
+      const row = document.querySelector(`[onclick="editCollaborator('${id}')"]`).closest('tr');
+      const collaboratorCell = row.querySelector('.collaborator-cell');
+      const displaySection = collaboratorCell.querySelector('.collaborator-display');
+      const editSection = collaboratorCell.querySelector('.collaborator-edit-section');
+      
+      displaySection.style.display = 'none';
+      editSection.style.display = 'flex';
+      editSection.querySelector('.collaborator-input').focus();
+    };
+
+    window.saveCollaborator = async function(id) {
+      const row = document.querySelector(`[onclick="saveCollaborator('${id}')"]`).closest('tr');
+      const collaboratorCell = row.querySelector('.collaborator-cell');
+      const input = collaboratorCell.querySelector('.collaborator-input');
+      const newCollaborator = input.value.trim();
+
+      if (!newCollaborator) {
+        alert('Collaborator name cannot be empty!');
+        return;
+      }
+
+      try {
+        await update(ref(db, `tasks/${id}`), {
+          collaborator: newCollaborator,
+          lastUpdated: new Date().toISOString()
+        });
+        
+        // Update the display
+        collaboratorCell.querySelector('.collaborator-name').textContent = newCollaborator;
+        cancelEdit(id);
+        
+      } catch (error) {
+        console.error('Error updating collaborator:', error);
+        alert('Failed to update collaborator. Please try again.');
+      }
+    };
+
+    window.cancelEdit = function(id) {
+      const row = document.querySelector(`[onclick="cancelEdit('${id}')"]`).closest('tr');
+      const collaboratorCell = row.querySelector('.collaborator-cell');
+      const displaySection = collaboratorCell.querySelector('.collaborator-display');
+      const editSection = collaboratorCell.querySelector('.collaborator-edit-section');
+      
+      displaySection.style.display = 'flex';
+      editSection.style.display = 'none';
     };
 
     function checkIfLate(status) {
