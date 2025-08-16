@@ -585,10 +585,42 @@
     }
 
     .celebration-emoji {
-      font-size: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin-bottom: 20px;
-      display: block;
       animation: bounce 1.5s infinite;
+    }
+
+    .green-circle {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4);
+      animation: pulse 2s infinite;
+    }
+
+    .white-tick {
+      color: white;
+      font-size: 60px;
+      font-weight: bold;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4), 0 0 0 0 rgba(39, 174, 96, 0.7);
+      }
+      70% {
+        box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4), 0 0 0 20px rgba(39, 174, 96, 0);
+      }
+      100% {
+        box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4), 0 0 0 0 rgba(39, 174, 96, 0);
+      }
     }
 
     @keyframes bounce {
@@ -747,8 +779,13 @@
         font-size: 36px;
       }
 
-      .celebration-emoji {
-        font-size: 60px;
+      .green-circle {
+        width: 80px;
+        height: 80px;
+      }
+
+      .white-tick {
+        font-size: 40px;
       }
 
       .celebration-message {
@@ -977,11 +1014,15 @@
         <div class="particle"></div>
         <div class="particle"></div>
         
-        <span class="celebration-emoji">🎉</span>
+        <div class="celebration-emoji">
+          <div class="green-circle">
+            <div class="white-tick">✓</div>
+          </div>
+        </div>
         <h1 class="celebration-title">CONGRATULATIONS!</h1>
         <div class="celebration-line"></div>
         <p class="celebration-message">
-          You Are Helping LemonCore To Grow, Keep That Up Champ.
+          You Are Helping LemonCore To Grow, Keep That Up Champ!
         </p>
         <button class="celebration-close" onclick="closeCelebration()">
           ✨ Continue The Great Work! ✨
