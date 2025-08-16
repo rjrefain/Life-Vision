@@ -496,18 +496,18 @@
             </div>
 
             <!-- Summary Cards -->
-            <div class="summary-grid" id="summaryGrid">
+                                        <div class="summary-grid" id="summaryGrid">
                 <div class="summary-card revenue-card">
                     <h3>💰 Total Client Revenue</h3>
-                    <div class="amount" id="totalRevenue">$0.00</div>
+                    <div class="amount" id="totalRevenue">৳0.00</div>
                 </div>
                 <div class="summary-card expense-card">
                     <h3>💸 Total Collaborator Payments</h3>
-                    <div class="amount" id="totalExpenses">$0.00</div>
+                    <div class="amount" id="totalExpenses">৳0.00</div>
                 </div>
                 <div class="summary-card profit-card">
                     <h3>💎 Net Profit</h3>
-                    <div class="amount" id="netProfit">$0.00</div>
+                    <div class="amount" id="netProfit">৳0.00</div>
                 </div>
             </div>
 
@@ -703,7 +703,7 @@
                 
                 if (payments.clientRate > 0 || payments.collaboratorRate > 0) {
                     profitClass = profit >= 0 ? 'profit-positive' : 'profit-negative';
-                    profitText = `${profit >= 0 ? 'Profit' : 'Loss'}: $${Math.abs(profit).toFixed(2)}`;
+                    profitText = `${profit >= 0 ? 'Profit' : 'Loss'}: ৳${Math.abs(profit).toFixed(2)}`;
                     if (payments.clientRate > 0) {
                         const margin = ((profit / payments.clientRate) * 100).toFixed(1);
                         profitText += ` (${margin}% margin)`;
@@ -798,9 +798,9 @@
 
             const netProfit = totalRevenue - totalExpenses;
 
-            document.getElementById('totalRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
-            document.getElementById('totalExpenses').textContent = `$${totalExpenses.toFixed(2)}`;
-            document.getElementById('netProfit').textContent = `$${netProfit.toFixed(2)}`;
+            document.getElementById('totalRevenue').textContent = `৳${totalRevenue.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `৳${totalExpenses.toFixed(2)}`;
+            document.getElementById('netProfit').textContent = `৳${netProfit.toFixed(2)}`;
             
             // Update profit card color based on profit/loss
             const profitCard = document.querySelector('.profit-card .amount');
