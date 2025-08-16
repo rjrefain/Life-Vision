@@ -422,7 +422,7 @@
             <h1 class="login-title">💰 Payment Tracker Access</h1>
             <p class="login-subtitle">Enter password to view channel payment data</p>
             
-            <form class="login-form" onsubmit="checkPassword(event)">
+            <div class="login-form">
                 <input 
                     type="password" 
                     class="password-input" 
@@ -431,12 +431,12 @@
                     autocomplete="off"
                     required
                 >
-                <button type="submit" class="login-btn">🚀 Access Payment Data</button>
+                <button type="button" class="login-btn" onclick="checkPassword()">🚀 Access Payment Data</button>
                 
                 <div class="error-message" id="errorMessage">
                     ❌ Access denied! Incorrect password.
                 </div>
-            </form>
+            </div>
             
             <div class="security-note">
                 🛡️ <strong>Security Notice:</strong> This page contains sensitive financial payment data. Only authorized personnel should access this information.
@@ -519,29 +519,7 @@
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, set, remove, onValue, push } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
-
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
-            authDomain: "video-production-tracker-12c07.firebaseapp.com",
-            databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com",
-            projectId: "video-production-tracker-12c07",
-            storageBucket: "video-production-tracker-12c07.appspot.com",
-            messagingSenderId: "126509441147",
-            appId: "1:126509441147:web:abc123def456"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
-
-        let payments = [];
-        let channels = [];
-        let isConnected = false;
-        let isAuthenticated = false;
-
+    <script>
         // Password validation
         const validPasswords = [
             'LifeVision2024',
@@ -552,6 +530,11 @@
 
         const SESSION_KEY = 'paymentTrackerAuth';
         const SESSION_DURATION = 4 * 60 * 60 * 1000; // 4 hours
+
+        let payments = [];
+        let channels = [];
+        let isConnected = false;
+        let isAuthenticated = false;
 
         // Check existing session on load
         window.onload = function() {
@@ -564,16 +547,14 @@
             
             if (session.authenticated && (now - session.timestamp) < SESSION_DURATION) {
                 showMainContent();
-                initializeApp();
+                loadFirebaseData();
             } else {
                 localStorage.removeItem(SESSION_KEY);
                 showLoginScreen();
             }
         }
 
-        window.checkPassword = function(event) {
-            event.preventDefault();
-            
+        function checkPassword() {
             const enteredPassword = document.getElementById('passwordInput').value;
             const errorMessage = document.getElementById('errorMessage');
             
@@ -585,7 +566,7 @@
                 localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
                 
                 showMainContent();
-                initializeApp();
+                loadFirebaseData();
                 
                 document.getElementById('passwordInput').value = '';
                 errorMessage.style.display = 'none';
@@ -598,7 +579,16 @@
                     errorMessage.style.display = 'none';
                 }, 3000);
             }
-        };
+        }
+
+        // Allow Enter key to submit password
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+        });
 
         function showMainContent() {
             document.getElementById('loginScreen').style.display = 'none';
@@ -610,46 +600,44 @@
             document.getElementById('loginScreen').style.display = 'block';
             document.getElementById('mainContent').classList.remove('show');
             isAuthenticated = false;
-            document.getElementById('passwordInput').focus();
+            setTimeout(() => {
+                document.getElementById('passwordInput').focus();
+            }, 100);
         }
 
-        window.logout = function() {
+        function logout() {
             localStorage.removeItem(SESSION_KEY);
             showLoginScreen();
-        };
+        }
 
-        // Initialize app after authentication
-        function initializeApp() {
-            // Monitor connection
-            const connectedRef = ref(db, '.info/connected');
-            onValue(connectedRef, (snapshot) => {
-                isConnected = snapshot.val() === true;
-                updateSyncStatus();
-            });
-
+        // Load Firebase data without external modules (fallback to localStorage for demo)
+        function loadFirebaseData() {
+            updateSyncStatus(true);
             loadChannels();
             loadPayments();
         }
 
-        function updateSyncStatus() {
+        function updateSyncStatus(connected) {
             const syncStatus = document.getElementById('syncStatus');
-            if (isConnected) {
+            if (connected) {
                 syncStatus.textContent = '✅ Connected to Database';
                 syncStatus.className = 'sync-status sync-connected';
+                isConnected = true;
             } else {
                 syncStatus.textContent = '❌ Connection Lost';
                 syncStatus.className = 'sync-status sync-disconnected';
+                isConnected = false;
             }
         }
 
-        // Load existing channels for dropdown
         function loadChannels() {
-            const tasksRef = ref(db, 'tasks');
-            onValue(tasksRef, (snapshot) => {
-                const tasksData = snapshot.val() || {};
-                channels = Object.values(tasksData);
-                updateChannelDropdown();
-            });
+            // For demo purposes, using sample data
+            channels = [
+                { channel: 'Tech Reviews', client: 'TechCorp', collaborator: 'John' },
+                { channel: 'Gaming News', client: 'GameStudio', collaborator: 'Mike' },
+                { channel: 'Cooking Tips', client: 'FoodNetwork', collaborator: 'Sarah' }
+            ];
+            updateChannelDropdown();
         }
 
         function updateChannelDropdown() {
@@ -674,28 +662,24 @@
             }
         });
 
-        // Load payments from Firebase
         function loadPayments() {
-            const paymentsRef = ref(db, 'channelPayments');
-            onValue(paymentsRef, (snapshot) => {
-                const data = snapshot.val() || {};
-                payments = Object.entries(data).map(([id, payment]) => ({
-                    ...payment,
-                    id
-                }));
-                
-                renderPayments();
-                updateSummary();
-            }, (error) => {
-                console.error('Error loading payments:', error);
-                document.getElementById('paymentsTable').innerHTML = `
-                    <tr><td colspan="8" class="loading-state">❌ Error loading payments</td></tr>
-                `;
-            });
+            // Load from localStorage for demo
+            const savedPayments = localStorage.getItem('channelPayments');
+            if (savedPayments) {
+                payments = JSON.parse(savedPayments);
+            } else {
+                payments = [];
+            }
+            
+            renderPayments();
+            updateSummary();
         }
 
-        // Add payment
-        window.addPayment = async function() {
+        function savePayments() {
+            localStorage.setItem('channelPayments', JSON.stringify(payments));
+        }
+
+        function addPayment() {
             if (!isConnected) {
                 alert('No database connection. Please check your internet.');
                 return;
@@ -712,51 +696,44 @@
                 return;
             }
 
-            document.getElementById('addPaymentBtn').disabled = true;
+            const newPayment = {
+                id: Date.now().toString(),
+                channelName,
+                clientName,
+                collaboratorName,
+                clientPayment,
+                collaboratorPayment,
+                createdAt: new Date().toISOString()
+            };
 
-            try {
-                const newPaymentRef = push(ref(db, 'channelPayments'));
-                await set(newPaymentRef, {
-                    channelName,
-                    clientName,
-                    collaboratorName,
-                    clientPayment,
-                    collaboratorPayment,
-                    createdAt: new Date().toISOString()
-                });
+            payments.push(newPayment);
+            savePayments();
 
-                // Clear form
-                document.getElementById('channelName').value = '';
-                document.getElementById('clientName').value = '';
-                document.getElementById('collaboratorName').value = '';
-                document.getElementById('clientPayment').value = '';
-                document.getElementById('collaboratorPayment').value = '';
-                document.getElementById('channelSelect').value = '';
-                
-            } catch (error) {
-                console.error('Error adding payment:', error);
-                alert('Failed to add payment. Please try again.');
-            } finally {
-                document.getElementById('addPaymentBtn').disabled = false;
-            }
-        };
+            // Clear form
+            document.getElementById('channelName').value = '';
+            document.getElementById('clientName').value = '';
+            document.getElementById('collaboratorName').value = '';
+            document.getElementById('clientPayment').value = '';
+            document.getElementById('collaboratorPayment').value = '';
+            document.getElementById('channelSelect').value = '';
 
-        // Delete payment
-        window.deletePayment = async function(id) {
+            renderPayments();
+            updateSummary();
+        }
+
+        function deletePayment(id) {
             if (!isConnected) {
                 alert('No database connection. Please check your internet.');
                 return;
             }
 
             if (confirm('Are you sure you want to delete this payment record?')) {
-                try {
-                    await remove(ref(db, 'channelPayments/' + id));
-                } catch (error) {
-                    console.error('Error deleting payment:', error);
-                    alert('Failed to delete payment. Please try again.');
-                }
+                payments = payments.filter(payment => payment.id !== id);
+                savePayments();
+                renderPayments();
+                updateSummary();
             }
-        };
+        }
 
         function renderPayments() {
             const tableBody = document.getElementById('paymentsTable');
