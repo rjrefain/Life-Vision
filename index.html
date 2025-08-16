@@ -118,6 +118,7 @@
       box-shadow: none;
     }
 
+    /* Collapsible Form Styles */
     .form-section {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
@@ -198,14 +199,6 @@
     .form-content button:hover {
       background: linear-gradient(135deg, #219150, #27ae60);
       transform: translateY(-1px);
-    }
-
-    .toggle-icon {
-      transition: transform 0.3s ease;
-    }
-
-    .form-section.expanded .toggle-icon {
-      transform: rotate(180deg);
     }
 
     .table-wrapper {
@@ -298,11 +291,6 @@
       color: #388e3c;
     }
 
-    .late-worker {
-      animation: late-pulse 1.5s infinite alternate;
-      border-left: 3px solid var(--danger-color);
-    }
-
     /* Editable Collaborator Styles */
     .collaborator-cell {
       position: relative;
@@ -333,14 +321,19 @@
       opacity: 1;
     }
 
+    .collaborator-edit-section {
+      display: none;
+      align-items: center;
+      gap: 5px;
+    }
+
     .collaborator-input {
-      width: 100%;
+      flex: 1;
       padding: 5px 8px;
       border: 2px solid var(--primary-color);
       border-radius: 5px;
       font-size: 14px;
       background: white;
-      display: none;
     }
 
     .collaborator-input:focus {
@@ -356,8 +349,6 @@
       border-radius: 3px;
       font-size: 12px;
       cursor: pointer;
-      margin-left: 5px;
-      display: none;
     }
 
     .cancel-collaborator-btn {
@@ -368,13 +359,6 @@
       border-radius: 3px;
       font-size: 12px;
       cursor: pointer;
-      margin-left: 3px;
-      display: none;
-    }
-
-    @keyframes late-pulse {
-      0% { background-color: #ffebee; }
-      100% { background-color: #ffcdd2; }
     }
 
     @media (max-width: 768px) {
@@ -386,6 +370,16 @@
         flex-direction: column;
         align-items: center;
         gap: 10px;
+      }
+
+      .status-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .reset-btn {
+        padding: 10px 20px;
+        font-size: 12px;
       }
 
       .form-content input {
@@ -402,16 +396,6 @@
       .form-toggle-btn {
         font-size: 14px;
         padding: 12px 16px;
-      }
-
-      .status-container {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .reset-btn {
-        padding: 10px 20px;
-        font-size: 12px;
       }
 
       /* Hide table headers on mobile */
@@ -496,11 +480,6 @@
         margin-top: 5px;
       }
 
-      .late-worker {
-        border-left: 4px solid var(--danger-color);
-        animation: late-pulse 1.5s infinite alternate;
-      }
-
       h1 {
         font-size: 1.8em;
         margin-bottom: 15px;
@@ -519,6 +498,15 @@
       .collaborator-display {
         flex-direction: column;
         gap: 5px;
+      }
+
+      .collaborator-edit-section {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .collaborator-input {
+        width: 100%;
       }
     }
   </style>
@@ -605,22 +593,21 @@
     function renderTasks(tasks) {
       tasksBody.innerHTML = '';
       Object.entries(tasks).forEach(([id, task]) => {
-        const isLate = checkIfLate(task.status);
         const row = document.createElement('tr');
-        if (isLate) row.classList.add('late-worker');
+        row.setAttribute('data-channel-id', id);
 
         row.innerHTML = `
           <td data-label="Channel">${task.channel}</td>
           <td data-label="Client">${task.client}</td>
           <td data-label="Collaborator" class="collaborator-cell">
-            <div class="collaborator-display" onclick="editCollaborator('${id}', event)">
+            <div class="collaborator-display" onclick="editCollaborator('${id}')">
               <span class="collaborator-name">${task.collaborator || 'Unassigned'}</span>
               <span class="edit-icon">✏️</span>
             </div>
-            <div class="collaborator-edit-section" style="display: none;">
-              <input type="text" class="collaborator-input" value="${task.collaborator || ''}" onkeypress="handleEnterKey(event, '${id}')" />
-              <button class="save-collaborator-btn" onclick="saveCollaborator('${id}', event)">✅</button>
-              <button class="cancel-collaborator-btn" onclick="cancelEdit('${id}', event)">❌</button>
+            <div class="collaborator-edit-section">
+              <input type="text" class="collaborator-input" value="${task.collaborator || ''}" />
+              <button class="save-collaborator-btn" onclick="saveCollaborator('${id}')">✅</button>
+              <button class="cancel-collaborator-btn" onclick="cancelEdit('${id}')">❌</button>
             </div>
           </td>
           <td data-label="Videos/Day">${task.dailyVideos}</td>
@@ -632,6 +619,7 @@
             <button class="delete-icon" onclick="deleteChannel('${id}')">🗑️</button>
           </td>
         `;
+        
         tasksBody.appendChild(row);
       });
     }
@@ -657,7 +645,6 @@
       const formSection = document.getElementById('formSection');
       const formContent = document.getElementById('formContent');
       const toggleBtn = document.querySelector('.form-toggle-btn');
-      const toggleIcon = document.querySelector('.toggle-icon');
       
       if (formContent.classList.contains('expanded')) {
         // Collapse form
@@ -705,7 +692,7 @@
       }
     };
 
-    // Reset All Channels Function - GREEN BUTTON
+    // Reset All Channels Function
     window.resetAllChannels = async function() {
       const confirmation = confirm(
         "🔄 Are you sure you want to reset ALL channels?\n\n" +
@@ -755,10 +742,7 @@
     };
 
     // Edit Collaborator Functions - FIXED
-    window.editCollaborator = function(id, event) {
-      if (event) event.stopPropagation();
-      
-      // Find the correct row by data attribute
+    window.editCollaborator = function(id) {
       const targetRow = document.querySelector(`tr[data-channel-id="${id}"]`);
       
       if (targetRow) {
@@ -768,25 +752,14 @@
         
         displaySection.style.display = 'none';
         editSection.style.display = 'flex';
-        editSection.style.alignItems = 'center';
-        editSection.style.gap = '5px';
         
         const input = editSection.querySelector('.collaborator-input');
-        input.style.display = 'inline-block';
         input.focus();
         input.select();
-        
-        const saveBtn = editSection.querySelector('.save-collaborator-btn');
-        const cancelBtn = editSection.querySelector('.cancel-collaborator-btn');
-        saveBtn.style.display = 'inline-block';
-        cancelBtn.style.display = 'inline-block';
       }
     };
 
-    window.saveCollaborator = async function(id, event) {
-      if (event) event.stopPropagation();
-      
-      // Find the correct row by data attribute
+    window.saveCollaborator = async function(id) {
       const targetRow = document.querySelector(`tr[data-channel-id="${id}"]`);
       
       if (targetRow) {
@@ -824,10 +797,7 @@
       }
     };
 
-    window.cancelEdit = function(id, event) {
-      if (event) event.stopPropagation();
-      
-      // Find the correct row by data attribute
+    window.cancelEdit = function(id) {
       const targetRow = document.querySelector(`tr[data-channel-id="${id}"]`);
       
       if (targetRow) {
@@ -844,22 +814,20 @@
       }
     };
 
-    // Handle Enter key press in input
-    window.handleEnterKey = function(event, id) {
-      if (event.key === 'Enter') {
-        saveCollaborator(id, event);
-      } else if (event.key === 'Escape') {
-        cancelEdit(id, event);
+    // Handle Enter key for collaborator input
+    document.addEventListener('keydown', function(e) {
+      if (e.target.classList.contains('collaborator-input')) {
+        if (e.key === 'Enter') {
+          const row = e.target.closest('tr');
+          const channelId = row.getAttribute('data-channel-id');
+          saveCollaborator(channelId);
+        } else if (e.key === 'Escape') {
+          const row = e.target.closest('tr');
+          const channelId = row.getAttribute('data-channel-id');
+          cancelEdit(channelId);
+        }
       }
-    };
-
-    function checkIfLate(status) {
-      if (status === 'completed') return false;
-      const now = new Date();
-      const bdt = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
-      const hour = bdt.getHours();
-      return hour >= 8 && hour < 14;
-    }
+    });
 
     function updateDateTime() {
       const now = new Date();
