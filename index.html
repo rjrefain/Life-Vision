@@ -239,12 +239,40 @@
       color: var(--primary-color);
     }
 
-    tr:nth-child(even) {
-      background-color: #f8f9fa;
+    /* Drag and Drop Styles */
+    .table-wrapper tbody tr {
+      cursor: move;
+      transition: all 0.3s ease;
+      position: relative;
     }
 
-    tr:hover {
+    .table-wrapper tbody tr:hover {
       background-color: #e3f2fd;
+      transform: scale(1.01);
+    }
+
+    .table-wrapper tbody tr.dragging {
+      opacity: 0.5;
+      transform: rotate(2deg);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    .table-wrapper tbody tr.drag-over {
+      border-top: 3px solid var(--primary-color);
+      background-color: rgba(102, 126, 234, 0.1);
+    }
+
+    .drag-handle {
+      color: var(--primary-color);
+      font-size: 16px;
+      margin-right: 8px;
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+    }
+
+    tr:hover .drag-handle {
+      opacity: 1;
     }
 
     .status-btn {
@@ -609,7 +637,9 @@
         row.setAttribute('data-channel-id', id);
 
         row.innerHTML = `
-          <td data-label="Channel">${task.channel}</td>
+          <td data-label="Channel">
+            <span class="drag-handle">⋮⋮</span>${task.channel}
+          </td>
           <td data-label="Client">${task.client}</td>
           <td data-label="Collaborator" class="collaborator-cell">
             <div class="collaborator-display" onclick="editCollaborator('${id}')">
@@ -853,6 +883,127 @@
     updateDateTime();
     setInterval(updateDateTime, 1000);
     loadTasks();
+
+    // Drag and Drop Functions
+    let draggedElement = null;
+    let channelOrder = [];
+
+    function handleDragStart(e) {
+      draggedElement = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/html', this.outerHTML);
+    }
+
+    function handleDragOver(e) {
+      if (e.preventDefault) {
+        e.preventDefault();
+      }
+      e.dataTransfer.dropEffect = 'move';
+      return false;
+    }
+
+    function handleDragEnter(e) {
+      this.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      this.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      if (e.stopPropagation) {
+        e.stopPropagation();
+      }
+
+      if (draggedElement !== this) {
+        // Get the bounding rectangle of the target element
+        const targetRect = this.getBoundingClientRect();
+        const targetMiddle = targetRect.top + targetRect.height / 2;
+        
+        // Insert before or after based on mouse position
+        if (e.clientY < targetMiddle) {
+          this.parentNode.insertBefore(draggedElement, this);
+        } else {
+          this.parentNode.insertBefore(draggedElement, this.nextSibling);
+        }
+        
+        // Save the new order
+        saveChannelOrder();
+      }
+
+      this.classList.remove('drag-over');
+      return false;
+    }
+
+    function handleDragEnd(e) {
+      // Clean up
+      const allRows = document.querySelectorAll('#tasksBody tr');
+      allRows.forEach(row => {
+        row.classList.remove('dragging', 'drag-over');
+      });
+      draggedElement = null;
+    }
+
+    function saveChannelOrder() {
+      const rows = document.querySelectorAll('#tasksBody tr');
+      const newOrder = [];
+      
+      rows.forEach((row, index) => {
+        const channelId = row.getAttribute('data-channel-id');
+        newOrder.push({
+          id: channelId,
+          order: index
+        });
+      });
+      
+      // Save to localStorage for persistence
+      localStorage.setItem('channelOrder', JSON.stringify(newOrder));
+      
+      // Optional: Save to Firebase for global persistence
+      try {
+        const orderData = {};
+        newOrder.forEach(item => {
+          orderData[item.id] = { order: item.order };
+        });
+        update(ref(db, 'channelOrder'), orderData);
+      } catch (error) {
+        console.log('Could not save order to Firebase:', error);
+      }
+    }
+
+    function loadChannelOrder() {
+      // Try to load from localStorage first
+      const savedOrder = localStorage.getItem('channelOrder');
+      if (savedOrder) {
+        channelOrder = JSON.parse(savedOrder);
+        return channelOrder;
+      }
+      return [];
+    }
+
+    function sortChannelsByOrder(tasks) {
+      const savedOrder = loadChannelOrder();
+      
+      if (savedOrder.length === 0) {
+        return Object.entries(tasks);
+      }
+      
+      // Create a map for quick lookup
+      const orderMap = {};
+      savedOrder.forEach(item => {
+        orderMap[item.id] = item.order;
+      });
+      
+      // Sort the tasks based on saved order
+      const sortedEntries = Object.entries(tasks).sort((a, b) => {
+        const orderA = orderMap[a[0]] !== undefined ? orderMap[a[0]] : 999;
+        const orderB = orderMap[b[0]] !== undefined ? orderMap[b[0]] : 999;
+        return orderA - orderB;
+      });
+      
+      return sortedEntries;
+    }
   </script>
 </body>
 </html>
