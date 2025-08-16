@@ -439,12 +439,31 @@
 
     .edit-input {
       width: 100%;
-      padding: 8px 12px;
+      max-width: 100%;
+      padding: 6px 8px;
       border: 2px solid var(--primary-color);
       border-radius: 5px;
       font-size: 14px;
       background: white;
       box-sizing: border-box;
+    }
+
+    /* Specific width constraints for different columns */
+    .videos-edit {
+      width: 60px;
+      max-width: 60px;
+    }
+
+    .collaborator-edit {
+      max-width: 120px;
+    }
+
+    .client-edit {
+      max-width: 150px;
+    }
+
+    .channel-edit {
+      max-width: 180px;
     }
 
     .edit-input:focus {
