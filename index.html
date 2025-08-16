@@ -346,12 +346,33 @@
     .drag-handle {
       color: var(--primary-color);
       font-size: 16px;
-      margin-right: 8px;
       opacity: 0.5;
       transition: opacity 0.3s ease;
       cursor: grab;
       display: inline-block;
       vertical-align: middle;
+    }
+
+    /* Channel column layout fix */
+    .channel-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .channel-content .drag-handle {
+      flex-shrink: 0;
+      margin-right: 0;
+    }
+
+    .channel-content .channel-display {
+      flex: 1;
+    }
+
+    .channel-content .channel-edit {
+      flex: 1;
+      max-width: none;
     }
 
     .drag-handle:active {
@@ -508,6 +529,231 @@
     .cancel-edit-btn:hover {
       background: #c0392b;
       transform: scale(1.05);
+    }
+
+    /* Celebration Modal Styles */
+    .celebration-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+      backdrop-filter: blur(10px);
+    }
+
+    .celebration-modal.show {
+      display: flex;
+      animation: modalFadeIn 0.5s ease;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .celebration-content {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 20px;
+      padding: 40px;
+      text-align: center;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+      max-width: 500px;
+      width: 90%;
+      transform: scale(0.8);
+      animation: celebrationPop 0.6s ease forwards;
+    }
+
+    @keyframes celebrationPop {
+      0% {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .celebration-emoji {
+      font-size: 80px;
+      margin-bottom: 20px;
+      display: block;
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-20px);
+      }
+      60% {
+        transform: translateY(-10px);
+      }
+    }
+
+    .celebration-title {
+      color: white;
+      font-size: 48px;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.5);
+      }
+      to {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 255, 255, 0.8);
+      }
+    }
+
+    .celebration-line {
+      width: 80%;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #fff, transparent);
+      margin: 20px auto;
+      border-radius: 2px;
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+    }
+
+    .celebration-message {
+      color: white;
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+      animation: fadeInUp 1s ease 0.5s both;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .celebration-close {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+      padding: 12px 30px;
+      border-radius: 25px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      animation: fadeInUp 1s ease 1s both;
+    }
+
+    .celebration-close:hover {
+      background: white;
+      color: var(--primary-color);
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+    }
+
+    /* Floating particles */
+    .particle {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      animation: float 3s infinite ease-in-out;
+      opacity: 0.7;
+    }
+
+    .particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
+    .particle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.5s; }
+    .particle:nth-child(3) { top: 80%; left: 40%; animation-delay: 1s; }
+    .particle:nth-child(4) { top: 40%; left: 70%; animation-delay: 1.5s; }
+    .particle:nth-child(5) { top: 30%; left: 10%; animation-delay: 2s; }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 1;
+      }
+    }
+
+    /* Confetti animation */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #f1c40f;
+      animation: confettiFall 3s linear infinite;
+    }
+
+    .confetti:nth-child(odd) { background: #e74c3c; }
+    .confetti:nth-child(3n) { background: #2ecc71; }
+    .confetti:nth-child(4n) { background: #3498db; }
+    .confetti:nth-child(5n) { background: #9b59b6; }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .celebration-content {
+        padding: 30px 20px;
+        margin: 20px;
+      }
+
+      .celebration-title {
+        font-size: 36px;
+      }
+
+      .celebration-emoji {
+        font-size: 60px;
+      }
+
+      .celebration-message {
+        font-size: 18px;
+      }
     }
 
     @media (max-width: 768px) {
@@ -721,6 +967,27 @@
         <tbody id="tasksBody"></tbody>
       </table>
     </div>
+
+    <!-- Celebration Modal -->
+    <div class="celebration-modal" id="celebrationModal">
+      <div class="celebration-content">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        
+        <span class="celebration-emoji">🎉</span>
+        <h1 class="celebration-title">CONGRATULATIONS!</h1>
+        <div class="celebration-line"></div>
+        <p class="celebration-message">
+          You Are Helping LemonCore To Grow, Keep That Up Champ.
+        </p>
+        <button class="celebration-close" onclick="closeCelebration()">
+          ✨ Continue The Great Work! ✨
+        </button>
+      </div>
+    </div>
   </div>
 
   <script type="module">
@@ -877,9 +1144,11 @@
 
         row.innerHTML = `
           <td data-label="Channel">
-            <span class="drag-handle">⋮⋮</span>
-            <span class="channel-display">${task.channel}</span>
-            <input type="text" class="edit-input channel-edit" value="${task.channel}" style="display: none;" />
+            <div class="channel-content">
+              <span class="drag-handle">⋮⋮</span>
+              <span class="channel-display">${task.channel}</span>
+              <input type="text" class="edit-input channel-edit" value="${task.channel}" style="display: none;" />
+            </div>
           </td>
           <td data-label="Client">
             <span class="client-display">${task.client}</span>
@@ -1101,6 +1370,11 @@
         const task = snapshot.val();
         const newStatus = task.status === 'completed' ? 'pending' : 'completed';
         await set(taskRef, { ...task, status: newStatus, lastUpdated: new Date().toISOString() });
+        
+        // Show celebration when marking as completed
+        if (newStatus === 'completed') {
+          showCelebration();
+        }
       }
     };
 
@@ -1200,6 +1474,53 @@
         resetBtn.textContent = '🔄 Reset All Channels';
       }
     };
+
+    // Celebration functions
+    window.showCelebration = function() {
+      const modal = document.getElementById('celebrationModal');
+      modal.classList.add('show');
+      
+      // Create confetti effect
+      createConfetti();
+      
+      // Auto close after 10 seconds
+      setTimeout(() => {
+        closeCelebration();
+      }, 10000);
+    };
+
+    window.closeCelebration = function() {
+      const modal = document.getElementById('celebrationModal');
+      modal.classList.remove('show');
+      
+      // Remove confetti
+      const confettiElements = document.querySelectorAll('.confetti');
+      confettiElements.forEach(confetti => confetti.remove());
+    };
+
+    function createConfetti() {
+      const colors = ['#f1c40f', '#e74c3c', '#2ecc71', '#3498db', '#9b59b6', '#ff6b6b', '#4ecdc4'];
+      
+      for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = Math.random() * 100 + '%';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.animationDelay = Math.random() * 3 + 's';
+          confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+          
+          document.body.appendChild(confetti);
+          
+          // Remove confetti after animation
+          setTimeout(() => {
+            if (confetti.parentNode) {
+              confetti.remove();
+            }
+          }, 5000);
+        }, i * 100);
+      }
+    }
 
     function updateDateTime() {
       const now = new Date();
