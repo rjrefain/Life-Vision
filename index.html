@@ -118,6 +118,78 @@
       box-shadow: none;
     }
 
+    /* Auto Reorder Dropdown Styles */
+    .dropdown-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    .auto-reorder-btn {
+      background: linear-gradient(135deg, #f39c12, #e67e22);
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+      display: inline-block;
+    }
+
+    .auto-reorder-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(243, 156, 18, 0.5);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      min-width: 200px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+      animation: dropdownSlide 0.3s ease;
+    }
+
+    @keyframes dropdownSlide {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .dropdown-item {
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      font-weight: 500;
+      color: var(--dark-color);
+    }
+
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+      color: var(--primary-color);
+    }
+
+    .dropdown-item:not(:last-child) {
+      border-bottom: 1px solid #e8ecf0;
+    }
+
     /* Collapsible Form Styles */
     .form-section {
       background: rgba(255, 255, 255, 0.95);
@@ -346,74 +418,77 @@
       color: #388e3c;
     }
 
-    /* Editable Collaborator Styles */
-    .collaborator-cell {
-      position: relative;
-    }
-
-    .collaborator-display {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      padding: 5px;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
-
-    .collaborator-display:hover {
-      background-color: rgba(102, 126, 234, 0.1);
-    }
-
-    .edit-icon {
+    /* Row Edit Styles */
+    .edit-pencil {
       color: var(--primary-color);
-      font-size: 14px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-left: 8px;
       opacity: 0.7;
-      transition: opacity 0.3s ease;
+      transition: all 0.3s ease;
     }
 
-    .collaborator-display:hover .edit-icon {
+    .edit-pencil:hover {
       opacity: 1;
+      transform: scale(1.1);
     }
 
-    .collaborator-edit-section {
-      display: none;
-      align-items: center;
-      gap: 5px;
+    .row-editing {
+      background-color: #fff3cd !important;
     }
 
-    .collaborator-input {
-      flex: 1;
-      padding: 5px 8px;
+    .edit-input {
+      width: 100%;
+      padding: 8px 12px;
       border: 2px solid var(--primary-color);
       border-radius: 5px;
       font-size: 14px;
       background: white;
+      box-sizing: border-box;
     }
 
-    .collaborator-input:focus {
+    .edit-input:focus {
       outline: none;
-      box-shadow: 0 0 5px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
     }
 
-    .save-collaborator-btn {
+    .edit-actions {
+      display: flex;
+      gap: 5px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .save-edit-btn {
       background: var(--success-color);
       color: white;
       border: none;
-      padding: 4px 8px;
-      border-radius: 3px;
-      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 5px;
       cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
     }
 
-    .cancel-collaborator-btn {
+    .save-edit-btn:hover {
+      background: #219150;
+      transform: scale(1.05);
+    }
+
+    .cancel-edit-btn {
       background: var(--danger-color);
       color: white;
       border: none;
-      padding: 4px 8px;
-      border-radius: 3px;
-      font-size: 12px;
+      padding: 8px 12px;
+      border-radius: 5px;
       cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .cancel-edit-btn:hover {
+      background: #c0392b;
+      transform: scale(1.05);
     }
 
     @media (max-width: 768px) {
@@ -432,9 +507,14 @@
         gap: 15px;
       }
 
-      .reset-btn {
+      .reset-btn, .auto-reorder-btn {
         padding: 10px 20px;
         font-size: 12px;
+      }
+
+      .dropdown-menu {
+        left: 50%;
+        transform: translateX(-50%);
       }
 
       .form-content input {
@@ -550,21 +630,11 @@
         padding: 8px 15px;
       }
 
-      .collaborator-display {
-        flex-direction: column;
-        gap: 5px;
-      }
-
-      .collaborator-edit-section {
-        flex-direction: column;
-        gap: 8px;
-      }
-
-      .collaborator-input {
-        width: 100%;
-      }
-
       .drag-handle {
+        font-size: 14px;
+      }
+
+      .edit-pencil {
         font-size: 14px;
       }
     }
@@ -602,6 +672,19 @@
       <button class="reset-btn" onclick="resetAllChannels()" id="resetBtn">
         🔄 Reset All Channels
       </button>
+      <div class="dropdown-container">
+        <button class="auto-reorder-btn" onclick="toggleDropdown()">
+          🔄 Auto Reorder ▼
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <div class="dropdown-item" onclick="reorderBy('collaborator')">
+            👥 Collaborator Arrangement
+          </div>
+          <div class="dropdown-item" onclick="reorderBy('project')">
+            📁 Project Arrangement
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="table-wrapper">
@@ -645,7 +728,69 @@
     let draggedElement = null;
     let channelOrder = [];
 
-    function loadTasks() {
+    // Dropdown functionality
+    window.toggleDropdown = function() {
+      const dropdown = document.getElementById('dropdownMenu');
+      dropdown.classList.toggle('show');
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function closeDropdown(e) {
+        if (!e.target.closest('.dropdown-container')) {
+          dropdown.classList.remove('show');
+          document.removeEventListener('click', closeDropdown);
+        }
+      });
+    };
+
+    // Auto reorder functionality
+    window.reorderBy = async function(type) {
+      const dropdown = document.getElementById('dropdownMenu');
+      dropdown.classList.remove('show');
+      
+      const tasksRef = ref(db, 'tasks');
+      const snapshot = await get(tasksRef);
+      
+      if (snapshot.exists()) {
+        const tasks = snapshot.val();
+        let sortedEntries;
+        
+        if (type === 'collaborator') {
+          // Sort by collaborator name, then by channel name
+          sortedEntries = Object.entries(tasks).sort((a, b) => {
+            const collabA = (a[1].collaborator || 'Unassigned').toLowerCase();
+            const collabB = (b[1].collaborator || 'Unassigned').toLowerCase();
+            if (collabA === collabB) {
+              return a[1].channel.toLowerCase().localeCompare(b[1].channel.toLowerCase());
+            }
+            return collabA.localeCompare(collabB);
+          });
+        } else if (type === 'project') {
+          // Sort by channel/project name
+          sortedEntries = Object.entries(tasks).sort((a, b) => {
+            return a[1].channel.toLowerCase().localeCompare(b[1].channel.toLowerCase());
+          });
+        }
+        
+        // Create new order array
+        const newOrder = sortedEntries.map((entry, index) => ({
+          id: entry[0],
+          order: index
+        }));
+        
+        // Save to Firebase
+        await set(ref(db, 'channelOrder'), newOrder);
+        channelOrder = newOrder;
+        
+        // Re-render tasks with new order
+        renderTasks(tasks);
+        
+        const orderType = type === 'collaborator' ? 'Collaborator' : 'Project';
+        alert(`✅ Channels reordered by ${orderType} successfully!`);
+      }
+    };
+
+    async function loadTasks() {
+      await loadChannelOrder();
       const tasksRef = ref(db, 'tasks');
       onValue(tasksRef, (snapshot) => {
         const tasks = snapshot.val() || {};
@@ -653,16 +798,17 @@
       });
     }
 
-    function loadChannelOrder() {
-      const savedOrder = localStorage.getItem('channelOrder');
-      if (savedOrder) {
-        channelOrder = JSON.parse(savedOrder);
+    async function loadChannelOrder() {
+      const orderRef = ref(db, 'channelOrder');
+      const snapshot = await get(orderRef);
+      if (snapshot.exists()) {
+        channelOrder = snapshot.val();
         return channelOrder;
       }
       return [];
     }
 
-    function saveChannelOrder() {
+    async function saveChannelOrder() {
       const rows = document.querySelectorAll('#tasksBody tr');
       const newOrder = [];
       
@@ -676,19 +822,17 @@
         }
       });
       
-      localStorage.setItem('channelOrder', JSON.stringify(newOrder));
+      await set(ref(db, 'channelOrder'), newOrder);
       channelOrder = newOrder;
     }
 
     function sortChannelsByOrder(tasks) {
-      const savedOrder = loadChannelOrder();
-      
-      if (savedOrder.length === 0) {
+      if (channelOrder.length === 0) {
         return Object.entries(tasks);
       }
       
       const orderMap = {};
-      savedOrder.forEach(item => {
+      channelOrder.forEach(item => {
         orderMap[item.id] = item.order;
       });
       
@@ -714,27 +858,35 @@
 
         row.innerHTML = `
           <td data-label="Channel">
-            <span class="drag-handle">⋮⋮</span>${task.channel}
+            <span class="drag-handle">⋮⋮</span>
+            <span class="channel-display">${task.channel}</span>
+            <input type="text" class="edit-input channel-edit" value="${task.channel}" style="display: none;" />
           </td>
-          <td data-label="Client">${task.client}</td>
-          <td data-label="Collaborator" class="collaborator-cell">
-            <div class="collaborator-display" onclick="editCollaborator('${id}')">
-              <span class="collaborator-name">${task.collaborator || 'Unassigned'}</span>
-              <span class="edit-icon">✏️</span>
-            </div>
-            <div class="collaborator-edit-section">
-              <input type="text" class="collaborator-input" value="${task.collaborator || ''}" />
-              <button class="save-collaborator-btn" onclick="saveCollaborator('${id}')">✅</button>
-              <button class="cancel-collaborator-btn" onclick="cancelEdit('${id}')">❌</button>
-            </div>
+          <td data-label="Client">
+            <span class="client-display">${task.client}</span>
+            <input type="text" class="edit-input client-edit" value="${task.client}" style="display: none;" />
           </td>
-          <td data-label="Videos/Day">${task.dailyVideos}</td>
+          <td data-label="Collaborator">
+            <span class="collaborator-display">${task.collaborator || 'Unassigned'}</span>
+            <input type="text" class="edit-input collaborator-edit" value="${task.collaborator || ''}" style="display: none;" />
+          </td>
+          <td data-label="Videos/Day">
+            <span class="videos-display">${task.dailyVideos}</span>
+            <span class="edit-pencil" onclick="editRow('${id}')" title="Edit this row">✏️</span>
+            <input type="number" class="edit-input videos-edit" value="${task.dailyVideos}" style="display: none;" min="0" />
+          </td>
           <td data-label="Status"><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
-          <td>
-            <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${id}')">
-              ${task.status === 'completed' ? 'Completed' : 'Mark Complete'}
-            </button>
-            <button class="delete-icon" onclick="deleteChannel('${id}')">🗑️</button>
+          <td class="action-cell">
+            <div class="normal-actions">
+              <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${id}')">
+                ${task.status === 'completed' ? 'Completed' : 'Mark Complete'}
+              </button>
+              <button class="delete-icon" onclick="deleteChannel('${id}')">🗑️</button>
+            </div>
+            <div class="edit-actions" style="display: none;">
+              <button class="save-edit-btn" onclick="saveRowEdit('${id}')">✅ Save</button>
+              <button class="cancel-edit-btn" onclick="cancelRowEdit('${id}')">❌ Cancel</button>
+            </div>
           </td>
         `;
         
@@ -749,6 +901,125 @@
         tasksBody.appendChild(row);
       });
     }
+
+    // Row editing functionality
+    window.editRow = function(id) {
+      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
+      if (!row) return;
+      
+      // Disable dragging while editing
+      row.draggable = false;
+      row.classList.add('row-editing');
+      
+      // Hide display elements and show input elements
+      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
+      const inputs = row.querySelectorAll('.edit-input');
+      
+      displays.forEach(display => display.style.display = 'none');
+      inputs.forEach(input => input.style.display = 'block');
+      
+      // Show edit actions, hide normal actions
+      const normalActions = row.querySelector('.normal-actions');
+      const editActions = row.querySelector('.edit-actions');
+      normalActions.style.display = 'none';
+      editActions.style.display = 'flex';
+      
+      // Focus on first input
+      const firstInput = row.querySelector('.channel-edit');
+      if (firstInput) {
+        firstInput.focus();
+        firstInput.select();
+      }
+    };
+
+    window.saveRowEdit = async function(id) {
+      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
+      if (!row) return;
+      
+      // Get new values from inputs
+      const newChannel = row.querySelector('.channel-edit').value.trim();
+      const newClient = row.querySelector('.client-edit').value.trim();
+      const newCollaborator = row.querySelector('.collaborator-edit').value.trim();
+      const newVideos = parseInt(row.querySelector('.videos-edit').value) || 0;
+      
+      if (!newChannel) {
+        alert('Channel name cannot be empty!');
+        return;
+      }
+      
+      try {
+        // Update Firebase
+        await update(ref(db, `tasks/${id}`), {
+          channel: newChannel,
+          client: newClient,
+          collaborator: newCollaborator,
+          dailyVideos: newVideos,
+          lastUpdated: new Date().toISOString()
+        });
+        
+        // Update display elements
+        row.querySelector('.channel-display').textContent = newChannel;
+        row.querySelector('.client-display').textContent = newClient;
+        row.querySelector('.collaborator-display').textContent = newCollaborator || 'Unassigned';
+        row.querySelector('.videos-display').textContent = newVideos;
+        
+        // Exit edit mode
+        cancelRowEdit(id);
+        
+        alert('✅ Row updated successfully!');
+        
+      } catch (error) {
+        console.error('Error updating row:', error);
+        alert('❌ Failed to update row. Please try again.');
+      }
+    };
+
+    window.cancelRowEdit = function(id) {
+      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
+      if (!row) return;
+      
+      // Re-enable dragging
+      row.draggable = true;
+      row.classList.remove('row-editing');
+      
+      // Show display elements and hide input elements
+      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
+      const inputs = row.querySelectorAll('.edit-input');
+      
+      displays.forEach(display => display.style.display = 'inline');
+      inputs.forEach(input => input.style.display = 'none');
+      
+      // Show normal actions, hide edit actions
+      const normalActions = row.querySelector('.normal-actions');
+      const editActions = row.querySelector('.edit-actions');
+      normalActions.style.display = 'block';
+      editActions.style.display = 'none';
+      
+      // Reset input values to original
+      const originalChannel = row.querySelector('.channel-display').textContent;
+      const originalClient = row.querySelector('.client-display').textContent;
+      const originalCollaborator = row.querySelector('.collaborator-display').textContent;
+      const originalVideos = row.querySelector('.videos-display').textContent;
+      
+      row.querySelector('.channel-edit').value = originalChannel;
+      row.querySelector('.client-edit').value = originalClient;
+      row.querySelector('.collaborator-edit').value = originalCollaborator === 'Unassigned' ? '' : originalCollaborator;
+      row.querySelector('.videos-edit').value = originalVideos;
+    };
+
+    // Handle Enter key for saving edits
+    document.addEventListener('keydown', function(e) {
+      if (e.target.classList.contains('edit-input')) {
+        const row = e.target.closest('tr');
+        const channelId = row.getAttribute('data-channel-id');
+        
+        if (e.key === 'Enter') {
+          saveRowEdit(channelId);
+        } else if (e.key === 'Escape') {
+          cancelRowEdit(channelId);
+        }
+      }
+    });
 
     // Drag and Drop Event Handlers
     function handleDragStart(e) {
@@ -910,91 +1181,6 @@
         resetBtn.textContent = '🔄 Reset All Channels';
       }
     };
-
-    // Edit Collaborator Functions
-    window.editCollaborator = function(id) {
-      const targetRow = document.querySelector(`tr[data-channel-id="${id}"]`);
-      
-      if (targetRow) {
-        const collaboratorCell = targetRow.querySelector('.collaborator-cell');
-        const displaySection = collaboratorCell.querySelector('.collaborator-display');
-        const editSection = collaboratorCell.querySelector('.collaborator-edit-section');
-        
-        displaySection.style.display = 'none';
-        editSection.style.display = 'flex';
-        
-        const input = editSection.querySelector('.collaborator-input');
-        input.focus();
-        input.select();
-      }
-    };
-
-    window.saveCollaborator = async function(id) {
-      const targetRow = document.querySelector(`tr[data-channel-id="${id}"]`);
-      
-      if (targetRow) {
-        const collaboratorCell = targetRow.querySelector('.collaborator-cell');
-        const input = collaboratorCell.querySelector('.collaborator-input');
-        const newCollaborator = input.value.trim();
-
-        if (!newCollaborator) {
-          alert('Collaborator name cannot be empty!');
-          return;
-        }
-
-        try {
-          await update(ref(db, `tasks/${id}`), {
-            collaborator: newCollaborator,
-            lastUpdated: new Date().toISOString()
-          });
-          
-          collaboratorCell.querySelector('.collaborator-name').textContent = newCollaborator;
-          
-          const displaySection = collaboratorCell.querySelector('.collaborator-display');
-          const editSection = collaboratorCell.querySelector('.collaborator-edit-section');
-          
-          displaySection.style.display = 'flex';
-          editSection.style.display = 'none';
-          
-          alert('✅ Collaborator updated successfully!');
-          
-        } catch (error) {
-          console.error('Error updating collaborator:', error);
-          alert('❌ Failed to update collaborator. Please try again.');
-        }
-      }
-    };
-
-    window.cancelEdit = function(id) {
-      const targetRow = document.querySelector(`tr[data-channel-id="${id}"]`);
-      
-      if (targetRow) {
-        const collaboratorCell = targetRow.querySelector('.collaborator-cell');
-        const displaySection = collaboratorCell.querySelector('.collaborator-display');
-        const editSection = collaboratorCell.querySelector('.collaborator-edit-section');
-        
-        displaySection.style.display = 'flex';
-        editSection.style.display = 'none';
-        
-        const originalValue = displaySection.querySelector('.collaborator-name').textContent;
-        editSection.querySelector('.collaborator-input').value = originalValue === 'Unassigned' ? '' : originalValue;
-      }
-    };
-
-    // Handle Enter key for collaborator input
-    document.addEventListener('keydown', function(e) {
-      if (e.target.classList.contains('collaborator-input')) {
-        if (e.key === 'Enter') {
-          const row = e.target.closest('tr');
-          const channelId = row.getAttribute('data-channel-id');
-          saveCollaborator(channelId);
-        } else if (e.key === 'Escape') {
-          const row = e.target.closest('tr');
-          const channelId = row.getAttribute('data-channel-id');
-          cancelEdit(channelId);
-        }
-      }
-    });
 
     function updateDateTime() {
       const now = new Date();
