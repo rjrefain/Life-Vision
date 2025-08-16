@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Channel Payment Tracker - Secure Access</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Login Screen Styles */
+        .login-screen {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .login-title {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .login-subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+
+        .login-form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border: 2px solid #e8ecf0;
+            border-radius: 25px;
+            outline: none;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .password-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .error-message {
+            background: #ffebee;
+            color: #c62828;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #f44336;
+            display: none;
+        }
+
+        .security-note {
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            border-left: 4px solid #2196f3;
+            font-size: 0.9em;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            display: none;
+        }
+
+        .main-content.show {
+            display: block;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.2em;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.5);
+        }
+
+        /* Summary Cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #f1c40f, #f39c12);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(241, 196, 15, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        .summary-card h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .summary-card .amount {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .profit-card {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .revenue-card {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .expense-card {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        /* Channel Payment Form */
+        .add-payment-form {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .form-grid input, .form-grid select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-grid input:focus, .form-grid select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Payment Table */
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            font-size: 1em;
+        }
+        
+        th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 18px 15px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e8ecf0;
+            transition: all 0.3s ease;
+            vertical-align: middle;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+            transform: scale(1.01);
+        }
+        
+        .channel-name {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.05em;
+        }
+        
+        .amount {
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1em;
+        }
+        
+        .client-payment {
+            color: #27ae60;
+        }
+        
+        .collaborator-payment {
+            color: #3498db;
+        }
+
+        .profit-amount {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .profit-positive {
+            color: #27ae60;
+        }
+
+        .profit-negative {
+            color: #e74c3c;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+
+        .sync-status {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .sync-connected {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .sync-disconnected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                justify-content: center;
+            }
+
+            table {
+                font-size: 0.9em;
+            }
+
+            th, td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Login Screen -->
+        <div class="login-screen" id="loginScreen">
+            <h1 class="login-title">💰 Payment Tracker Access</h1>
+            <p class="login-subtitle">Enter password to view channel payment data</p>
+            
+            <form class="login-form" onsubmit="checkPassword(event)">
+                <input 
+                    type="password" 
+                    class="password-input" 
+                    id="passwordInput" 
+                    placeholder="Enter your password"
+                    autocomplete="off"
+                    required
+                >
+                <button type="submit" class="login-btn">🚀 Access Payment Data</button>
+                
+                <div class="error-message" id="errorMessage">
+                    ❌ Access denied! Incorrect password.
+                </div>
+            </form>
+            
+            <div class="security-note">
+                🛡️ <strong>Security Notice:</strong> This page contains sensitive financial payment data. Only authorized personnel should access this information.
+            </div>
+        </div>
+
+        <!-- Main Content (Hidden by default) -->
+        <div class="main-content" id="mainContent">
+            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+            
+            <h1>💰 Channel Payment Tracker</h1>
+            
+            <div class="nav-buttons">
+                <a href="index.html" class="nav-btn">🏠 Home</a>
+                <a href="Administration Page.html" class="nav-btn">📊 Admin Dashboard</a>
+                <a href="channel-status-tracker.html" class="nav-btn">📺 Channel Status</a>
+                <a href="task-dashboard.html" class="nav-btn">📋 Tasks</a>
+            </div>
+
+            <div class="sync-status sync-disconnected" id="syncStatus">
+                🔄 Connecting to database...
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="summary-grid" id="summaryGrid">
+                <div class="summary-card revenue-card">
+                    <h3>💰 Total Client Revenue</h3>
+                    <div class="amount" id="totalRevenue">$0.00</div>
+                </div>
+                <div class="summary-card expense-card">
+                    <h3>💸 Total Collaborator Payments</h3>
+                    <div class="amount" id="totalExpenses">$0.00</div>
+                </div>
+                <div class="summary-card profit-card">
+                    <h3>💎 Net Profit</h3>
+                    <div class="amount" id="netProfit">$0.00</div>
+                </div>
+            </div>
+
+            <!-- Add Payment Form -->
+            <div class="add-payment-form">
+                <h3>➕ Add Channel Payment</h3>
+                <div class="form-grid">
+                    <input type="text" id="channelName" placeholder="Channel Name" required>
+                    <select id="channelSelect">
+                        <option value="">Or select existing channel...</option>
+                    </select>
+                    <input type="text" id="clientName" placeholder="Client Name">
+                    <input type="text" id="collaboratorName" placeholder="Collaborator Name">
+                    <input type="number" id="clientPayment" placeholder="Client Payment ($)" step="0.01" required>
+                    <input type="number" id="collaboratorPayment" placeholder="Collaborator Payment ($)" step="0.01" required>
+                </div>
+                <button onclick="addPayment()" class="add-btn" id="addPaymentBtn">➕ Add Payment Record</button>
+            </div>
+
+            <!-- Payment Table -->
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Channel</th>
+                            <th>Client</th>
+                            <th>Collaborator</th>
+                            <th>Client Payment</th>
+                            <th>Collaborator Payment</th>
+                            <th>Profit/Loss</th>
+                            <th>Margin %</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="paymentsTable">
+                        <tr>
+                            <td colspan="8" class="loading-state">
+                                🔄 Loading payment data...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, set, remove, onValue, push } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
+            authDomain: "video-production-tracker-12c07.firebaseapp.com",
+            databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com",
+            projectId: "video-production-tracker-12c07",
+            storageBucket: "video-production-tracker-12c07.appspot.com",
+            messagingSenderId: "126509441147",
+            appId: "1:126509441147:web:abc123def456"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let payments = [];
+        let channels = [];
+        let isConnected = false;
+        let isAuthenticated = false;
+
+        // Password validation
+        const validPasswords = [
+            'LifeVision2024',
+            'BrothersOnly',
+            'PaymentTracker2024',
+            'Life Vision'
+        ];
+
+        const SESSION_KEY = 'paymentTrackerAuth';
+        const SESSION_DURATION = 4 * 60 * 60 * 1000; // 4 hours
+
+        // Check existing session on load
+        window.onload = function() {
+            checkExistingSession();
+        };
+
+        function checkExistingSession() {
+            const session = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}');
+            const now = new Date().getTime();
+            
+            if (session.authenticated && (now - session.timestamp) < SESSION_DURATION) {
+                showMainContent();
+                initializeApp();
+            } else {
+                localStorage.removeItem(SESSION_KEY);
+                showLoginScreen();
+            }
+        }
+
+        window.checkPassword = function(event) {
+            event.preventDefault();
+            
+            const enteredPassword = document.getElementById('passwordInput').value;
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (validPasswords.includes(enteredPassword)) {
+                const sessionData = {
+                    authenticated: true,
+                    timestamp: new Date().getTime()
+                };
+                localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
+                
+                showMainContent();
+                initializeApp();
+                
+                document.getElementById('passwordInput').value = '';
+                errorMessage.style.display = 'none';
+            } else {
+                errorMessage.style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+                
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                }, 3000);
+            }
+        };
+
+        function showMainContent() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('mainContent').classList.add('show');
+            isAuthenticated = true;
+        }
+
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('mainContent').classList.remove('show');
+            isAuthenticated = false;
+            document.getElementById('passwordInput').focus();
+        }
+
+        window.logout = function() {
+            localStorage.removeItem(SESSION_KEY);
+            showLoginScreen();
+        };
+
+        // Initialize app after authentication
+        function initializeApp() {
+            // Monitor connection
+            const connectedRef = ref(db, '.info/connected');
+            onValue(connectedRef, (snapshot) => {
+                isConnected = snapshot.val() === true;
+                updateSyncStatus();
+            });
+
+            loadChannels();
+            loadPayments();
+        }
+
+        function updateSyncStatus() {
+            const syncStatus = document.getElementById('syncStatus');
+            if (isConnected) {
+                syncStatus.textContent = '✅ Connected to Database';
+                syncStatus.className = 'sync-status sync-connected';
+            } else {
+                syncStatus.textContent = '❌ Connection Lost';
+                syncStatus.className = 'sync-status sync-disconnected';
+            }
+        }
+
+        // Load existing channels for dropdown
+        function loadChannels() {
+            const tasksRef = ref(db, 'tasks');
+            onValue(tasksRef, (snapshot) => {
+                const tasksData = snapshot.val() || {};
+                channels = Object.values(tasksData);
+                updateChannelDropdown();
+            });
+        }
+
+        function updateChannelDropdown() {
+            const select = document.getElementById('channelSelect');
+            select.innerHTML = '<option value="">Or select existing channel...</option>';
+            
+            channels.forEach(channel => {
+                const option = document.createElement('option');
+                option.value = channel.channel;
+                option.textContent = `${channel.channel} (${channel.collaborator || 'Unassigned'})`;
+                select.appendChild(option);
+            });
+        }
+
+        // Handle channel selection
+        document.getElementById('channelSelect').addEventListener('change', function() {
+            const selectedChannel = channels.find(ch => ch.channel === this.value);
+            if (selectedChannel) {
+                document.getElementById('channelName').value = selectedChannel.channel;
+                document.getElementById('clientName').value = selectedChannel.client || '';
+                document.getElementById('collaboratorName').value = selectedChannel.collaborator || '';
+            }
+        });
+
+        // Load payments from Firebase
+        function loadPayments() {
+            const paymentsRef = ref(db, 'channelPayments');
+            onValue(paymentsRef, (snapshot) => {
+                const data = snapshot.val() || {};
+                payments = Object.entries(data).map(([id, payment]) => ({
+                    ...payment,
+                    id
+                }));
+                
+                renderPayments();
+                updateSummary();
+            }, (error) => {
+                console.error('Error loading payments:', error);
+                document.getElementById('paymentsTable').innerHTML = `
+                    <tr><td colspan="8" class="loading-state">❌ Error loading payments</td></tr>
+                `;
+            });
+        }
+
+        // Add payment
+        window.addPayment = async function() {
+            if (!isConnected) {
+                alert('No database connection. Please check your internet.');
+                return;
+            }
+
+            const channelName = document.getElementById('channelName').value.trim();
+            const clientName = document.getElementById('clientName').value.trim();
+            const collaboratorName = document.getElementById('collaboratorName').value.trim();
+            const clientPayment = parseFloat(document.getElementById('clientPayment').value);
+            const collaboratorPayment = parseFloat(document.getElementById('collaboratorPayment').value);
+
+            if (!channelName || isNaN(clientPayment) || isNaN(collaboratorPayment)) {
+                alert('Please fill in all required fields with valid amounts.');
+                return;
+            }
+
+            document.getElementById('addPaymentBtn').disabled = true;
+
+            try {
+                const newPaymentRef = push(ref(db, 'channelPayments'));
+                await set(newPaymentRef, {
+                    channelName,
+                    clientName,
+                    collaboratorName,
+                    clientPayment,
+                    collaboratorPayment,
+                    createdAt: new Date().toISOString()
+                });
+
+                // Clear form
+                document.getElementById('channelName').value = '';
+                document.getElementById('clientName').value = '';
+                document.getElementById('collaboratorName').value = '';
+                document.getElementById('clientPayment').value = '';
+                document.getElementById('collaboratorPayment').value = '';
+                document.getElementById('channelSelect').value = '';
+                
+            } catch (error) {
+                console.error('Error adding payment:', error);
+                alert('Failed to add payment. Please try again.');
+            } finally {
+                document.getElementById('addPaymentBtn').disabled = false;
+            }
+        };
+
+        // Delete payment
+        window.deletePayment = async function(id) {
+            if (!isConnected) {
+                alert('No database connection. Please check your internet.');
+                return;
+            }
+
+            if (confirm('Are you sure you want to delete this payment record?')) {
+                try {
+                    await remove(ref(db, 'channelPayments/' + id));
+                } catch (error) {
+                    console.error('Error deleting payment:', error);
+                    alert('Failed to delete payment. Please try again.');
+                }
+            }
+        };
+
+        function renderPayments() {
+            const tableBody = document.getElementById('paymentsTable');
+            
+            if (payments.length === 0) {
+                tableBody.innerHTML = `
+                    <tr><td colspan="8" class="loading-state">No payment records found. Add some payments to get started.</td></tr>
+                `;
+                return;
+            }
+
+            tableBody.innerHTML = payments.map(payment => {
+                const profit = payment.clientPayment - payment.collaboratorPayment;
+                const margin = payment.clientPayment > 0 ? ((profit / payment.clientPayment) * 100).toFixed(1) : 0;
+                const profitClass = profit >= 0 ? 'profit-positive' : 'profit-negative';
+                
+                return `
+                    <tr>
+                        <td class="channel-name">${payment.channelName}</td>
+                        <td>${payment.clientName || 'N/A'}</td>
+                        <td>${payment.collaboratorName || 'N/A'}</td>
+                        <td class="amount client-payment">$${payment.clientPayment.toFixed(2)}</td>
+                        <td class="amount collaborator-payment">$${payment.collaboratorPayment.toFixed(2)}</td>
+                        <td class="amount profit-amount ${profitClass}">$${profit.toFixed(2)}</td>
+                        <td class="amount ${profitClass}">${margin}%</td>
+                        <td style="text-align: center;">
+                            <button class="delete-btn" onclick="deletePayment('${payment.id}')" title="Delete Payment">
+                                🗑️
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function updateSummary() {
+            const totalRevenue = payments.reduce((sum, p) => sum + p.clientPayment, 0);
+            const totalExpenses = payments.reduce((sum, p) => sum + p.collaboratorPayment, 0);
+            const netProfit = totalRevenue - totalExpenses;
+
+            document.getElementById('totalRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `$${totalExpenses.toFixed(2)}`;
+            document.getElementById('netProfit').textContent = `$${netProfit.toFixed(2)}`;
+            
+            // Update profit card color based on profit/loss
+            const profitCard = document.querySelector('.profit-card .amount');
+            if (netProfit >= 0) {
+                profitCard.style.color = 'white';
+            } else {
+                profitCard.style.color = '#ffeb3b';
+            }
+        }
+
+        // Auto-logout after session expires
+        setInterval(() => {
+            if (isAuthenticated) {
+                checkExistingSession();
+            }
+        }, 60000); // Check every minute
+
+        // Security measures
+        document.addEventListener('contextmenu', function(e) {
+            if (isAuthenticated) {
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (isAuthenticated) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') || 
+                    (e.ctrlKey && e.key === 'u')) {
+                    e.preventDefault();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
