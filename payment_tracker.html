@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -406,6 +405,121 @@
             font-size: 1.1em;
         }
 
+        /* Collaborators Table Styles */
+        .collaborators-table {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .collaborators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .collaborator-card {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(23, 162, 184, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .collaborator-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 4s infinite;
+        }
+
+        .collaborator-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .collaborator-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .collaborator-name {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .collaborator-earnings {
+            font-size: 1.8em;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .collaborator-channels {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .collaborator-channels h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .channel-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9em;
+        }
+
+        .channel-item:last-child {
+            border-bottom: none;
+        }
+
+        .channel-name {
+            font-weight: 500;
+        }
+
+        .channel-earning {
+            font-weight: 600;
+            color: #fff3cd;
+        }
+
+        .no-collaborators {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
         @keyframes shine {
             0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
             100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
@@ -497,18 +611,30 @@
             </div>
 
             <!-- Summary Cards -->
-                                        <div class="summary-grid" id="summaryGrid">
+            <div class="summary-grid" id="summaryGrid">
                 <div class="summary-card revenue-card">
-                    <h3>💰 Total Client Revenue</h3>
+                    <h3>💰 Total Daily Revenue</h3>
                     <div class="amount" id="totalRevenue">৳0.00</div>
                 </div>
                 <div class="summary-card expense-card">
-                    <h3>💸 Total Collaborator Payments</h3>
+                    <h3>💸 Total Daily Expenses</h3>
                     <div class="amount" id="totalExpenses">৳0.00</div>
                 </div>
                 <div class="summary-card profit-card">
-                    <h3>💎 Net Profit</h3>
+                    <h3>💎 Net Daily Profit</h3>
                     <div class="amount" id="netProfit">৳0.00</div>
+                </div>
+            </div>
+
+            <!-- Collaborators Earnings Table -->
+            <div id="collaboratorsSection" style="margin-bottom: 40px;">
+                <h2 style="text-align: center; color: #2c3e50; margin-bottom: 25px; font-size: 1.8em; font-weight: 300;">
+                    🤝 Collaborators Daily Earnings
+                </h2>
+                <div id="collaboratorsTable">
+                    <div class="loading-state">
+                        🔄 Loading collaborator data...
+                    </div>
                 </div>
             </div>
 
@@ -679,6 +805,7 @@
             onValue(paymentsRef, (snapshot) => {
                 channelPayments = snapshot.val() || {};
                 renderChannels();
+                renderCollaborators();
                 updateSummary();
             });
         }
@@ -697,18 +824,29 @@
 
             const channelsHTML = channels.map(channel => {
                 const payments = channelPayments[channel.id] || { clientRate: 0, collaboratorRate: 0 };
-                const profit = payments.clientRate - payments.collaboratorRate;
+                const dailyVideos = parseInt(channel.dailyVideos) || 0;
+                
+                // Calculate daily amounts
+                const dailyClientRevenue = payments.clientRate * dailyVideos;
+                const dailyCollaboratorCost = payments.collaboratorRate * dailyVideos;
+                const dailyProfit = dailyClientRevenue - dailyCollaboratorCost;
                 
                 let profitClass = 'profit-neutral';
-                let profitText = 'No profit data';
+                let profitText = 'No data available';
                 
-                if (payments.clientRate > 0 || payments.collaboratorRate > 0) {
-                    profitClass = profit >= 0 ? 'profit-positive' : 'profit-negative';
-                    profitText = `${profit >= 0 ? 'Profit' : 'Loss'}: ৳${Math.abs(profit).toFixed(2)}`;
-                    if (payments.clientRate > 0) {
-                        const margin = ((profit / payments.clientRate) * 100).toFixed(1);
+                if (dailyVideos > 0 && (payments.clientRate > 0 || payments.collaboratorRate > 0)) {
+                    profitClass = dailyProfit >= 0 ? 'profit-positive' : 'profit-negative';
+                    profitText = `Daily ${dailyProfit >= 0 ? 'Profit' : 'Loss'}: ৳${Math.abs(dailyProfit).toFixed(2)}`;
+                    
+                    if (dailyClientRevenue > 0) {
+                        const margin = ((dailyProfit / dailyClientRevenue) * 100).toFixed(1);
                         profitText += ` (${margin}% margin)`;
                     }
+                    
+                    // Add breakdown
+                    profitText += `<br><small>Revenue: ৳${dailyClientRevenue.toFixed(2)} | Cost: ৳${dailyCollaboratorCost.toFixed(2)}</small>`;
+                } else if (dailyVideos === 0) {
+                    profitText = 'Set daily video count first';
                 }
 
                 return `
@@ -718,7 +856,7 @@
                                 <h3>📺 ${channel.channel}</h3>
                                 <div class="channel-meta">👤 Client: ${channel.client || 'Not specified'}</div>
                                 <div class="channel-meta">🤝 Collaborator: ${channel.collaborator || 'Unassigned'}</div>
-                                <div class="channel-meta">📹 Videos/Day: ${channel.dailyVideos || 0}</div>
+                                <div class="channel-meta">📹 Videos/Day: ${dailyVideos}</div>
                             </div>
                             <div class="status-badge status-${channel.status}">
                                 ${channel.status || 'pending'}
@@ -728,7 +866,7 @@
                         <div class="payment-section">
                             <div class="payment-row">
                                 <div class="payment-label client-payment">
-                                    💰 Client Payment:
+                                    💰 Per Video Rate:
                                 </div>
                                 <input 
                                     type="number" 
@@ -744,7 +882,7 @@
                             
                             <div class="payment-row">
                                 <div class="payment-label collaborator-payment">
-                                    💸 Collaborator Rate:
+                                    💸 Per Video Cost:
                                 </div>
                                 <input 
                                     type="number" 
@@ -769,6 +907,94 @@
             container.innerHTML = `<div class="channels-grid">${channelsHTML}</div>`;
         }
 
+        function renderCollaborators() {
+            const container = document.getElementById('collaboratorsTable');
+            
+            // Group channels by collaborator
+            const collaboratorData = {};
+            
+            channels.forEach(channel => {
+                const collaborator = channel.collaborator || 'Unassigned';
+                if (collaborator === 'Unassigned') return; // Skip unassigned channels
+                
+                const payments = channelPayments[channel.id] || { clientRate: 0, collaboratorRate: 0 };
+                const dailyVideos = parseInt(channel.dailyVideos) || 0;
+                const dailyEarning = payments.collaboratorRate * dailyVideos;
+                
+                if (!collaboratorData[collaborator]) {
+                    collaboratorData[collaborator] = {
+                        name: collaborator,
+                        totalEarnings: 0,
+                        channels: []
+                    };
+                }
+                
+                collaboratorData[collaborator].totalEarnings += dailyEarning;
+                collaboratorData[collaborator].channels.push({
+                    name: channel.channel,
+                    earning: dailyEarning,
+                    videos: dailyVideos,
+                    rate: payments.collaboratorRate
+                });
+            });
+            
+            const collaborators = Object.values(collaboratorData);
+            
+            if (collaborators.length === 0) {
+                container.innerHTML = `
+                    <div class="no-collaborators">
+                        👥 No collaborators assigned yet<br>
+                        <small>Assign collaborators to channels to see their earnings</small>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort by highest earnings first
+            collaborators.sort((a, b) => b.totalEarnings - a.totalEarnings);
+            
+            const collaboratorsHTML = collaborators.map(collaborator => {
+                const initials = collaborator.name.split(' ').map(word => word[0]).join('').toUpperCase();
+                
+                const channelsHTML = collaborator.channels.map(channel => `
+                    <div class="channel-item">
+                        <span class="channel-name">📺 ${channel.name}</span>
+                        <span class="channel-earning">৳${channel.earning.toFixed(2)}</span>
+                    </div>
+                    <div class="channel-item" style="font-size: 0.8em; opacity: 0.8; padding-top: 2px;">
+                        <span>${channel.videos} videos × ৳${channel.rate}/video</span>
+                        <span></span>
+                    </div>
+                `).join('');
+                
+                return `
+                    <div class="collaborator-card">
+                        <div class="collaborator-header">
+                            <div class="collaborator-avatar">${initials}</div>
+                            <h3 class="collaborator-name">${collaborator.name}</h3>
+                        </div>
+                        
+                        <div class="collaborator-earnings">
+                            ৳${collaborator.totalEarnings.toFixed(2)}/day
+                        </div>
+                        
+                        <div class="collaborator-channels">
+                            <h4>📋 Active Channels (${collaborator.channels.length})</h4>
+                            ${channelsHTML}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = `
+                <div class="collaborators-table">
+                    <div class="collaborators-grid">
+                        ${collaboratorsHTML}
+                    </div>
+                </div>
+            `;
+        }
+
         window.updatePaymentRate = async function(channelId, rateType, value) {
             if (!isConnected) {
                 alert('No database connection. Please check your internet.');
@@ -789,23 +1015,26 @@
         };
 
         function updateSummary() {
-            let totalRevenue = 0;
-            let totalExpenses = 0;
+            let totalDailyRevenue = 0;
+            let totalDailyExpenses = 0;
 
-            Object.values(channelPayments).forEach(payment => {
-                totalRevenue += payment.clientRate || 0;
-                totalExpenses += payment.collaboratorRate || 0;
+            channels.forEach(channel => {
+                const payments = channelPayments[channel.id] || { clientRate: 0, collaboratorRate: 0 };
+                const dailyVideos = parseInt(channel.dailyVideos) || 0;
+                
+                totalDailyRevenue += (payments.clientRate || 0) * dailyVideos;
+                totalDailyExpenses += (payments.collaboratorRate || 0) * dailyVideos;
             });
 
-            const netProfit = totalRevenue - totalExpenses;
+            const netDailyProfit = totalDailyRevenue - totalDailyExpenses;
 
-            document.getElementById('totalRevenue').textContent = `৳${totalRevenue.toFixed(2)}`;
-            document.getElementById('totalExpenses').textContent = `৳${totalExpenses.toFixed(2)}`;
-            document.getElementById('netProfit').textContent = `৳${netProfit.toFixed(2)}`;
+            document.getElementById('totalRevenue').textContent = `৳${totalDailyRevenue.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `৳${totalDailyExpenses.toFixed(2)}`;
+            document.getElementById('netProfit').textContent = `৳${netDailyProfit.toFixed(2)}`;
             
             // Update profit card color based on profit/loss
             const profitCard = document.querySelector('.profit-card .amount');
-            if (netProfit >= 0) {
+            if (netDailyProfit >= 0) {
                 profitCard.style.color = 'white';
             } else {
                 profitCard.style.color = '#ffeb3b';
