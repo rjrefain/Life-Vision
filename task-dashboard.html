@@ -897,9 +897,24 @@
         updateStats();
         renderTasks();
         updateSyncStatus('connected');
+        
+        // Hide loading message
+        const container = document.getElementById('tasksContainer');
+        if (container.querySelector('.loading')) {
+          renderTasks(); // This will replace loading with actual content or empty state
+        }
       }, (error) => {
         console.error('Error loading tasks:', error);
         updateSyncStatus('disconnected');
+        
+        // Show error state instead of loading
+        const container = document.getElementById('tasksContainer');
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3 style="color: var(--danger-color);">Connection Error</h3>
+            <p>Unable to load tasks. Please check your internet connection and refresh the page.</p>
+          </div>
+        `;
       });
     }
 
