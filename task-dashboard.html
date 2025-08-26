@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Task Management Dashboard - Cloud Sync</title>
+  <title>Task Management Dashboard</title>
   <style>
     :root {
       --primary-color: #667eea;
@@ -75,34 +75,13 @@
       font-weight: 600;
     }
 
-    .sync-status {
-      padding: 10px 20px;
+    #firebaseStatus {
+      padding: 8px 15px;
       border-radius: 20px;
       font-weight: 600;
       color: white;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .sync-status.connected {
+      display: inline-block;
       background: linear-gradient(135deg, var(--success-color), #2ecc71);
-    }
-
-    .sync-status.disconnected {
-      background: linear-gradient(135deg, var(--danger-color), #c0392b);
-    }
-
-    .sync-status.syncing {
-      background: linear-gradient(135deg, var(--warning-color), #e67e22);
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    .sync-icon {
-      animation: spin 1s linear infinite;
     }
 
     .stats {
@@ -301,16 +280,6 @@
       min-height: 200px;
     }
 
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 60px 20px;
-      color: var(--primary-color);
-      font-size: 18px;
-      font-weight: 600;
-    }
-
     .task-item {
       padding: 25px;
       border-bottom: 1px solid rgba(102, 126, 234, 0.1);
@@ -459,7 +428,7 @@
       font-size: 16px;
     }
 
-    /* Celebration Modal Styles - Same as index.html */
+    /* Celebration Modal Styles */
     .celebration-modal {
       position: fixed;
       top: 0;
@@ -694,28 +663,6 @@
       h1 {
         font-size: 1.8em;
       }
-
-      .celebration-content {
-        padding: 30px 20px;
-        margin: 20px;
-      }
-
-      .celebration-title {
-        font-size: 36px;
-      }
-
-      .green-circle {
-        width: 80px;
-        height: 80px;
-      }
-
-      .white-tick {
-        font-size: 40px;
-      }
-
-      .celebration-message {
-        font-size: 18px;
-      }
     }
   </style>
 </head>
@@ -725,10 +672,7 @@
 
     <div class="header-section">
       <div id="currentDateTime">Loading time...</div>
-      <div class="sync-status disconnected" id="syncStatus">
-        <span id="syncIcon">⚡</span>
-        <span id="syncText">Connecting...</span>
-      </div>
+      <div id="firebaseStatus">🟢 Ready to Use</div>
     </div>
 
     <div class="stats">
@@ -779,8 +723,9 @@
     </div>
 
     <div class="tasks-container" id="tasksContainer">
-      <div class="loading">
-        <span class="sync-icon">⚡</span> Loading tasks...
+      <div class="empty-state">
+        <h3>Welcome to Task Management!</h3>
+        <p>No tasks found. Click "Add New Task" to get started.</p>
       </div>
     </div>
 
@@ -808,7 +753,7 @@
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
     import { getDatabase, ref, set, remove, onValue, push } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
-    // Firebase configuration - Using your existing Firebase project
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
       authDomain: "video-production-tracker-12c07.firebaseapp.com",
@@ -825,21 +770,17 @@
     
     let tasks = [];
     let currentFilter = 'all';
-    let isConnected = false;
 
     // Toggle form visibility
     window.toggleForm = function() {
-      const formSection = document.getElementById('formSection');
       const formContent = document.getElementById('formContent');
       const toggleBtn = document.querySelector('.form-toggle-btn');
       
       if (formContent.classList.contains('expanded')) {
         formContent.classList.remove('expanded');
-        formSection.classList.remove('expanded');
         toggleBtn.innerHTML = `➕ Add New Task <span class="toggle-icon">▼</span>`;
       } else {
         formContent.classList.add('expanded');
-        formSection.classList.add('expanded');
         toggleBtn.innerHTML = `➖ Hide Form <span class="toggle-icon">▲</span>`;
         setTimeout(() => {
           document.getElementById('taskTitle').focus();
@@ -847,84 +788,8 @@
       }
     };
 
-    // Update sync status
-    function updateSyncStatus(status) {
-      const syncStatus = document.getElementById('syncStatus');
-      const syncIcon = document.getElementById('syncIcon');
-      const syncText = document.getElementById('syncText');
-      
-      syncStatus.className = 'sync-status ' + status;
-      
-      switch(status) {
-        case 'connected':
-          syncIcon.textContent = '✅';
-          syncText.textContent = 'Connected';
-          isConnected = true;
-          break;
-        case 'disconnected':
-          syncIcon.textContent = '❌';
-          syncText.textContent = 'Disconnected';
-          isConnected = false;
-          break;
-        case 'syncing':
-          syncIcon.textContent = '🔄';
-          syncIcon.classList.add('sync-icon');
-          syncText.textContent = 'Syncing...';
-          break;
-      }
-    }
-
-    // Monitor connection status
-    const connectedRef = ref(db, '.info/connected');
-    onValue(connectedRef, (snapshot) => {
-      if (snapshot.val() === true) {
-        updateSyncStatus('connected');
-      } else {
-        updateSyncStatus('disconnected');
-      }
-    });
-
-    // Load tasks from Firebase
-    function loadTasks() {
-      const tasksRef = ref(db, 'adminTasks');
-      onValue(tasksRef, (snapshot) => {
-        const data = snapshot.val() || {};
-        tasks = Object.entries(data).map(([id, task]) => ({
-          ...task,
-          id
-        })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        
-        updateStats();
-        renderTasks();
-        updateSyncStatus('connected');
-        
-        // Hide loading message
-        const container = document.getElementById('tasksContainer');
-        if (container.querySelector('.loading')) {
-          renderTasks(); // This will replace loading with actual content or empty state
-        }
-      }, (error) => {
-        console.error('Error loading tasks:', error);
-        updateSyncStatus('disconnected');
-        
-        // Show error state instead of loading
-        const container = document.getElementById('tasksContainer');
-        container.innerHTML = `
-          <div class="empty-state">
-            <h3 style="color: var(--danger-color);">Connection Error</h3>
-            <p>Unable to load tasks. Please check your internet connection and refresh the page.</p>
-          </div>
-        `;
-      });
-    }
-
-    // Add task to Firebase
-    window.addTask = async function() {
-      if (!isConnected) {
-        alert('No connection to database. Please check your internet connection.');
-        return;
-      }
-
+    // Add task
+    window.addTask = function() {
       const title = document.getElementById('taskTitle').value.trim();
       const assignee = document.getElementById('taskAssignee').value.trim();
       const priority = document.getElementById('taskPriority').value;
@@ -936,24 +801,202 @@
         return;
       }
 
-      updateSyncStatus('syncing');
-      document.getElementById('addTaskBtn').disabled = true;
+      const newTask = {
+        id: Date.now().toString(),
+        title,
+        assignee: assignee || 'Unassigned',
+        priority,
+        dueDate,
+        description,
+        completed: false,
+        createdAt: new Date().toISOString()
+      };
 
-      try {
-        const newTaskRef = push(ref(db, 'adminTasks'));
-        await set(newTaskRef, {
-          title,
-          assignee,
-          priority,
-          dueDate,
-          description,
-          completed: false,
-          createdAt: new Date().toISOString()
-        });
+      // Add to local array
+      tasks.unshift(newTask);
 
-        // Clear form
-        document.getElementById('taskTitle').value = '';
-        document.getElementById('taskAssignee').value = '';
-        document.getElementById('taskPriority').value = 'medium';
-        document.getElementById('taskDueDate').value = '';
-        document.
+      // Save to Firebase
+      const newTaskRef = push(ref(db, 'adminTasks'));
+      set(newTaskRef, newTask);
+
+      // Clear form
+      document.getElementById('taskTitle').value = '';
+      document.getElementById('taskAssignee').value = '';
+      document.getElementById('taskPriority').value = 'medium';
+      document.getElementById('taskDueDate').value = '';
+      document.getElementById('taskDescription').value = '';
+      
+      toggleForm(); // Close form
+      updateStats();
+      renderTasks();
+      
+      document.getElementById('firebaseStatus').innerHTML = '🟢 Task Added Successfully';
+      setTimeout(() => {
+        document.getElementById('firebaseStatus').innerHTML = '🟢 Connected to Database';
+      }, 2000);
+    };
+
+    // Toggle task completion
+    window.toggleTask = function(id) {
+      const task = tasks.find(t => t.id === id);
+      if (task) {
+        task.completed = !task.completed;
+        
+        // Update Firebase
+        const taskRef = ref(db, `adminTasks/${id}`);
+        set(taskRef, task);
+        
+        if (task.completed) {
+          showCelebration();
+        }
+        
+        updateStats();
+        renderTasks();
+      }
+    };
+
+    // Delete task
+    window.deleteTask = function(id) {
+      if (confirm('Are you sure you want to delete this task?')) {
+        tasks = tasks.filter(t => t.id !== id);
+        
+        // Remove from Firebase
+        remove(ref(db, `adminTasks/${id}`));
+        
+        updateStats();
+        renderTasks();
+      }
+    };
+
+    // Filter tasks
+    window.filterTasks = function(filter) {
+      currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      renderTasks();
+    };
+
+    function getFilteredTasks() {
+      switch (currentFilter) {
+        case 'pending':
+          return tasks.filter(t => !t.completed);
+        case 'completed':
+          return tasks.filter(t => t.completed);
+        case 'high':
+          return tasks.filter(t => t.priority === 'high');
+        default:
+          return tasks;
+      }
+    }
+
+    function renderTasks() {
+      const container = document.getElementById('tasksContainer');
+      const filteredTasks = getFilteredTasks();
+
+      if (filteredTasks.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <h3>${currentFilter === 'all' ? 'No tasks yet!' : 'No ' + currentFilter + ' tasks'}</h3>
+            <p>${currentFilter === 'all' ? 'Click "Add New Task" to get started.' : 'Try changing the filter or adding new tasks.'}</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filteredTasks.map(task => `
+        <div class="task-item ${task.completed ? 'completed' : ''}">
+          <input type="checkbox" class="task-checkbox" ${task.completed ? 'checked' : ''} 
+                 onchange="toggleTask('${task.id}')">
+          <div class="task-content">
+            <div class="task-title">${task.title}</div>
+            <div class="task-meta">
+              ${task.assignee !== 'Unassigned' ? `<span>👤 ${task.assignee}</span>` : ''}
+              <span class="task-priority priority-${task.priority}">${task.priority.toUpperCase()}</span>
+              ${task.dueDate ? `<span>📅 ${new Date(task.dueDate).toLocaleDateString()}</span>` : ''}
+            </div>
+            ${task.description ? `<div class="task-description">${task.description}</div>` : ''}
+          </div>
+          <div class="task-actions">
+            <button class="action-btn delete-btn" onclick="deleteTask('${task.id}')" title="Delete task">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateStats() {
+      const total = tasks.length;
+      const completed = tasks.filter(t => t.completed).length;
+      const pending = total - completed;
+      const highPriority = tasks.filter(t => t.priority === 'high' && !t.completed).length;
+
+      document.getElementById('totalTasks').textContent = total;
+      document.getElementById('completedTasks').textContent = completed;
+      document.getElementById('pendingTasks').textContent = pending;
+      document.getElementById('highPriorityTasks').textContent = highPriority;
+    }
+
+    // Load tasks from Firebase
+    function loadTasks() {
+      const tasksRef = ref(db, 'adminTasks');
+      onValue(tasksRef, (snapshot) => {
+        const data = snapshot.val() || {};
+        tasks = Object.entries(data).map(([firebaseId, task]) => ({
+          ...task,
+          firebaseId // Keep Firebase ID for updates
+        })).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        
+        updateStats();
+        renderTasks();
+        
+        document.getElementById('firebaseStatus').innerHTML = '🟢 Connected to Database';
+      }, (error) => {
+        console.error('Error loading tasks:', error);
+        document.getElementById('firebaseStatus').innerHTML = '🔴 Connection Error';
+      });
+    }
+
+    // Celebration functions
+    window.showCelebration = function() {
+      const modal = document.getElementById('celebrationModal');
+      modal.classList.add('show');
+      
+      // Auto close after 5 seconds
+      setTimeout(() => {
+        closeCelebration();
+      }, 5000);
+    };
+
+    window.closeCelebration = function() {
+      const modal = document.getElementById('celebrationModal');
+      modal.classList.remove('show');
+    };
+
+    function updateDateTime() {
+      const now = new Date();
+      const bdt = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
+      document.getElementById('currentDateTime').textContent = bdt.toLocaleString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
+      });
+    }
+
+    // Initialize
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+    loadTasks();
+
+    // Add Enter key support for task title
+    document.getElementById('taskTitle').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        window.addTask();
+      }
+    });
+
+    // Initial render
+    updateStats();
+    renderTasks();
+  </script>
+</body>
+</html>
