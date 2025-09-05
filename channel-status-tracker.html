@@ -860,4 +860,75 @@
       if (channelElement) {
         channelElement.classList.add('floating');
         setTimeout(() => {
-          channelElement.
+          channelElement.classList.remove('floating');
+        }, 2000);
+      }
+
+      try {
+        await supabase
+          .from('channel_status')
+          .upsert({
+            channel_id: channelId,
+            condition: condition,
+            last_updated: new Date().toISOString()
+          });
+        
+        // Update local data
+        const channel = channels.find(c => c.id === channelId);
+        if (channel) {
+          channel.condition = condition;
+          renderChannels();
+          updateStats();
+        }
+      } catch (error) {
+        console.error('Error updating condition:', error);
+        alert('Failed to update channel condition. Please try again.');
+        if (channelElement) {
+          channelElement.classList.remove('floating');
+        }
+      }
+    };
+
+    function updateStats() {
+      const stats = channels.reduce((acc, channel) => {
+        acc[channel.condition] = (acc[channel.condition] || 0) + 1;
+        if (channel.topic_available) {
+          acc.topicAvailable = (acc.topicAvailable || 0) + 1;
+        }
+        
+        const visitStatus = getVisitStatus(channel);
+        if (visitStatus.status === 'warning') {
+          acc.needVisit = (acc.needVisit || 0) + 1;
+        }
+        
+        return acc;
+      }, {});
+
+      document.getElementById('greenCount').textContent = stats.green || 0;
+      document.getElementById('yellowCount').textContent = stats.yellow || 0;
+      document.getElementById('redCount').textContent = stats.red || 0;
+      document.getElementById('topicAvailableCount').textContent = stats.topicAvailable || 0;
+      document.getElementById('needVisitCount').textContent = stats.needVisit || 0;
+    }
+
+    // Initialize
+    checkConnection();
+    loadChannels();
+    
+    // Check connection and reload data every 30 seconds
+    setInterval(() => {
+      checkConnection();
+      if (isConnected) {
+        loadChannels();
+      }
+    }, 30000);
+    
+    // Check for expired visits every hour
+    setInterval(() => {
+      if (channels.length > 0) {
+        updateVisitWarnings();
+      }
+    }, 60 * 60 * 1000);
+  </script>
+</body>
+</html>
