@@ -648,22 +648,12 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
 
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
-            authDomain: "video-production-tracker-12c07.firebaseapp.com",
-            databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com",
-            projectId: "video-production-tracker-12c07",
-            storageBucket: "video-production-tracker-12c07.appspot.com",
-            messagingSenderId: "126509441147",
-            appId: "1:126509441147:web:abc123def456"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getDatabase(app);
+        // Supabase configuration
+        const supabaseUrl = 'https://prkrbswttmtgeplsvzlj.supabase.co'
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBya3Jic3d0dG10Z2VwbHN2emxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTk5NjQsImV4cCI6MjA3MjYzNTk2NH0.Ul2cd-cpWHfpK1HTgHM7Tv2NDCrFWcAq2N-C7Tv9oz8'
+        const supabase = createClient(supabaseUrl, supabaseKey)
 
         // Password validation
         const validPasswords = [
@@ -692,7 +682,7 @@
             
             if (session.authenticated && (now - session.timestamp) < SESSION_DURATION) {
                 showMainContent();
-                initializeFirebase();
+                initializeSupabase();
             } else {
                 localStorage.removeItem(SESSION_KEY);
                 showLoginScreen();
@@ -711,7 +701,7 @@
                 localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
                 
                 showMainContent();
-                initializeFirebase();
+                initializeSupabase();
                 
                 document.getElementById('passwordInput').value = '';
                 errorMessage.style.display = 'none';
@@ -759,13 +749,16 @@
             showLoginScreen();
         };
 
-        function initializeFirebase() {
-            // Monitor connection
-            const connectedRef = ref(db, '.info/connected');
-            onValue(connectedRef, (snapshot) => {
-                isConnected = snapshot.val() === true;
+        async function initializeSupabase() {
+            // Test connection
+            try {
+                const { data, error } = await supabase.from('tasks').select('count', { count: 'exact', head: true });
+                isConnected = !error;
                 updateSyncStatus();
-            });
+            } catch (error) {
+                isConnected = false;
+                updateSyncStatus();
+            }
 
             loadChannels();
             loadChannelPayments();
@@ -782,32 +775,55 @@
             }
         }
 
-        function loadChannels() {
-            const tasksRef = ref(db, 'tasks');
-            onValue(tasksRef, (snapshot) => {
-                const tasksData = snapshot.val() || {};
-                channels = Object.entries(tasksData).map(([id, task]) => ({
-                    ...task,
-                    id
-                }));
+        async function loadChannels() {
+            try {
+                const { data: tasksData, error } = await supabase
+                    .from('tasks')
+                    .select('*');
                 
+                if (error) throw error;
+                
+                channels = tasksData || [];
                 renderChannels();
-            }, (error) => {
+                isConnected = true;
+                updateSyncStatus();
+            } catch (error) {
                 console.error('Error loading channels:', error);
+                isConnected = false;
+                updateSyncStatus();
                 document.getElementById('channelsContainer').innerHTML = `
                     <div class="loading-state">❌ Error loading channels from database</div>
                 `;
-            });
+            }
         }
 
-        function loadChannelPayments() {
-            const paymentsRef = ref(db, 'channelPaymentRates');
-            onValue(paymentsRef, (snapshot) => {
-                channelPayments = snapshot.val() || {};
+        async function loadChannelPayments() {
+            try {
+                const { data: paymentsData, error } = await supabase
+                    .from('channel_payment_rates')
+                    .select('*');
+                
+                if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
+                    throw error;
+                }
+                
+                channelPayments = {};
+                if (paymentsData) {
+                    paymentsData.forEach(payment => {
+                        channelPayments[payment.channel_id] = payment;
+                    });
+                }
+                
                 renderChannels();
                 renderCollaborators();
                 updateSummary();
-            });
+            } catch (error) {
+                console.error('Error loading channel payments:', error);
+                // Continue without payment data
+                renderChannels();
+                renderCollaborators();
+                updateSummary();
+            }
         }
 
         function renderChannels() {
@@ -823,18 +839,18 @@
             }
 
             const channelsHTML = channels.map(channel => {
-                const payments = channelPayments[channel.id] || { clientRate: 0, collaboratorRate: 0 };
-                const dailyVideos = parseInt(channel.dailyVideos) || 0;
+                const payments = channelPayments[channel.id] || { client_rate: 0, collaborator_rate: 0 };
+                const dailyVideos = parseInt(channel.daily_videos) || 0;
                 
                 // Calculate daily amounts
-                const dailyClientRevenue = payments.clientRate * dailyVideos;
-                const dailyCollaboratorCost = payments.collaboratorRate * dailyVideos;
+                const dailyClientRevenue = payments.client_rate * dailyVideos;
+                const dailyCollaboratorCost = payments.collaborator_rate * dailyVideos;
                 const dailyProfit = dailyClientRevenue - dailyCollaboratorCost;
                 
                 let profitClass = 'profit-neutral';
                 let profitText = 'No data available';
                 
-                if (dailyVideos > 0 && (payments.clientRate > 0 || payments.collaboratorRate > 0)) {
+                if (dailyVideos > 0 && (payments.client_rate > 0 || payments.collaborator_rate > 0)) {
                     profitClass = dailyProfit >= 0 ? 'profit-positive' : 'profit-negative';
                     profitText = `Daily ${dailyProfit >= 0 ? 'Profit' : 'Loss'}: ৳${Math.abs(dailyProfit).toFixed(2)}`;
                     
@@ -871,12 +887,12 @@
                                 <input 
                                     type="number" 
                                     class="payment-input client-payment" 
-                                    value="${payments.clientRate || ''}" 
+                                    value="${payments.client_rate || ''}" 
                                     placeholder="0.00"
                                     step="0.01"
                                     data-channel="${channel.id}"
-                                    data-type="clientRate"
-                                    onchange="updatePaymentRate('${channel.id}', 'clientRate', this.value)"
+                                    data-type="client_rate"
+                                    onchange="updatePaymentRate('${channel.id}', 'client_rate', this.value)"
                                 >
                             </div>
                             
@@ -887,12 +903,12 @@
                                 <input 
                                     type="number" 
                                     class="payment-input collaborator-payment" 
-                                    value="${payments.collaboratorRate || ''}" 
+                                    value="${payments.collaborator_rate || ''}" 
                                     placeholder="0.00"
                                     step="0.01"
                                     data-channel="${channel.id}"
-                                    data-type="collaboratorRate"
-                                    onchange="updatePaymentRate('${channel.id}', 'collaboratorRate', this.value)"
+                                    data-type="collaborator_rate"
+                                    onchange="updatePaymentRate('${channel.id}', 'collaborator_rate', this.value)"
                                 >
                             </div>
                             
@@ -917,9 +933,9 @@
                 const collaborator = channel.collaborator || 'Unassigned';
                 if (collaborator === 'Unassigned') return; // Skip unassigned channels
                 
-                const payments = channelPayments[channel.id] || { clientRate: 0, collaboratorRate: 0 };
-                const dailyVideos = parseInt(channel.dailyVideos) || 0;
-                const dailyEarning = payments.collaboratorRate * dailyVideos;
+                const payments = channelPayments[channel.id] || { client_rate: 0, collaborator_rate: 0 };
+                const dailyVideos = parseInt(channel.daily_videos) || 0;
+                const dailyEarning = payments.collaborator_rate * dailyVideos;
                 
                 if (!collaboratorData[collaborator]) {
                     collaboratorData[collaborator] = {
@@ -934,7 +950,7 @@
                     name: channel.channel,
                     earning: dailyEarning,
                     videos: dailyVideos,
-                    rate: payments.collaboratorRate
+                    rate: payments.collaborator_rate
                 });
             });
             
@@ -1004,10 +1020,26 @@
             const numValue = parseFloat(value) || 0;
             
             try {
-                await update(ref(db, `channelPaymentRates/${channelId}`), {
-                    [rateType]: numValue,
-                    lastUpdated: new Date().toISOString()
-                });
+                const { error } = await supabase
+                    .from('channel_payment_rates')
+                    .upsert({
+                        channel_id: channelId,
+                        [rateType]: numValue,
+                        last_updated: new Date().toISOString()
+                    });
+
+                if (error) throw error;
+
+                // Update local data
+                if (!channelPayments[channelId]) {
+                    channelPayments[channelId] = {};
+                }
+                channelPayments[channelId][rateType] = numValue;
+                
+                // Re-render to update calculations
+                renderChannels();
+                renderCollaborators();
+                updateSummary();
             } catch (error) {
                 console.error('Error updating payment rate:', error);
                 alert('Failed to save payment rate. Please try again.');
@@ -1019,11 +1051,11 @@
             let totalDailyExpenses = 0;
 
             channels.forEach(channel => {
-                const payments = channelPayments[channel.id] || { clientRate: 0, collaboratorRate: 0 };
-                const dailyVideos = parseInt(channel.dailyVideos) || 0;
+                const payments = channelPayments[channel.id] || { client_rate: 0, collaborator_rate: 0 };
+                const dailyVideos = parseInt(channel.daily_videos) || 0;
                 
-                totalDailyRevenue += (payments.clientRate || 0) * dailyVideos;
-                totalDailyExpenses += (payments.collaboratorRate || 0) * dailyVideos;
+                totalDailyRevenue += (payments.client_rate || 0) * dailyVideos;
+                totalDailyExpenses += (payments.collaborator_rate || 0) * dailyVideos;
             });
 
             const netDailyProfit = totalDailyRevenue - totalDailyExpenses;
