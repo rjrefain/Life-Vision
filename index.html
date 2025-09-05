@@ -57,7 +57,7 @@
       flex-wrap: wrap;
     }
 
-    #firebaseStatus {
+    #supabaseStatus {
       padding: 8px 15px;
       border-radius: 20px;
       font-weight: 600;
@@ -744,31 +744,6 @@
       }
     }
 
-    /* Confetti animation */
-    .confetti {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: #f1c40f;
-      animation: confettiFall 3s linear infinite;
-    }
-
-    .confetti:nth-child(odd) { background: #e74c3c; }
-    .confetti:nth-child(3n) { background: #2ecc71; }
-    .confetti:nth-child(4n) { background: #3498db; }
-    .confetti:nth-child(5n) { background: #9b59b6; }
-
-    @keyframes confettiFall {
-      0% {
-        transform: translateY(-100vh) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-      }
-    }
-
     @media (max-width: 768px) {
       .celebration-content {
         padding: 30px 20px;
@@ -970,7 +945,7 @@
     </div>
 
     <div class="status-container">
-      <div id="firebaseStatus">🟢 Connected to Database</div>
+      <div id="supabaseStatus">🟢 Connected to Database</div>
       <button class="reset-btn" onclick="resetAllChannels()" id="resetBtn">
         🔄 Reset All Channels
       </button>
@@ -1032,21 +1007,12 @@
   </div>
 
   <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-    import { getDatabase, ref, set, remove, get, onValue, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+    import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyCBZnmZfQ4HZvQF-7JxYkfZQN8vXfJ3d2g",
-      authDomain: "video-production-tracker-12c07.firebaseapp.com",
-      databaseURL: "https://video-production-tracker-12c07-default-rtdb.firebaseio.com",
-      projectId: "video-production-tracker-12c07",
-      storageBucket: "video-production-tracker-12c07.appspot.com",
-      messagingSenderId: "126509441147",
-      appId: "1:126509441147:web:abc123def456"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    // Supabase configuration
+    const supabaseUrl = 'https://prkrbswttmtgeplsvzlj.supabase.co'
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBya3Jic3d0dG10Z2VwbHN2emxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTk5NjQsImV4cCI6MjA3MjYzNTk2NH0.Ul2cd-cpWHfpK1HTgHM7Tv2NDCrFWcAq2N-C7Tv9oz8'
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
     const tasksBody = document.getElementById('tasksBody');
     const currentDateTime = document.getElementById('currentDateTime');
@@ -1054,6 +1020,7 @@
     // Drag and Drop Variables
     let draggedElement = null;
     let channelOrder = [];
+    let tasks = [];
 
     // Dropdown functionality
     window.toggleDropdown = function() {
@@ -1074,112 +1041,136 @@
       const dropdown = document.getElementById('dropdownMenu');
       dropdown.classList.remove('show');
       
-      const tasksRef = ref(db, 'tasks');
-      const snapshot = await get(tasksRef);
-      
-      if (snapshot.exists()) {
-        const tasks = snapshot.val();
+      try {
+        const { data: tasks, error } = await supabase
+          .from('tasks')
+          .select('*')
+        
+        if (error) throw error;
+
         let sortedEntries;
         
         if (type === 'collaborator') {
           // Sort by collaborator name, then by channel name
-          sortedEntries = Object.entries(tasks).sort((a, b) => {
-            const collabA = (a[1].collaborator || 'Unassigned').toLowerCase();
-            const collabB = (b[1].collaborator || 'Unassigned').toLowerCase();
+          sortedEntries = tasks.sort((a, b) => {
+            const collabA = (a.collaborator || 'Unassigned').toLowerCase();
+            const collabB = (b.collaborator || 'Unassigned').toLowerCase();
             if (collabA === collabB) {
-              return a[1].channel.toLowerCase().localeCompare(b[1].channel.toLowerCase());
+              return a.channel.toLowerCase().localeCompare(b.channel.toLowerCase());
             }
             return collabA.localeCompare(collabB);
           });
         } else if (type === 'project') {
           // Sort by channel/project name
-          sortedEntries = Object.entries(tasks).sort((a, b) => {
-            return a[1].channel.toLowerCase().localeCompare(b[1].channel.toLowerCase());
+          sortedEntries = tasks.sort((a, b) => {
+            return a.channel.toLowerCase().localeCompare(b.channel.toLowerCase());
           });
         }
         
         // Create new order array
-        const newOrder = sortedEntries.map((entry, index) => ({
-          id: entry[0],
-          order: index
+        const newOrder = sortedEntries.map((task, index) => ({
+          channel_id: task.id,
+          order_position: index
         }));
         
-        // Save to Firebase
-        await set(ref(db, 'channelOrder'), newOrder);
+        // Clear existing order and insert new one
+        await supabase.from('channel_order').delete().gt('id', 0);
+        await supabase.from('channel_order').insert(newOrder);
+        
         channelOrder = newOrder;
         
-        // Re-render tasks with new order
-        renderTasks(tasks);
+        // Re-load and render tasks
+        await loadTasks();
         
         const orderType = type === 'collaborator' ? 'Collaborator' : 'Project';
         alert(`✅ Channels reordered by ${orderType} successfully!`);
+      } catch (error) {
+        console.error('Error reordering:', error);
+        alert('❌ Failed to reorder channels');
       }
     };
 
     async function loadTasks() {
-      await loadChannelOrder();
-      const tasksRef = ref(db, 'tasks');
-      onValue(tasksRef, (snapshot) => {
-        const tasks = snapshot.val() || {};
-        renderTasks(tasks);
-      });
-    }
-
-    async function loadChannelOrder() {
-      const orderRef = ref(db, 'channelOrder');
-      const snapshot = await get(orderRef);
-      if (snapshot.exists()) {
-        channelOrder = snapshot.val();
-        return channelOrder;
+      try {
+        // Load channel order
+        const { data: orderData } = await supabase
+          .from('channel_order')
+          .select('*')
+          .order('order_position');
+        
+        channelOrder = orderData || [];
+        
+        // Load tasks
+        const { data: tasksData, error } = await supabase
+          .from('tasks')
+          .select('*');
+        
+        if (error) throw error;
+        
+        tasks = tasksData || [];
+        renderTasks();
+        
+        document.getElementById('supabaseStatus').innerHTML = '🟢 Connected to Database';
+      } catch (error) {
+        console.error('Error loading tasks:', error);
+        document.getElementById('supabaseStatus').innerHTML = '🔴 Connection Error';
       }
-      return [];
     }
 
     async function saveChannelOrder() {
-      const rows = document.querySelectorAll('#tasksBody tr');
-      const newOrder = [];
-      
-      rows.forEach((row, index) => {
-        const channelId = row.getAttribute('data-channel-id');
-        if (channelId) {
-          newOrder.push({
-            id: channelId,
-            order: index
-          });
+      try {
+        const rows = document.querySelectorAll('#tasksBody tr');
+        const newOrder = [];
+        
+        rows.forEach((row, index) => {
+          const channelId = row.getAttribute('data-channel-id');
+          if (channelId) {
+            newOrder.push({
+              channel_id: channelId,
+              order_position: index
+            });
+          }
+        });
+        
+        // Clear existing order and insert new one
+        await supabase.from('channel_order').delete().gt('id', 0);
+        if (newOrder.length > 0) {
+          await supabase.from('channel_order').insert(newOrder);
         }
-      });
-      
-      await set(ref(db, 'channelOrder'), newOrder);
-      channelOrder = newOrder;
+        
+        channelOrder = newOrder;
+      } catch (error) {
+        console.error('Error saving channel order:', error);
+      }
     }
 
     function sortChannelsByOrder(tasks) {
       if (channelOrder.length === 0) {
-        return Object.entries(tasks);
+        return tasks;
       }
       
       const orderMap = {};
       channelOrder.forEach(item => {
-        orderMap[item.id] = item.order;
+        orderMap[item.channel_id] = item.order_position;
       });
       
-      const sortedEntries = Object.entries(tasks).sort((a, b) => {
-        const orderA = orderMap[a[0]] !== undefined ? orderMap[a[0]] : 999;
-        const orderB = orderMap[b[0]] !== undefined ? orderMap[b[0]] : 999;
+      const sortedTasks = [...tasks].sort((a, b) => {
+        const orderA = orderMap[a.id] !== undefined ? orderMap[a.id] : 999;
+        const orderB = orderMap[b.id] !== undefined ? orderMap[b.id] : 999;
         return orderA - orderB;
       });
       
-      return sortedEntries;
+      return sortedTasks;
     }
 
-    function renderTasks(tasks) {
+    function renderTasks() {
       tasksBody.innerHTML = '';
       
       const sortedTasks = sortChannelsByOrder(tasks);
       
-      sortedTasks.forEach(([id, task]) => {
+      sortedTasks.forEach(task => {
         const row = document.createElement('tr');
-        row.setAttribute('data-channel-id', id);
+        row.setAttribute('data-channel-id', task.id);
         row.className = 'draggable-row';
         row.draggable = true;
 
@@ -1192,29 +1183,29 @@
             </div>
           </td>
           <td data-label="Client">
-            <span class="client-display">${task.client}</span>
-            <input type="text" class="edit-input client-edit" value="${task.client}" style="display: none;" />
+            <span class="client-display">${task.client || ''}</span>
+            <input type="text" class="edit-input client-edit" value="${task.client || ''}" style="display: none;" />
           </td>
           <td data-label="Collaborator">
             <span class="collaborator-display">${task.collaborator || 'Unassigned'}</span>
             <input type="text" class="edit-input collaborator-edit" value="${task.collaborator || ''}" style="display: none;" />
           </td>
           <td data-label="Videos/Day">
-            <span class="videos-display">${task.dailyVideos}</span>
-            <span class="edit-pencil" onclick="editRow('${id}')" title="Edit this row">✏️</span>
-            <input type="number" class="edit-input videos-edit" value="${task.dailyVideos}" style="display: none;" min="0" />
+            <span class="videos-display">${task.daily_videos || 0}</span>
+            <span class="edit-pencil" onclick="editRow('${task.id}')" title="Edit this row">✏️</span>
+            <input type="number" class="edit-input videos-edit" value="${task.daily_videos || 0}" style="display: none;" min="0" />
           </td>
           <td data-label="Status"><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
           <td class="action-cell">
             <div class="normal-actions">
-              <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${id}')">
+              <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${task.id}')">
                 ${task.status === 'completed' ? 'Completed' : 'Mark Complete'}
               </button>
-              <button class="delete-icon" onclick="deleteChannel('${id}')">🗑️</button>
+              <button class="delete-icon" onclick="deleteChannel('${task.id}')">🗑️</button>
             </div>
             <div class="edit-actions" style="display: none;">
-              <button class="save-edit-btn" onclick="saveRowEdit('${id}')">✅ Save</button>
-              <button class="cancel-edit-btn" onclick="cancelRowEdit('${id}')">❌ Cancel</button>
+              <button class="save-edit-btn" onclick="saveRowEdit('${task.id}')">✅ Save</button>
+              <button class="cancel-edit-btn" onclick="cancelRowEdit('${task.id}')">❌ Cancel</button>
             </div>
           </td>
         `;
@@ -1277,14 +1268,31 @@
       }
       
       try {
-        // Update Firebase
-        await update(ref(db, `tasks/${id}`), {
-          channel: newChannel,
-          client: newClient,
-          collaborator: newCollaborator,
-          dailyVideos: newVideos,
-          lastUpdated: new Date().toISOString()
-        });
+        // Update Supabase
+        const { error } = await supabase
+          .from('tasks')
+          .update({
+            channel: newChannel,
+            client: newClient,
+            collaborator: newCollaborator,
+            daily_videos: newVideos,
+            last_updated: new Date().toISOString()
+          })
+          .eq('id', id);
+        
+        if (error) throw error;
+        
+        // Update local tasks array
+        const taskIndex = tasks.findIndex(t => t.id === id);
+        if (taskIndex !== -1) {
+          tasks[taskIndex] = {
+            ...tasks[taskIndex],
+            channel: newChannel,
+            client: newClient,
+            collaborator: newCollaborator,
+            daily_videos: newVideos
+          };
+        }
         
         // Update display elements
         row.querySelector('.channel-display').textContent = newChannel;
@@ -1405,23 +1413,62 @@
     }
 
     window.toggleTask = async function(id) {
-      const taskRef = ref(db, 'tasks/' + id);
-      const snapshot = await get(taskRef);
-      if (snapshot.exists()) {
-        const task = snapshot.val();
+      try {
+        const task = tasks.find(t => t.id === id);
+        if (!task) return;
+        
         const newStatus = task.status === 'completed' ? 'pending' : 'completed';
-        await set(taskRef, { ...task, status: newStatus, lastUpdated: new Date().toISOString() });
+        
+        const { error } = await supabase
+          .from('tasks')
+          .update({ 
+            status: newStatus, 
+            last_updated: new Date().toISOString() 
+          })
+          .eq('id', id);
+        
+        if (error) throw error;
+        
+        // Update local array
+        task.status = newStatus;
+        renderTasks();
         
         // Show celebration when marking as completed
         if (newStatus === 'completed') {
           showCelebration();
         }
+      } catch (error) {
+        console.error('Error updating task:', error);
+        alert('❌ Failed to update task status');
       }
     };
 
     window.deleteChannel = async function(id) {
       if (confirm("Are you sure you want to delete this channel?")) {
-        await remove(ref(db, 'tasks/' + id));
+        try {
+          const { error } = await supabase
+            .from('tasks')
+            .delete()
+            .eq('id', id);
+          
+          if (error) throw error;
+          
+          // Remove from local array
+          tasks = tasks.filter(t => t.id !== id);
+          renderTasks();
+          
+          // Also remove from channel order
+          await supabase
+            .from('channel_order')
+            .delete()
+            .eq('channel_id', id);
+          
+          channelOrder = channelOrder.filter(o => o.channel_id !== id);
+          
+        } catch (error) {
+          console.error('Error deleting channel:', error);
+          alert('❌ Failed to delete channel');
+        }
       }
     };
 
@@ -1455,18 +1502,42 @@
       if (!id || !channel) return alert("Channel ID and Name are required.");
 
       try {
-        await set(ref(db, 'tasks/' + id), {
-          channel, client, collaborator, dailyVideos,
-          status: 'pending',
-          lastUpdated: new Date().toISOString()
+        const { error } = await supabase
+          .from('tasks')
+          .insert([{
+            id: id,
+            channel: channel,
+            client: client,
+            collaborator: collaborator,
+            daily_videos: dailyVideos,
+            status: 'pending',
+            last_updated: new Date().toISOString(),
+            created_at: new Date().toISOString()
+          }]);
+
+        if (error) throw error;
+
+        // Add to local array
+        tasks.push({
+          id: id,
+          channel: channel,
+          client: client,
+          collaborator: collaborator,
+          daily_videos: dailyVideos,
+          status: 'pending'
         });
 
         document.querySelectorAll('.form-content input').forEach(i => i.value = '');
         toggleForm();
+        renderTasks();
         alert('✅ Channel added successfully!');
       } catch (error) {
         console.error('Error adding channel:', error);
-        alert('❌ Failed to add channel. Please try again.');
+        if (error.code === '23505') {
+          alert('❌ Channel ID already exists. Please use a different ID.');
+        } else {
+          alert('❌ Failed to add channel. Please try again.');
+        }
       }
     };
 
@@ -1484,29 +1555,25 @@
       resetBtn.textContent = '🔄 Resetting...';
 
       try {
-        const tasksRef = ref(db, 'tasks');
-        const snapshot = await get(tasksRef);
-        
-        if (snapshot.exists()) {
-          const tasks = snapshot.val();
-          const updates = {};
-          let resetCount = 0;
+        const { error } = await supabase
+          .from('tasks')
+          .update({ 
+            status: 'pending',
+            last_updated: new Date().toISOString()
+          })
+          .eq('status', 'completed');
 
-          Object.entries(tasks).forEach(([id, task]) => {
-            if (task.status === 'completed') {
-              updates[`tasks/${id}/status`] = 'pending';
-              updates[`tasks/${id}/lastUpdated`] = new Date().toISOString();
-              resetCount++;
-            }
-          });
+        if (error) throw error;
 
-          if (resetCount > 0) {
-            await update(ref(db), updates);
-            alert(`✅ Successfully reset ${resetCount} channel(s) from completed to pending status!`);
-          } else {
-            alert('ℹ️ No completed channels found to reset.');
+        // Update local array
+        tasks.forEach(task => {
+          if (task.status === 'completed') {
+            task.status = 'pending';
           }
-        }
+        });
+
+        renderTasks();
+        alert('✅ All channels have been reset to pending status!');
       } catch (error) {
         console.error('Error resetting channels:', error);
         alert('❌ Error resetting channels. Please try again.');
@@ -1521,9 +1588,6 @@
       const modal = document.getElementById('celebrationModal');
       modal.classList.add('show');
       
-      // Create confetti effect
-      createConfetti();
-      
       // Auto close after 10 seconds
       setTimeout(() => {
         closeCelebration();
@@ -1533,35 +1597,7 @@
     window.closeCelebration = function() {
       const modal = document.getElementById('celebrationModal');
       modal.classList.remove('show');
-      
-      // Remove confetti
-      const confettiElements = document.querySelectorAll('.confetti');
-      confettiElements.forEach(confetti => confetti.remove());
     };
-
-    function createConfetti() {
-      const colors = ['#f1c40f', '#e74c3c', '#2ecc71', '#3498db', '#9b59b6', '#ff6b6b', '#4ecdc4'];
-      
-      for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-          const confetti = document.createElement('div');
-          confetti.className = 'confetti';
-          confetti.style.left = Math.random() * 100 + '%';
-          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-          confetti.style.animationDelay = Math.random() * 3 + 's';
-          confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
-          
-          document.body.appendChild(confetti);
-          
-          // Remove confetti after animation
-          setTimeout(() => {
-            if (confetti.parentNode) {
-              confetti.remove();
-            }
-          }, 5000);
-        }, i * 100);
-      }
-    }
 
     function updateDateTime() {
       const now = new Date();
