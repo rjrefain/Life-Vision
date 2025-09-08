@@ -3,1027 +3,769 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Production Payment Table - Secure Access</title>
+    <title>Professional Payment Dashboard - August 2025</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        * {
             margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-        }
-        
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Login Screen Styles */
-        .login-screen {
-            text-align: center;
-            padding: 50px 20px;
-        }
-
-        .login-title {
-            color: #2c3e50;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            font-weight: 300;
-        }
-
-        .login-subtitle {
-            color: #7f8c8d;
-            font-size: 1.2em;
-            margin-bottom: 40px;
-        }
-
-        .login-form {
-            max-width: 400px;
-            margin: 0 auto;
-        }
-
-        .password-input {
-            width: 100%;
-            padding: 15px 20px;
-            font-size: 1.1em;
-            border: 2px solid #e8ecf0;
-            border-radius: 25px;
-            outline: none;
-            transition: all 0.3s ease;
-            margin-bottom: 20px;
+            padding: 0;
             box-sizing: border-box;
         }
 
-        .password-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh;
+            color: #334155;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        .login-btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Header */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .company-info h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+
+        .company-info p {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .month-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .month-badge {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.1em;
+            padding: 12px 24px;
+            border-radius: 12px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            font-size: 1.1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .login-btn:hover {
+        .edit-btn {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .edit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
         }
 
-        .error-message {
-            background: #ffebee;
-            color: #c62828;
-            padding: 12px 20px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border-left: 4px solid #f44336;
-            display: none;
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
-        .security-note {
-            background: #e3f2fd;
-            color: #1565c0;
-            padding: 15px 20px;
-            border-radius: 10px;
-            margin-top: 30px;
-            border-left: 4px solid #2196f3;
-            font-size: 0.9em;
+        .dashboard-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
         }
 
-        /* Main Content Styles */
-        .main-content {
-            display: none;
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         }
 
-        .main-content.show {
-            display: block;
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
         }
-        
-        h1 {
-            text-align: center;
-            color: #2c3e50;
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .revenue-icon { background: linear-gradient(135deg, #10b981, #059669); }
+        .expense-icon { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .profit-icon { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .card-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 8px;
+        }
+
+        .card-amount-bdt {
+            font-size: 1.2rem;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        /* Projects Section */
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
             margin-bottom: 30px;
-            font-size: 2.2em;
-            font-weight: 300;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .logout-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .add-btn {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
             border: none;
             padding: 10px 20px;
-            border-radius: 20px;
+            border-radius: 10px;
+            font-weight: 600;
             cursor: pointer;
-            font-weight: 600;
-            z-index: 1000;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
 
-        .logout-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .home-btn {
-            background: linear-gradient(135deg, #27ae60, #2ecc71);
-            color: white;
-            padding: 12px 25px;
-            text-decoration: none;
-            border-radius: 25px;
-            font-weight: 600;
-            display: inline-block;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-            margin-bottom: 30px;
-        }
-
-        .home-btn:hover {
+        .add-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(39, 174, 96, 0.5);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
         }
 
-        /* Financial Summary Card */
-        .financial-summary-card {
-            background: linear-gradient(135deg, #f1c40f, #f39c12);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 40px;
-            box-shadow: 0 20px 40px rgba(241, 196, 15, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .financial-summary-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-
-        .financial-summary-card h2 {
-            margin: 0 0 25px 0;
-            font-size: 2.2em;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-
-        .financial-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
-
-        .financial-item {
-            background: rgba(255,255,255,0.15);
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .financial-item:hover {
-            background: rgba(255,255,255,0.25);
-            transform: translateY(-5px);
-        }
-
-        .financial-icon {
-            font-size: 2.5em;
-            min-width: 60px;
-            text-align: center;
-        }
-
-        .financial-details {
-            flex: 1;
-        }
-
-        .financial-label {
-            font-size: 1.1em;
-            font-weight: 600;
-            margin-bottom: 8px;
-            opacity: 0.9;
-        }
-
-        .financial-amount {
-            font-size: 1.8em;
-            font-weight: 700;
-            margin-bottom: 5px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        .financial-bdt {
-            font-size: 1.2em;
-            font-weight: 500;
-            opacity: 0.8;
-        }
-        
-        .table-wrapper {
+        /* Professional Table */
+        .table-container {
             overflow-x: auto;
             border-radius: 15px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            margin-bottom: 30px;
+            border: 1px solid #e2e8f0;
+            background: white;
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            font-size: 1em;
         }
-        
+
         th {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e293b, #334155);
             color: white;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 18px 15px;
+            padding: 16px;
             text-align: left;
-            font-size: 0.9em;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        
-        th:first-child {
-            border-top-left-radius: 15px;
-        }
-        
-        th:last-child {
-            border-top-right-radius: 15px;
-        }
-        
+
         td {
-            padding: 15px;
-            border-bottom: 1px solid #e8ecf0;
-            transition: all 0.3s ease;
-            vertical-align: middle;
+            padding: 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-weight: 500;
         }
-        
-        tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        
+
         tr:hover {
-            background-color: #e3f2fd;
-            transform: scale(1.01);
+            background-color: #f8fafc;
         }
-        
-        .channel-name {
-            font-weight: 600;
-            color: #2c3e50;
-            font-size: 1.05em;
+
+        .editable {
+            background: none;
+            border: 1px solid transparent;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
-        
-        .videos-count {
-            text-align: center;
-            font-weight: 600;
-            color: #8e44ad;
-            font-size: 1.1em;
+
+        .editable:hover {
+            background: #f1f5f9;
+            border-color: #cbd5e1;
         }
-        
-        .rate {
-            text-align: center;
-            font-weight: 600;
-            color: #3498db;
-            font-size: 1.05em;
+
+        .editable:focus {
+            outline: none;
+            background: white;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
-        
-        .amount {
-            text-align: center;
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
             font-weight: 700;
-            font-size: 1.2em;
+            color: #1e293b;
         }
-        
-        .amount.correct {
-            color: #27ae60;
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #64748b;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
         }
-        
-        .success-note {
-            background: #e8f5e8;
-            border-left: 4px solid #27ae60;
-            color: #2e7d32;
-            padding: 12px 15px;
-            margin: 10px 0;
-            border-radius: 0 8px 8px 0;
-            font-size: 0.9em;
+
+        .close-btn:hover {
+            background: #f1f5f9;
+            color: #1e293b;
         }
-        
-        .summary-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #059669, #047857);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+        }
+
+        .delete-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        /* Status badges */
+        .status-complete {
+            background: #dcfce7;
+            color: #166534;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Export Section */
+        .export-section {
+            display: flex;
+            gap: 15px;
             margin-top: 30px;
         }
-        
-        .summary-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease;
-        }
-        
-        .summary-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .summary-card h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.1em;
-            opacity: 0.9;
-            font-weight: 500;
-        }
-        
-        .summary-card .number {
-            font-size: 2.2em;
-            font-weight: bold;
-            margin: 0;
-        }
-        
-        .total-row {
-            background: linear-gradient(135deg, #27ae60, #2ecc71) !important;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .total-row td {
-            border-bottom: none;
-            font-size: 1.1em;
-        }
-        
-        .rank {
-            text-align: center;
-            font-weight: bold;
-            color: #f39c12;
-            font-size: 1.1em;
-        }
 
-        .access-time {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
+        .export-btn {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
             color: white;
-            padding: 8px 15px;
-            border-radius: 15px;
-            font-size: 0.8em;
-            z-index: 1000;
-        }
-
-        .project-title {
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            padding: 20px;
-            margin: 30px 0 20px 0;
-            border-radius: 15px;
-            text-align: center;
-            font-size: 1.8em;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.3);
-        }
-
-        /* Scaling Cost Card */
-        .scaling-card {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-            color: white;
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 40px;
-            box-shadow: 0 20px 40px rgba(231, 76, 60, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .scaling-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-
-        .scaling-card h2 {
-            margin: 0 0 25px 0;
-            font-size: 2.2em;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-
-        .cost-breakdown {
-            display: grid;
-            gap: 15px;
-        }
-
-        .cost-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.15);
-            padding: 15px 20px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .cost-item:hover {
-            background: rgba(255,255,255,0.25);
-            transform: translateX(5px);
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
         }
 
-        .cost-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255,255,255,0.25);
-            padding: 20px;
-            border-radius: 15px;
-            border: 2px solid rgba(255,255,255,0.3);
-            margin-top: 10px;
-            font-size: 1.1em;
-        }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-top {
+                flex-direction: column;
+                gap: 20px;
+            }
 
-        .cost-label {
-            font-size: 1.1em;
-            font-weight: 500;
-        }
+            .company-info h1 {
+                font-size: 2rem;
+            }
 
-        .cost-amount {
-            font-size: 1.2em;
-            font-weight: 700;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
 
-        .exclusion-note {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 10px;
-            margin-top: 15px;
-            border-left: 4px solid rgba(255,255,255,0.5);
-            font-size: 0.95em;
-            font-style: italic;
-        }
+            .card-amount {
+                font-size: 2rem;
+            }
 
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            .month-selector {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Login Screen -->
-        <div class="login-screen" id="loginScreen">
-            <h1 class="login-title">🔐 Secure Access Required</h1>
-            <p class="login-subtitle">Enter password to view payment data</p>
-            
-            <form class="login-form" onsubmit="checkPassword(event)">
-                <input 
-                    type="password" 
-                    class="password-input" 
-                    id="passwordInput" 
-                    placeholder="Enter your password"
-                    autocomplete="off"
-                    required
-                >
-                <button type="submit" class="login-btn">🚀 Access Dashboard</button>
-                
-                <div class="error-message" id="errorMessage">
-                    ❌ Access denied! Incorrect password.
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div class="company-info">
+                    <h1>LifeVision Media</h1>
+                    <p>Professional Video Production & Content Creation</p>
                 </div>
-            </form>
-            
-            <div class="security-note">
-                🛡️ <strong>Security Notice:</strong> This page contains sensitive financial data. Only authorized personnel should access this information.
+                <div class="month-selector">
+                    <div class="month-badge" id="currentMonth">August 2025</div>
+                    <button class="edit-btn" onclick="openEditModal()">
+                        ✏️ Edit Data
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Main Content (Hidden by default) -->
-        <div class="main-content" id="mainContent">
-            <button class="logout-btn" onclick="logout()">🚪 Logout</button>
-            
-            <a href="index.html" class="home-btn">🏠 Home</a>
-
-            <h1>💰 Video Production Payment Summary</h1>
-            
-            <!-- Financial Summary Card -->
-            <div class="financial-summary-card">
-                <h2>📊 Financial Overview</h2>
-                <div class="financial-grid">
-                    <div class="financial-item revenue">
-                        <div class="financial-icon">💰</div>
-                        <div class="financial-details">
-                            <div class="financial-label">Total Revenue</div>
-                            <div class="financial-amount">$2,049.50</div>
-                            <div class="financial-bdt">৳204,950</div>
-                        </div>
-                    </div>
-                    <div class="financial-item costs">
-                        <div class="financial-icon">📉</div>
-                        <div class="financial-details">
-                            <div class="financial-label">Monthly Costs</div>
-                            <div class="financial-amount">$1,322.00</div>
-                            <div class="financial-bdt">৳132,200</div>
-                        </div>
-                    </div>
-                    <div class="financial-item profit">
-                        <div class="financial-icon">💎</div>
-                        <div class="financial-details">
-                            <div class="financial-label">Net Profit</div>
-                            <div class="financial-amount">$727.50</div>
-                            <div class="financial-bdt">৳72,750</div>
-                        </div>
-                    </div>
+        <!-- Financial Overview Dashboard -->
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon revenue-icon">💰</div>
+                    <div class="card-title">Total Revenue</div>
                 </div>
+                <div class="card-amount" id="totalRevenue">$2,150.00</div>
+                <div class="card-amount-bdt" id="totalRevenueBdt">৳215,000</div>
             </div>
 
-            <!-- Brother's Share Card -->
-            <div class="scaling-card" style="background: linear-gradient(135deg, #16a085, #27ae60); margin-bottom: 40px;">
-                <h2>🤝 Partnership Share Distribution</h2>
-                <div class="financial-grid">
-                    <div class="financial-item" style="background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);">
-                        <div class="financial-icon">👨‍💼</div>
-                        <div class="financial-details">
-                            <div class="financial-label">Reon - Production Manager (30%)</div>
-                            <div class="financial-amount">$218.25</div>
-                            <div class="financial-bdt">৳21,825</div>
-                        </div>
-                    </div>
-                    <div class="financial-item" style="background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);">
-                        <div class="financial-icon">👑</div>
-                        <div class="financial-details">
-                            <div class="financial-label">Refain - Founder & CEO (70%)</div>
-                            <div class="financial-amount">$509.25</div>
-                            <div class="financial-bdt">৳50,925</div>
-                        </div>
-                    </div>
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon expense-icon">📊</div>
+                    <div class="card-title">Total Expenses</div>
                 </div>
-                <div class="exclusion-note" style="background: rgba(255,255,255,0.15); color: white; border-left-color: rgba(255,255,255,0.5); margin-top: 20px;">
-                    🤝 <strong>Partnership Agreement:</strong> Profit sharing based on 30%-70% equity distribution from net monthly profit of $727.50
-                </div>
+                <div class="card-amount" id="totalExpenses">$1,340.00</div>
+                <div class="card-amount-bdt" id="totalExpensesBdt">৳134,000</div>
             </div>
 
-            <!-- Project 1 Table - Simplified -->
-            <div class="project-title">Jaroslav Project 1 (Refain)</div>
-            <div class="table-wrapper">
-                <table>
+            <div class="dashboard-card">
+                <div class="card-header">
+                    <div class="card-icon profit-icon">💎</div>
+                    <div class="card-title">Net Profit</div>
+                </div>
+                <div class="card-amount" id="netProfit">$810.00</div>
+                <div class="card-amount-bdt" id="netProfitBdt">৳81,000</div>
+            </div>
+        </div>
+
+        <!-- Projects Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">📋 Active Projects</h2>
+                <button class="add-btn" onclick="addProject()">+ Add Project</button>
+            </div>
+            <div class="table-container">
+                <table id="projectsTable">
                     <thead>
                         <tr>
-                            <th>Project</th>
-                            <th>Payment Type</th>
+                            <th>Project Name</th>
+                            <th>Client</th>
                             <th>Amount (USD)</th>
                             <th>Amount (BDT)</th>
                             <th>Status</th>
-                            <th>Notes</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="total-row">
-                            <td><strong>Jaroslav Project 1</strong></td>
-                            <td><strong>Monthly Payment</strong></td>
-                            <td><strong>$618.00</strong></td>
-                            <td><strong>৳61,800</strong></td>
-                            <td><strong>✅ Complete</strong></td>
-                            <td><strong>📊 Total Payment</strong></td>
+                        <tr>
+                            <td class="editable" contenteditable="true">Jaroslav Project 1</td>
+                            <td class="editable" contenteditable="true">Refain</td>
+                            <td class="editable" contenteditable="true">$640.00</td>
+                            <td class="editable" contenteditable="true">৳64,000</td>
+                            <td><span class="status-complete">Complete</span></td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td class="editable" contenteditable="true">Jaroslav Project 2</td>
+                            <td class="editable" contenteditable="true">Eity</td>
+                            <td class="editable" contenteditable="true">$660.00</td>
+                            <td class="editable" contenteditable="true">৳66,000</td>
+                            <td><span class="status-complete">Complete</span></td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td class="editable" contenteditable="true">Jaroslav Project 3</td>
+                            <td class="editable" contenteditable="true">Reon</td>
+                            <td class="editable" contenteditable="true">$350.00</td>
+                            <td class="editable" contenteditable="true">৳35,000</td>
+                            <td><span class="status-complete">Complete</span></td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td class="editable" contenteditable="true">Jason Hill Project 1</td>
+                            <td class="editable" contenteditable="true">Jason Hill</td>
+                            <td class="editable" contenteditable="true">$500.00</td>
+                            <td class="editable" contenteditable="true">৳50,000</td>
+                            <td><span class="status-complete">Complete</span></td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div class="exclusion-note" style="background: #e3f2fd; color: #1565c0; border-left-color: #2196f3;">
-                💡 <strong>Note:</strong> Payment amounts exclude Claude AI subscription charges, which are handled separately. <br>
-                💰 <strong>Exchange Rate:</strong> 1 USD = 100 BDT (Adjusted rate accounts for banking fees, wire transfer charges, and currency conversion costs. Market rate: ~120 BDT)
+        <!-- Team Members Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">👥 Team Salary</h2>
+                <button class="add-btn" onclick="addTeamMember()">+ Add Member</button>
             </div>
-
-            <!-- Project 2 Table - Simplified -->
-            <div class="project-title">Jaroslav Project 2 (Eity)</div>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Project</th>
-                            <th>Payment Type</th>
-                            <th>Amount (USD)</th>
-                            <th>Amount (BDT)</th>
-                            <th>Status</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="total-row">
-                            <td><strong>Jaroslav Project 2</strong></td>
-                            <td><strong>Monthly Payment</strong></td>
-                            <td><strong>$622.00</strong></td>
-                            <td><strong>৳62,200</strong></td>
-                            <td><strong>✅ Complete</strong></td>
-                            <td><strong>📊 Total Payment</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="exclusion-note" style="background: #e3f2fd; color: #1565c0; border-left-color: #2196f3;">
-                💡 <strong>Note:</strong> Payment amounts exclude Claude AI subscription charges, which are handled separately. <br>
-                💰 <strong>Exchange Rate:</strong> 1 USD = 100 BDT (Adjusted rate accounts for banking fees, wire transfer charges, and currency conversion costs. Market rate: ~120 BDT)
-            </div>
-
-            <!-- Project 3 Table - New Addition -->
-            <div class="project-title">Jaroslav Project 3 (Reon)</div>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Project</th>
-                            <th>Payment Type</th>
-                            <th>Amount (USD)</th>
-                            <th>Amount (BDT)</th>
-                            <th>Status</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="total-row">
-                            <td><strong>Jaroslav Project 3</strong></td>
-                            <td><strong>Monthly Payment</strong></td>
-                            <td><strong>$328.00</strong></td>
-                            <td><strong>৳32,800</strong></td>
-                            <td><strong>✅ Complete</strong></td>
-                            <td><strong>📊 Total Payment</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="exclusion-note" style="background: #e3f2fd; color: #1565c0; border-left-color: #2196f3;">
-                💡 <strong>Note:</strong> Payment amounts exclude Claude AI subscription charges, which are handled separately. <br>
-                💰 <strong>Exchange Rate:</strong> 1 USD = 100 BDT (Adjusted rate accounts for banking fees, wire transfer charges, and currency conversion costs. Market rate: ~120 BDT)
-            </div>
-
-            <!-- Jason's Production Table -->
-            <div class="project-title">Jason Hill Project 1</div>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Project</th>
-                            <th>Payment Type</th>
-                            <th>Amount (USD)</th>
-                            <th>Amount (BDT)</th>
-                            <th>Status</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="total-row">
-                            <td><strong>Jason Hill Project 1</strong></td>
-                            <td><strong>Monthly Payment</strong></td>
-                            <td><strong>$481.50</strong></td>
-                            <td><strong>৳48,150</strong></td>
-                            <td><strong>✅ Complete</strong></td>
-                            <td><strong>📊 Total Payment</strong></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="exclusion-note" style="background: #e3f2fd; color: #1565c0; border-left-color: #2196f3;">
-                💡 <strong>Note:</strong> Payment amounts exclude Claude AI subscription charges, which are handled separately. <br>
-                💰 <strong>Exchange Rate:</strong> 1 USD = 100 BDT (Adjusted rate accounts for banking fees, wire transfer charges, and currency conversion costs. Market rate: ~120 BDT)
-            </div>
-
-            <!-- Monthly Costs Card -->
-            <div class="scaling-card">
-                <h2>📊 Monthly Operating Costs</h2>
-                <div class="cost-breakdown">
-                    <div class="cost-item">
-                        <span class="cost-label">PC Service</span>
-                        <span class="cost-amount">৳8,000</span>
-                    </div>
-                    <div class="cost-item">
-                        <span class="cost-label">WiFi Bill</span>
-                        <span class="cost-amount">৳2,000</span>
-                    </div>
-                    <div class="cost-item">
-                        <span class="cost-label">Electricity Bill</span>
-                        <span class="cost-amount">৳2,000</span>
-                    </div>
-                    <div class="cost-item">
-                        <span class="cost-label">Basa Vara</span>
-                        <span class="cost-amount">৳3,000</span>
-                    </div>
-                    <div class="cost-item">
-                        <span class="cost-label">Laptop</span>
-                        <span class="cost-amount">৳300</span>
-                    </div>
-                    <div class="cost-total">
-                        <span class="cost-label"><strong>Total Operating Costs</strong></span>
-                        <span class="cost-amount"><strong>৳15,300 ($153.00)</strong></span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Collaborators Salary Section -->
-            <div class="project-title">👥 Collaborators Monthly Salary</div>
-            <div class="table-wrapper">
-                <table>
+            <div class="table-container">
+                <table id="teamTable">
                     <thead>
                         <tr>
                             <th>Rank</th>
-                            <th>Collaborator Name</th>
-                            <th>Monthly Salary (BDT)</th>
-                            <th>Monthly Salary (USD)</th>
-                            <th>Status</th>
+                            <th>Name</th>
                             <th>Role</th>
+                            <th>Salary (USD)</th>
+                            <th>Salary (BDT)</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="rank">🥇 1</td>
-                            <td class="channel-name">Razu</td>
-                            <td class="amount correct">৳23,750</td>
-                            <td class="amount correct">$237.50</td>
-                            <td>✅ Active</td>
-                            <td>Senior Producer</td>
+                            <td>🥇 1</td>
+                            <td class="editable" contenteditable="true">Razu</td>
+                            <td class="editable" contenteditable="true">Senior Producer</td>
+                            <td class="editable" contenteditable="true">$250.00</td>
+                            <td class="editable" contenteditable="true">৳25,000</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
                         </tr>
                         <tr>
-                            <td class="rank">🥈 2</td>
-                            <td class="channel-name">Robin</td>
-                            <td class="amount correct">৳17,300</td>
-                            <td class="amount correct">$173.00</td>
-                            <td>✅ Active</td>
-                            <td>Content Creator</td>
+                            <td>🥈 2</td>
+                            <td class="editable" contenteditable="true">Robin</td>
+                            <td class="editable" contenteditable="true">Content Creator</td>
+                            <td class="editable" contenteditable="true">$180.00</td>
+                            <td class="editable" contenteditable="true">৳18,000</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
                         </tr>
                         <tr>
-                            <td class="rank">🥉 3</td>
-                            <td class="channel-name">Mehedi</td>
-                            <td class="amount correct">৳15,000</td>
-                            <td class="amount correct">$150.00</td>
-                            <td>✅ Active</td>
-                            <td>Video Editor</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">4</td>
-                            <td class="channel-name">Emran</td>
-                            <td class="amount correct">৳13,600</td>
-                            <td class="amount correct">$136.00</td>
-                            <td>✅ Active</td>
-                            <td>Producer</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">5</td>
-                            <td class="channel-name">Sakil</td>
-                            <td class="amount correct">৳12,050</td>
-                            <td class="amount correct">$120.50</td>
-                            <td>✅ Active</td>
-                            <td>Assistant Editor</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">6</td>
-                            <td class="channel-name">Ramjan</td>
-                            <td class="amount correct">৳8,700</td>
-                            <td class="amount correct">$87.00</td>
-                            <td>✅ Active</td>
-                            <td>Content Writer</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">7</td>
-                            <td class="channel-name">Hasib</td>
-                            <td class="amount correct">৳7,950</td>
-                            <td class="amount correct">$79.50</td>
-                            <td>✅ Active</td>
-                            <td>Video Producer</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">8</td>
-                            <td class="channel-name">Munmun</td>
-                            <td class="amount correct">৳5,300</td>
-                            <td class="amount correct">$53.00</td>
-                            <td>✅ Active</td>
-                            <td>Assistant</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">9</td>
-                            <td class="channel-name">Alamin</td>
-                            <td class="amount correct">৳5,100</td>
-                            <td class="amount correct">$51.00</td>
-                            <td>✅ Active</td>
-                            <td>Junior Editor</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">10</td>
-                            <td class="channel-name">Eity</td>
-                            <td class="amount correct">৳5,000</td>
-                            <td class="amount correct">$50.00</td>
-                            <td>✅ Active</td>
-                            <td>Content Creator</td>
-                        </tr>
-                        <tr>
-                            <td class="rank">11</td>
-                            <td class="channel-name">Reon</td>
-                            <td class="amount correct">৳3,150</td>
-                            <td class="amount correct">$31.50</td>
-                            <td>✅ Active</td>
-                            <td>Junior Assistant</td>
-                        </tr>
-                        <tr class="total-row">
-                            <td><strong>TOTAL</strong></td>
-                            <td><strong>11 Collaborators</strong></td>
-                            <td><strong>৳116,900</strong></td>
-                            <td><strong>$1,169.00</strong></td>
-                            <td><strong>📊 Summary</strong></td>
-                            <td><strong>Team Payroll</strong></td>
+                            <td>🥉 3</td>
+                            <td class="editable" contenteditable="true">Mehedi</td>
+                            <td class="editable" contenteditable="true">Video Editor</td>
+                            <td class="editable" contenteditable="true">$160.00</td>
+                            <td class="editable" contenteditable="true">৳16,000</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
 
-            <div class="exclusion-note" style="background: #e3f2fd; color: #1565c0; border-left-color: #2196f3;">
-                💡 <strong>Note:</strong> All salary amounts are paid monthly in BDT. USD conversions shown for reference only. <br>
-                💰 <strong>Exchange Rate:</strong> 1 USD = 100 BDT (Adjusted rate accounts for banking fees, wire transfer charges, and currency conversion costs. Market rate: ~120 BDT)
+        <!-- Export Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">📊 Export & Reports</h2>
             </div>
-
-            <!-- Total Monthly Expenses Summary -->
-            <div class="scaling-card" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
-                <h2>💼 Total Monthly Expenses</h2>
-                <div class="cost-breakdown">
-                    <div class="cost-item">
-                        <span class="cost-label">Operating Costs</span>
-                        <span class="cost-amount">৳15,300 ($153.00)</span>
-                    </div>
-                    <div class="cost-item">
-                        <span class="cost-label">Collaborators Salary</span>
-                        <span class="cost-amount">৳116,900 ($1,169.00)</span>
-                    </div>
-                    <div class="cost-total">
-                        <span class="cost-label"><strong>Total Monthly Expenses</strong></span>
-                        <span class="cost-amount"><strong>৳132,200 ($1,322.00)</strong></span>
-                    </div>
-                </div>
+            <div class="export-section">
+                <button class="export-btn" onclick="exportToPDF()">📄 Export PDF</button>
+                <button class="export-btn" onclick="exportToExcel()">📊 Export Excel</button>
+                <button class="export-btn" onclick="printReport()">🖨️ Print Report</button>
             </div>
         </div>
     </div>
 
-    <div class="access-time" id="accessTime" style="display: none;">
-        Last accessed: <span id="accessTimestamp"></span>
+    <!-- Edit Modal -->
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Financial Overview</h3>
+                <button class="close-btn" onclick="closeEditModal()">&times;</button>
+            </div>
+            <form id="editForm">
+                <div class="form-group">
+                    <label class="form-label">Total Revenue (USD)</label>
+                    <input type="number" class="form-input" id="editRevenue" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Total Expenses (USD)</label>
+                    <input type="number" class="form-input" id="editExpenses" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Exchange Rate (BDT per USD)</label>
+                    <input type="number" class="form-input" id="exchangeRate" value="100" step="1">
+                </div>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </form>
+        </div>
     </div>
 
     <script>
-        // Multiple password options for you and your brother
-        const validPasswords = [
-            'LifeVision2024',
-            'BrothersOnly',
-            'SecureAccess123',
-            'Life Vision'
-        ];
-
-        // Session management
-        let isAuthenticated = false;
-        const SESSION_KEY = 'paymentTableAuth';
-        const SESSION_DURATION = 4 * 60 * 60 * 1000; // 4 hours
-
-        // Check if already authenticated on page load
-        window.onload = function() {
-            checkExistingSession();
+        // Data storage
+        let financialData = {
+            revenue: 2150,
+            expenses: 1340,
+            exchangeRate: 100
         };
 
-        function checkExistingSession() {
-            const session = JSON.parse(localStorage.getItem(SESSION_KEY) || '{}');
-            const now = new Date().getTime();
-            
-            if (session.authenticated && (now - session.timestamp) < SESSION_DURATION) {
-                showMainContent();
-                updateAccessTime();
-            } else {
-                // Clear expired session
-                localStorage.removeItem(SESSION_KEY);
-                showLoginScreen();
+        // Load data from localStorage if available
+        function loadData() {
+            const saved = localStorage.getItem('lifevision_financial_data');
+            if (saved) {
+                financialData = JSON.parse(saved);
+                updateDisplay();
+            loadProjectsTable();
+            loadTeamTable();
             }
         }
 
-        function checkPassword(event) {
-            event.preventDefault();
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('lifevision_financial_data', JSON.stringify(financialData));
+        }
+
+        // Update display with current data
+        function updateDisplay() {
+            const profit = financialData.revenue - financialData.expenses;
             
-            const enteredPassword = document.getElementById('passwordInput').value;
-            const errorMessage = document.getElementById('errorMessage');
+            document.getElementById('totalRevenue').textContent = `$${financialData.revenue.toFixed(2)}`;
+            document.getElementById('totalRevenueBdt').textContent = `৳${(financialData.revenue * financialData.exchangeRate).toLocaleString()}`;
             
-            if (validPasswords.includes(enteredPassword)) {
-                // Create session
-                const sessionData = {
-                    authenticated: true,
-                    timestamp: new Date().getTime()
-                };
-                localStorage.setItem(SESSION_KEY, JSON.stringify(sessionData));
-                
-                showMainContent();
-                updateAccessTime();
-                
-                // Clear password field
-                document.getElementById('passwordInput').value = '';
-                errorMessage.style.display = 'none';
-            } else {
-                // Show error
-                errorMessage.style.display = 'block';
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordInput').focus();
-                
-                // Hide error after 3 seconds
+            document.getElementById('totalExpenses').textContent = `$${financialData.expenses.toFixed(2)}`;
+            document.getElementById('totalExpensesBdt').textContent = `৳${(financialData.expenses * financialData.exchangeRate).toLocaleString()}`;
+            
+            document.getElementById('netProfit').textContent = `$${profit.toFixed(2)}`;
+            document.getElementById('netProfitBdt').textContent = `৳${(profit * financialData.exchangeRate).toLocaleString()}`;
+        }
+
+        // Modal functions
+        function openEditModal() {
+            document.getElementById('editRevenue').value = financialData.revenue;
+            document.getElementById('editExpenses').value = financialData.expenses;
+            document.getElementById('exchangeRate').value = financialData.exchangeRate;
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+
+        // Form submission
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            financialData.revenue = parseFloat(document.getElementById('editRevenue').value);
+            financialData.expenses = parseFloat(document.getElementById('editExpenses').value);
+            financialData.exchangeRate = parseFloat(document.getElementById('exchangeRate').value);
+            
+            updateDisplay();
+            saveData();
+            closeEditModal();
+            
+            // Show success message
+            alert('Financial data updated successfully!');
+        });
+
+        // Table functions
+        function addProject() {
+            const table = document.getElementById('projectsTable').getElementsByTagName('tbody')[0];
+            const newRow = table.insertRow();
+            newRow.innerHTML = `
+                <td class="editable" contenteditable="true">New Project</td>
+                <td class="editable" contenteditable="true">Client Name</td>
+                <td class="editable" contenteditable="true">$0.00</td>
+                <td class="editable" contenteditable="true">৳0</td>
+                <td><span class="status-pending">Pending</span></td>
+                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+            `;
+        }
+
+        function addTeamMember() {
+            const table = document.getElementById('teamTable').getElementsByTagName('tbody')[0];
+            const rowCount = table.rows.length + 1;
+            const newRow = table.insertRow();
+            newRow.innerHTML = `
+                <td>${rowCount}</td>
+                <td class="editable" contenteditable="true">New Member</td>
+                <td class="editable" contenteditable="true">Role</td>
+                <td class="editable" contenteditable="true">$0.00</td>
+                <td class="editable" contenteditable="true">৳0</td>
+                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+            `;
+        }
+
+        function deleteRow(btn) {
+            if (confirm('Are you sure you want to delete this row?')) {
+                btn.closest('tr').remove();
+            }
+        }
+
+        // Export functions
+        function exportToPDF() {
+            window.print();
+        }
+
+        function exportToExcel() {
+            alert('Excel export functionality would be implemented here');
+        }
+
+        function printReport() {
+            window.print();
+        }
+
+        // Auto-save editable content
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('editable')) {
+                // Auto-save functionality can be added here
                 setTimeout(() => {
-                    errorMessage.style.display = 'none';
-                }, 3000);
-            }
-        }
-
-        function showMainContent() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('mainContent').classList.add('show');
-            document.getElementById('accessTime').style.display = 'block';
-            isAuthenticated = true;
-        }
-
-        function showLoginScreen() {
-            document.getElementById('loginScreen').style.display = 'block';
-            document.getElementById('mainContent').classList.remove('show');
-            document.getElementById('accessTime').style.display = 'none';
-            isAuthenticated = false;
-            document.getElementById('passwordInput').focus();
-        }
-
-        function logout() {
-            localStorage.removeItem(SESSION_KEY);
-            showLoginScreen();
-        }
-
-        function updateAccessTime() {
-            const now = new Date();
-            const timeString = now.toLocaleString();
-            document.getElementById('accessTimestamp').textContent = timeString;
-        }
-
-        // Auto-logout after session expires
-        setInterval(() => {
-            if (isAuthenticated) {
-                checkExistingSession();
-            }
-        }, 60000); // Check every minute
-
-        // Prevent right-click and other shortcuts when authenticated
-        document.addEventListener('contextmenu', function(e) {
-            if (isAuthenticated) {
-                e.preventDefault();
+                    console.log('Auto-saving...');
+                }, 1000);
             }
         });
 
-        document.addEventListener('keydown', function(e) {
-            if (isAuthenticated) {
-                // Disable F12, Ctrl+Shift+I, Ctrl+U, etc.
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && e.key === 'I') || 
-                    (e.ctrlKey && e.key === 'u')) {
-                    e.preventDefault();
-                }
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateDisplay();
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('editModal');
+            if (e.target === modal) {
+                closeEditModal();
             }
         });
     </script>
