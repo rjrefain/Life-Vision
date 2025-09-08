@@ -120,19 +120,6 @@
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 8px;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .card-amount:hover {
-            background: #f1f5f9;
-        }
-
-        .card-amount:focus {
-            outline: 2px solid #3b82f6;
-            background: white;
         }
 
         .card-amount-bdt {
@@ -218,13 +205,13 @@
             background-color: #f8fafc;
         }
 
-        /* Editable cells */
         .editable {
             cursor: pointer;
             padding: 8px 12px;
             border-radius: 6px;
             transition: all 0.3s ease;
             min-height: 20px;
+            border: 2px solid transparent;
         }
 
         .editable:hover {
@@ -232,12 +219,19 @@
         }
 
         .editable:focus {
-            outline: 2px solid #3b82f6;
+            outline: none;
             background: white;
+            border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* Buttons */
+        .auto-calculated {
+            background: #f8fafc;
+            color: #64748b;
+            font-weight: 600;
+            font-style: italic;
+        }
+
         .delete-btn {
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
@@ -255,32 +249,146 @@
             box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
         }
 
-        /* Save indicator */
-        .save-indicator {
+        /* Status indicators */
+        .status-indicator {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
             padding: 12px 20px;
             border-radius: 25px;
             font-size: 0.9rem;
             font-weight: 600;
             z-index: 1001;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
         }
 
-        .save-indicator.show {
-            opacity: 1;
+        .status-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
         }
 
-        .save-indicator.error {
+        .status-error {
             background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
         }
 
-        /* Responsive Design */
+        .status-loading {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+
+        /* Custom Delete Modal */
+        .delete-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .delete-modal.show {
+            display: flex;
+        }
+
+        .delete-modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            text-align: center;
+        }
+
+        .delete-modal-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 20px;
+            color: white;
+        }
+
+        .delete-modal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 10px;
+        }
+
+        .delete-modal-message {
+            color: #64748b;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .delete-modal-checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            gap: 8px;
+        }
+
+        .delete-modal-checkbox input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .delete-modal-checkbox label {
+            color: #64748b;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .delete-modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .delete-modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            min-width: 80px;
+        }
+
+        .delete-modal-confirm {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+
+        .delete-modal-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .delete-modal-cancel {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .delete-modal-cancel:hover {
+            background: #e2e8f0;
+            transform: translateY(-2px);
+        }
+
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -321,8 +429,8 @@
                     <div class="card-icon revenue-icon">💰</div>
                     <div class="card-title">Total Revenue</div>
                 </div>
-                <div class="card-amount editable" contenteditable="true" data-type="revenue">$2,150.00</div>
-                <div class="card-amount-bdt">৳215,000</div>
+                <div class="card-amount" id="totalRevenue">$0.00</div>
+                <div class="card-amount-bdt" id="totalRevenueBdt">৳0</div>
             </div>
 
             <div class="dashboard-card">
@@ -330,8 +438,8 @@
                     <div class="card-icon expense-icon">📊</div>
                     <div class="card-title">Total Expenses</div>
                 </div>
-                <div class="card-amount editable" contenteditable="true" data-type="expenses">$1,340.00</div>
-                <div class="card-amount-bdt">৳134,000</div>
+                <div class="card-amount" id="totalExpenses">$0.00</div>
+                <div class="card-amount-bdt" id="totalExpensesBdt">৳0</div>
             </div>
 
             <div class="dashboard-card">
@@ -339,8 +447,8 @@
                     <div class="card-icon profit-icon">💎</div>
                     <div class="card-title">Net Profit</div>
                 </div>
-                <div class="card-amount" id="netProfit">$810.00</div>
-                <div class="card-amount-bdt">৳81,000</div>
+                <div class="card-amount" id="netProfit">$0.00</div>
+                <div class="card-amount-bdt" id="netProfitBdt">৳0</div>
             </div>
         </div>
 
@@ -363,38 +471,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="editable" contenteditable="true">Jaroslav Project 1</td>
-                            <td class="editable" contenteditable="true">Refain</td>
-                            <td class="editable" contenteditable="true">$640.00</td>
-                            <td class="editable" contenteditable="true">৳64,000</td>
-                            <td class="editable" contenteditable="true">Complete</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td class="editable" contenteditable="true">Jaroslav Project 2</td>
-                            <td class="editable" contenteditable="true">Eity</td>
-                            <td class="editable" contenteditable="true">$660.00</td>
-                            <td class="editable" contenteditable="true">৳66,000</td>
-                            <td class="editable" contenteditable="true">Complete</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td class="editable" contenteditable="true">Jaroslav Project 3</td>
-                            <td class="editable" contenteditable="true">Reon</td>
-                            <td class="editable" contenteditable="true">$350.00</td>
-                            <td class="editable" contenteditable="true">৳35,000</td>
-                            <td class="editable" contenteditable="true">Complete</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td class="editable" contenteditable="true">Jason Hill Project 1</td>
-                            <td class="editable" contenteditable="true">Jason Hill</td>
-                            <td class="editable" contenteditable="true">$500.00</td>
-                            <td class="editable" contenteditable="true">৳50,000</td>
-                            <td class="editable" contenteditable="true">Complete</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
+                        <!-- Data loaded from Supabase -->
                     </tbody>
                 </table>
             </div>
@@ -419,46 +496,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>🥇 1</td>
-                            <td class="editable" contenteditable="true">Razu</td>
-                            <td class="editable" contenteditable="true">Senior Producer</td>
-                            <td class="editable" contenteditable="true">$250.00</td>
-                            <td class="editable" contenteditable="true">৳25,000</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td>🥈 2</td>
-                            <td class="editable" contenteditable="true">Robin</td>
-                            <td class="editable" contenteditable="true">Content Creator</td>
-                            <td class="editable" contenteditable="true">$180.00</td>
-                            <td class="editable" contenteditable="true">৳18,000</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td>🥉 3</td>
-                            <td class="editable" contenteditable="true">Mehedi</td>
-                            <td class="editable" contenteditable="true">Video Editor</td>
-                            <td class="editable" contenteditable="true">$160.00</td>
-                            <td class="editable" contenteditable="true">৳16,000</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td class="editable" contenteditable="true">Emran</td>
-                            <td class="editable" contenteditable="true">Producer</td>
-                            <td class="editable" contenteditable="true">$136.00</td>
-                            <td class="editable" contenteditable="true">৳13,600</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td class="editable" contenteditable="true">Sakil</td>
-                            <td class="editable" contenteditable="true">Assistant Editor</td>
-                            <td class="editable" contenteditable="true">$120.50</td>
-                            <td class="editable" contenteditable="true">৳12,050</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
+                        <!-- Data loaded from Supabase -->
                     </tbody>
                 </table>
             </div>
@@ -482,49 +520,58 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- Data loaded from Supabase -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Shareholders Section -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">🤝 Company Shareholders</h2>
+                <button class="add-btn" onclick="addShareholder()">+ Add Shareholder</button>
+            </div>
+            <div class="table-container">
+                <table id="shareholdersTable">
+                    <thead>
                         <tr>
-                            <td class="editable" contenteditable="true">PC Service</td>
-                            <td class="editable" contenteditable="true">$80.00</td>
-                            <td class="editable" contenteditable="true">৳8,000</td>
-                            <td class="editable" contenteditable="true">Monthly</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                            <th>Shareholder Name</th>
+                            <th>Share Percentage (%)</th>
+                            <th>Monthly Profit Share (USD)</th>
+                            <th>Monthly Profit Share (BDT)</th>
+                            <th>Actions</th>
                         </tr>
-                        <tr>
-                            <td class="editable" contenteditable="true">WiFi Bill</td>
-                            <td class="editable" contenteditable="true">$20.00</td>
-                            <td class="editable" contenteditable="true">৳2,000</td>
-                            <td class="editable" contenteditable="true">Monthly</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td class="editable" contenteditable="true">Electricity Bill</td>
-                            <td class="editable" contenteditable="true">$20.00</td>
-                            <td class="editable" contenteditable="true">৳2,000</td>
-                            <td class="editable" contenteditable="true">Monthly</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td class="editable" contenteditable="true">Basa Vara (Rent)</td>
-                            <td class="editable" contenteditable="true">$30.00</td>
-                            <td class="editable" contenteditable="true">৳3,000</td>
-                            <td class="editable" contenteditable="true">Monthly</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
-                        <tr>
-                            <td class="editable" contenteditable="true">Laptop</td>
-                            <td class="editable" contenteditable="true">$3.00</td>
-                            <td class="editable" contenteditable="true">৳300</td>
-                            <td class="editable" contenteditable="true">Monthly</td>
-                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Data loaded from Supabase -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Save Indicator -->
-    <div class="save-indicator" id="saveIndicator">Data Saved Successfully</div>
+    <!-- Status Indicator -->
+    <div class="status-indicator" id="statusIndicator" style="display: none;"></div>
+
+    <!-- Custom Delete Modal -->
+    <div class="delete-modal" id="deleteModal">
+        <div class="delete-modal-content">
+            <div class="delete-modal-icon">⚠️</div>
+            <h3 class="delete-modal-title">Delete Confirmation</h3>
+            <p class="delete-modal-message">Are you sure you want to delete this row? This action cannot be undone.</p>
+            
+            <div class="delete-modal-checkbox">
+                <input type="checkbox" id="dontAskAgain">
+                <label for="dontAskAgain">Don't ask me again for now</label>
+            </div>
+            
+            <div class="delete-modal-actions">
+                <button class="delete-modal-btn delete-modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+                <button class="delete-modal-btn delete-modal-confirm" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
 
     <!-- Supabase Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -535,173 +582,493 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBya3Jic3d0dG10Z2VwbHN2emxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTk5NjQsImV4cCI6MjA3MjYzNTk2NH0.Ul2cd-cpWHfpK1HTgHM7Tv2NDCrFWcAq2N-C7Tv9oz8';
         
         // Initialize Supabase client
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { createClient } = supabase;
+        const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Exchange rate
+        // Global variables
         let exchangeRate = 100;
+        let skipDeleteConfirmation = false;
+        let pendingDeleteData = null;
 
-        // Save indicator functions
-        function showSaveIndicator(message = 'Data Saved Successfully', isError = false) {
-            const indicator = document.getElementById('saveIndicator');
+        // Data storage
+        let projectsData = [];
+        let teamData = [];
+        let scalingData = [];
+        let shareholdersData = [];
+
+        // Status indicator functions
+        function showStatus(message, type = 'success') {
+            const indicator = document.getElementById('statusIndicator');
             indicator.textContent = message;
-            indicator.classList.toggle('error', isError);
-            indicator.classList.add('show');
+            indicator.className = `status-indicator status-${type}`;
+            indicator.style.display = 'block';
             
             setTimeout(() => {
-                indicator.classList.remove('show');
+                indicator.style.display = 'none';
             }, 3000);
         }
 
-        // Auto-save functionality
-        function setupAutoSave() {
-            document.addEventListener('input', function(e) {
-                if (e.target.classList.contains('editable')) {
-                    clearTimeout(window.autoSaveTimer);
-                    window.autoSaveTimer = setTimeout(() => {
-                        saveAllData();
-                    }, 2000);
-                }
-            });
-        }
-
-        // Financial data updates
-        function updateFinancialDisplay() {
-            const revenueEl = document.querySelector('[data-type="revenue"]');
-            const expensesEl = document.querySelector('[data-type="expenses"]');
-            const profitEl = document.getElementById('netProfit');
-            
-            if (revenueEl && expensesEl && profitEl) {
-                const revenue = parseFloat(revenueEl.textContent.replace('$', '').replace(',', '')) || 0;
-                const expenses = parseFloat(expensesEl.textContent.replace('$', '').replace(',', '')) || 0;
-                const profit = revenue - expenses;
-                
-                profitEl.textContent = `$${profit.toFixed(2)}`;
-                
-                // Update BDT displays
-                const revenueBdt = revenueEl.parentElement.querySelector('.card-amount-bdt');
-                const expensesBdt = expensesEl.parentElement.querySelector('.card-amount-bdt');
-                const profitBdt = profitEl.parentElement.querySelector('.card-amount-bdt');
-                
-                if (revenueBdt) revenueBdt.textContent = `৳${(revenue * exchangeRate).toLocaleString()}`;
-                if (expensesBdt) expensesBdt.textContent = `৳${(expenses * exchangeRate).toLocaleString()}`;
-                if (profitBdt) profitBdt.textContent = `৳${(profit * exchangeRate).toLocaleString()}`;
-            }
-        }
-
-        // Add new project
-        function addProject() {
-            const tbody = document.querySelector('#projectsTable tbody');
-            const newRow = tbody.insertRow();
-            newRow.innerHTML = `
-                <td class="editable" contenteditable="true">New Project</td>
-                <td class="editable" contenteditable="true">Client Name</td>
-                <td class="editable" contenteditable="true">$0.00</td>
-                <td class="editable" contenteditable="true">৳0</td>
-                <td class="editable" contenteditable="true">Pending</td>
-                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-            `;
-            newRow.querySelector('.editable').focus();
-        }
-
-        // Add new team member
-        function addTeamMember() {
-            const tbody = document.querySelector('#teamTable tbody');
-            const rowCount = tbody.rows.length + 1;
-            const newRow = tbody.insertRow();
-            newRow.innerHTML = `
-                <td>${rowCount}</td>
-                <td class="editable" contenteditable="true">New Member</td>
-                <td class="editable" contenteditable="true">Role</td>
-                <td class="editable" contenteditable="true">$0.00</td>
-                <td class="editable" contenteditable="true">৳0</td>
-                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-            `;
-            newRow.querySelector('.editable').focus();
-        }
-
-        // Add new scaling cost
-        function addScalingCost() {
-            const tbody = document.querySelector('#scalingTable tbody');
-            const newRow = tbody.insertRow();
-            newRow.innerHTML = `
-                <td class="editable" contenteditable="true">New Cost Item</td>
-                <td class="editable" contenteditable="true">$0.00</td>
-                <td class="editable" contenteditable="true">৳0</td>
-                <td class="editable" contenteditable="true">Monthly</td>
-                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
-            `;
-            newRow.querySelector('.editable').focus();
-        }
-
-        // Delete row
-        function deleteRow(button) {
-            if (confirm('Are you sure you want to delete this row?')) {
-                button.closest('tr').remove();
-                saveAllData();
-            }
-        }
-
-        // Save all data to Supabase
-        async function saveAllData() {
+        // Create Supabase tables if they don't exist
+        async function initializeDatabase() {
             try {
-                // Get all data from tables
-                const data = {
-                    financial: getFinancialData(),
-                    projects: getTableData('projectsTable'),
-                    team: getTableData('teamTable'),
-                    scaling: getTableData('scalingTable')
-                };
+                showStatus('Initializing database...', 'loading');
 
-                // Save to Supabase (simplified - you can expand this)
-                console.log('Saving data:', data);
-                
-                showSaveIndicator('Data Saved Successfully');
+                // Check if tables exist by trying to select from them
+                const { data: projects } = await supabaseClient.from('projects').select('*').limit(1);
+                const { data: team } = await supabaseClient.from('team_members').select('*').limit(1);
+                const { data: scaling } = await supabaseClient.from('scaling_costs').select('*').limit(1);
+                const { data: shareholders } = await supabaseClient.from('shareholders').select('*').limit(1);
+
+                showStatus('Database connected successfully!');
                 return true;
             } catch (error) {
-                console.error('Error saving data:', error);
-                showSaveIndicator('Error Saving Data', true);
+                console.error('Database initialization error:', error);
+                showStatus('Database connection failed. Using default data.', 'error');
+                loadDefaultData();
                 return false;
             }
         }
 
-        // Get financial data
-        function getFinancialData() {
-            const revenue = document.querySelector('[data-type="revenue"]')?.textContent || '$0';
-            const expenses = document.querySelector('[data-type="expenses"]')?.textContent || '$0';
-            return { revenue, expenses, exchangeRate };
+        // Load default data if Supabase is not available
+        function loadDefaultData() {
+            projectsData = [
+                { id: 1, name: "Jaroslav Project 1", client: "Refain", amount_usd: 640, status: "Complete" },
+                { id: 2, name: "Jaroslav Project 2", client: "Eity", amount_usd: 660, status: "Complete" },
+                { id: 3, name: "Jaroslav Project 3", client: "Reon", amount_usd: 350, status: "Complete" },
+                { id: 4, name: "Jason Hill Project 1", client: "Jason Hill", amount_usd: 500, status: "Complete" }
+            ];
+
+            teamData = [
+                { id: 1, rank: 1, name: "Razu", role: "Senior Producer", salary_usd: 250 },
+                { id: 2, rank: 2, name: "Robin", role: "Content Creator", salary_usd: 180 },
+                { id: 3, rank: 3, name: "Mehedi", role: "Video Editor", salary_usd: 160 },
+                { id: 4, rank: 4, name: "Emran", role: "Producer", salary_usd: 136 },
+                { id: 5, rank: 5, name: "Sakil", role: "Assistant Editor", salary_usd: 120.50 }
+            ];
+
+            scalingData = [
+                { id: 1, item_name: "PC Service", amount_usd: 80, cost_type: "Monthly" },
+                { id: 2, item_name: "WiFi Bill", amount_usd: 20, cost_type: "Monthly" },
+                { id: 3, item_name: "Electricity Bill", amount_usd: 20, cost_type: "Monthly" },
+                { id: 4, item_name: "Basa Vara (Rent)", amount_usd: 30, cost_type: "Monthly" },
+                { id: 5, item_name: "Laptop", amount_usd: 3, cost_type: "Monthly" }
+            ];
+
+            shareholdersData = [
+                { id: 1, name: "Refain", percentage: 70 },
+                { id: 2, name: "Reon", percentage: 30 }
+            ];
+
+            updateTables();
+            calculateFinancials();
         }
 
-        // Get table data
-        function getTableData(tableId) {
-            const table = document.getElementById(tableId);
-            const rows = table.querySelectorAll('tbody tr');
-            const data = [];
+        // Load data from Supabase
+        async function loadData() {
+            try {
+                showStatus('Loading data...', 'loading');
+
+                // Load projects
+                const { data: projects, error: projectsError } = await supabaseClient
+                    .from('projects')
+                    .select('*')
+                    .order('id', { ascending: true });
+
+                if (projects) projectsData = projects;
+
+                // Load team members
+                const { data: team, error: teamError } = await supabaseClient
+                    .from('team_members')
+                    .select('*')
+                    .order('rank', { ascending: true });
+
+                if (team) teamData = team;
+
+                // Load scaling costs
+                const { data: scaling, error: scalingError } = await supabaseClient
+                    .from('scaling_costs')
+                    .select('*')
+                    .order('id', { ascending: true });
+
+                if (scaling) scalingData = scaling;
+
+                // Load shareholders
+                const { data: shareholders, error: shareholdersError } = await supabaseClient
+                    .from('shareholders')
+                    .select('*')
+                    .order('id', { ascending: true });
+
+                if (shareholders) shareholdersData = shareholders;
+
+                updateTables();
+                calculateFinancials();
+                showStatus('Data loaded successfully!');
+            } catch (error) {
+                console.error('Error loading data:', error);
+                showStatus('Failed to load data from cloud', 'error');
+                loadDefaultData();
+            }
+        }
+
+        // Save data to Supabase
+        async function saveData() {
+            try {
+                showStatus('Saving data...', 'loading');
+
+                // Save projects
+                for (const project of projectsData) {
+                    await supabaseClient
+                        .from('projects')
+                        .upsert(project);
+                }
+
+                // Save team members
+                for (const member of teamData) {
+                    await supabaseClient
+                        .from('team_members')
+                        .upsert(member);
+                }
+
+                // Save scaling costs
+                for (const cost of scalingData) {
+                    await supabaseClient
+                        .from('scaling_costs')
+                        .upsert(cost);
+                }
+
+                // Save shareholders
+                for (const shareholder of shareholdersData) {
+                    await supabaseClient
+                        .from('shareholders')
+                        .upsert(shareholder);
+                }
+
+                showStatus('Data saved successfully!');
+                return true;
+            } catch (error) {
+                console.error('Error saving data:', error);
+                showStatus('Failed to save data to cloud', 'error');
+                return false;
+            }
+        }
+
+        // Update all tables
+        function updateTables() {
+            updateProjectsTable();
+            updateTeamTable();
+            updateScalingTable();
+            updateShareholdersTable();
+        }
+
+        // Update projects table
+        function updateProjectsTable() {
+            const tbody = document.querySelector('#projectsTable tbody');
+            tbody.innerHTML = '';
+
+            projectsData.forEach(project => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td class="editable" contenteditable="true" data-field="name">${project.name}</td>
+                    <td class="editable" contenteditable="true" data-field="client">${project.client}</td>
+                    <td class="editable" contenteditable="true" data-field="amount_usd">$${project.amount_usd.toFixed(2)}</td>
+                    <td class="auto-calculated">৳${(project.amount_usd * exchangeRate).toLocaleString()}</td>
+                    <td class="editable" contenteditable="true" data-field="status">${project.status}</td>
+                    <td><button class="delete-btn" onclick="deleteItem('projects', ${project.id})">Delete</button></td>
+                `;
+                row.dataset.id = project.id;
+            });
+        }
+
+        // Update team table
+        function updateTeamTable() {
+            const tbody = document.querySelector('#teamTable tbody');
+            tbody.innerHTML = '';
+
+            teamData.forEach((member, index) => {
+                const row = tbody.insertRow();
+                const rankDisplay = index === 0 ? '🥇 1' : index === 1 ? '🥈 2' : index === 2 ? '🥉 3' : `${index + 1}`;
+                
+                row.innerHTML = `
+                    <td>${rankDisplay}</td>
+                    <td class="editable" contenteditable="true" data-field="name">${member.name}</td>
+                    <td class="editable" contenteditable="true" data-field="role">${member.role}</td>
+                    <td class="editable" contenteditable="true" data-field="salary_usd">$${member.salary_usd.toFixed(2)}</td>
+                    <td class="auto-calculated">৳${(member.salary_usd * exchangeRate).toLocaleString()}</td>
+                    <td><button class="delete-btn" onclick="deleteItem('team', ${member.id})">Delete</button></td>
+                `;
+                row.dataset.id = member.id;
+            });
+        }
+
+        // Update scaling table
+        function updateScalingTable() {
+            const tbody = document.querySelector('#scalingTable tbody');
+            tbody.innerHTML = '';
+
+            scalingData.forEach(cost => {
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td class="editable" contenteditable="true" data-field="item_name">${cost.item_name}</td>
+                    <td class="editable" contenteditable="true" data-field="amount_usd">$${cost.amount_usd.toFixed(2)}</td>
+                    <td class="auto-calculated">৳${(cost.amount_usd * exchangeRate).toLocaleString()}</td>
+                    <td class="editable" contenteditable="true" data-field="cost_type">${cost.cost_type}</td>
+                    <td><button class="delete-btn" onclick="deleteItem('scaling', ${cost.id})">Delete</button></td>
+                `;
+                row.dataset.id = cost.id;
+            });
+        }
+
+        // Update shareholders table
+        function updateShareholdersTable() {
+            const tbody = document.querySelector('#shareholdersTable tbody');
+            tbody.innerHTML = '';
+
+            shareholdersData.forEach(shareholder => {
+                const row = tbody.insertRow();
+                const totalRevenue = projectsData.reduce((sum, p) => sum + p.amount_usd, 0);
+                const totalExpenses = teamData.reduce((sum, t) => sum + t.salary_usd, 0) + 
+                                    scalingData.reduce((sum, s) => sum + s.amount_usd, 0);
+                const netProfit = totalRevenue - totalExpenses;
+                const profitShare = (netProfit * shareholder.percentage) / 100;
+                
+                row.innerHTML = `
+                    <td class="editable" contenteditable="true" data-field="name">${shareholder.name}</td>
+                    <td class="editable" contenteditable="true" data-field="percentage">${shareholder.percentage}</td>
+                    <td class="auto-calculated">${profitShare.toFixed(2)}</td>
+                    <td class="auto-calculated">৳${(profitShare * exchangeRate).toLocaleString()}</td>
+                    <td><button class="delete-btn" onclick="deleteItem('shareholders', ${shareholder.id})">Delete</button></td>
+                `;
+                row.dataset.id = shareholder.id;
+            });
+        }
+
+        // Calculate and update financial overview
+        function calculateFinancials() {
+            const totalRevenue = projectsData.reduce((sum, project) => sum + project.amount_usd, 0);
+            const teamExpenses = teamData.reduce((sum, member) => sum + member.salary_usd, 0);
+            const scalingExpenses = scalingData.reduce((sum, cost) => sum + cost.amount_usd, 0);
+            const totalExpenses = teamExpenses + scalingExpenses;
+            const netProfit = totalRevenue - totalExpenses;
+
+            // Update dashboard cards
+            document.getElementById('totalRevenue').textContent = `${totalRevenue.toFixed(2)}`;
+            document.getElementById('totalRevenueBdt').textContent = `৳${(totalRevenue * exchangeRate).toLocaleString()}`;
             
-            rows.forEach(row => {
-                const cells = row.querySelectorAll('td');
-                const rowData = [];
-                cells.forEach((cell, index) => {
-                    if (index < cells.length - 1) { // Skip the last cell (actions)
-                        rowData.push(cell.textContent.trim());
+            document.getElementById('totalExpenses').textContent = `${totalExpenses.toFixed(2)}`;
+            document.getElementById('totalExpensesBdt').textContent = `৳${(totalExpenses * exchangeRate).toLocaleString()}`;
+            
+            document.getElementById('netProfit').textContent = `${netProfit.toFixed(2)}`;
+            document.getElementById('netProfitBdt').textContent = `৳${(netProfit * exchangeRate).toLocaleString()}`;
+
+            // Update shareholder profit shares
+            updateShareholdersTable();
+        }
+
+        // Handle cell editing
+        function setupCellEditing() {
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('editable')) {
+                    const cell = e.target;
+                    const row = cell.closest('tr');
+                    const table = cell.closest('table');
+                    const field = cell.dataset.field;
+                    const id = parseInt(row.dataset.id);
+                    
+                    // Determine which data array to update
+                    let dataArray;
+                    if (table.id === 'projectsTable') {
+                        dataArray = projectsData;
+                    } else if (table.id === 'teamTable') {
+                        dataArray = teamData;
+                    } else if (table.id === 'scalingTable') {
+                        dataArray = scalingData;
+                    } else if (table.id === 'shareholdersTable') {
+                        dataArray = shareholdersData;
                     }
-                });
-                if (rowData.length > 0) {
-                    data.push(rowData);
+
+                    // Find and update the item
+                    const item = dataArray.find(item => item.id === id);
+                    if (item && field) {
+                        let value = cell.textContent.trim();
+                        
+                        // Handle different field types
+                        if (field.includes('usd') || field === 'amount_usd' || field === 'salary_usd') {
+                            value = parseFloat(value.replace(', '').replace(',', '')) || 0;
+                        } else if (field === 'percentage') {
+                            value = parseInt(value) || 0;
+                        }
+                        
+                        item[field] = value;
+                        
+                        // Recalculate financials and update BDT displays
+                        calculateFinancials();
+                        updateTables();
+                        
+                        // Auto-save after 2 seconds
+                        clearTimeout(window.autoSaveTimer);
+                        window.autoSaveTimer = setTimeout(() => {
+                            saveData();
+                        }, 2000);
+                    }
                 }
             });
+        }
+
+        // Add new project
+        function addProject() {
+            const newId = Date.now();
+            const newProject = {
+                id: newId,
+                name: "New Project",
+                client: "Client Name",
+                amount_usd: 0,
+                status: "Pending"
+            };
             
-            return data;
+            projectsData.push(newProject);
+            updateProjectsTable();
+            calculateFinancials();
+            saveData();
+        }
+
+        // Add new team member
+        function addTeamMember() {
+            const newId = Date.now();
+            const newMember = {
+                id: newId,
+                rank: teamData.length + 1,
+                name: "New Member",
+                role: "Role",
+                salary_usd: 0
+            };
+            
+            teamData.push(newMember);
+            updateTeamTable();
+            calculateFinancials();
+            saveData();
+        }
+
+        // Add new scaling cost
+        function addScalingCost() {
+            const newId = Date.now();
+            const newCost = {
+                id: newId,
+                item_name: "New Cost Item",
+                amount_usd: 0,
+                cost_type: "Monthly"
+            };
+            
+            scalingData.push(newCost);
+            updateScalingTable();
+            calculateFinancials();
+            saveData();
+        }
+
+        // Add new shareholder
+        function addShareholder() {
+            const newId = Date.now();
+            const newShareholder = {
+                id: newId,
+                name: "New Shareholder",
+                percentage: 0
+            };
+            
+            shareholdersData.push(newShareholder);
+            updateShareholdersTable();
+            calculateFinancials();
+            saveData();
+        }
+
+        // Delete item with custom modal
+        function deleteItem(type, id) {
+            if (skipDeleteConfirmation) {
+                performDelete(type, id);
+                return;
+            }
+
+            pendingDeleteData = { type, id };
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        // Close delete modal
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+            pendingDeleteData = null;
+            document.getElementById('dontAskAgain').checked = false;
+        }
+
+        // Confirm delete
+        function confirmDelete() {
+            if (pendingDeleteData) {
+                // Check if "don't ask again" is checked
+                const dontAskAgain = document.getElementById('dontAskAgain').checked;
+                if (dontAskAgain) {
+                    skipDeleteConfirmation = true;
+                    // Reset after 5 minutes
+                    setTimeout(() => {
+                        skipDeleteConfirmation = false;
+                    }, 300000);
+                }
+
+                performDelete(pendingDeleteData.type, pendingDeleteData.id);
+            }
+            closeDeleteModal();
+        }
+
+        // Perform the actual deletion
+        async function performDelete(type, id) {
+            try {
+                // Remove from local data
+                if (type === 'projects') {
+                    projectsData = projectsData.filter(item => item.id !== id);
+                    updateProjectsTable();
+                } else if (type === 'team') {
+                    teamData = teamData.filter(item => item.id !== id);
+                    updateTeamTable();
+                } else if (type === 'scaling') {
+                    scalingData = scalingData.filter(item => item.id !== id);
+                    updateScalingTable();
+                } else if (type === 'shareholders') {
+                    shareholdersData = shareholdersData.filter(item => item.id !== id);
+                    updateShareholdersTable();
+                }
+
+                // Delete from Supabase
+                const tableName = type === 'team' ? 'team_members' : type === 'scaling' ? 'scaling_costs' : type;
+                await supabaseClient.from(tableName).delete().eq('id', id);
+
+                calculateFinancials();
+                showStatus('Item deleted successfully!');
+            } catch (error) {
+                console.error('Error deleting item:', error);
+                showStatus('Failed to delete item', 'error');
+            }
         }
 
         // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            setupAutoSave();
-            
-            // Calculate all financials on page load
-            updateAllFinancials();
-            
-            showSaveIndicator('Dashboard Loaded Successfully');
-        });
+        async function initialize() {
+            try {
+                showStatus('Connecting to database...', 'loading');
+                
+                const dbConnected = await initializeDatabase();
+                if (dbConnected) {
+                    await loadData();
+                } else {
+                    loadDefaultData();
+                }
+                
+                setupCellEditing();
+                showStatus('Dashboard ready!');
+            } catch (error) {
+                console.error('Initialization error:', error);
+                showStatus('Error initializing dashboard', 'error');
+                loadDefaultData();
+                setupCellEditing();
+            }
+        }
+
+        // Start the application when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initialize);
     </script>
 </body>
 </html>
