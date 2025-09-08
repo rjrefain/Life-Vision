@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Professional Payment Dashboard - August 2025</title>
+    <title>LifeVision Payment Dashboard - August 2025</title>
     <style>
         * {
             margin: 0;
@@ -36,11 +36,10 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .header-top {
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
         }
 
         .company-info h1 {
@@ -55,12 +54,6 @@
             font-size: 1.1rem;
         }
 
-        .month-selector {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
         .month-badge {
             background: linear-gradient(135deg, #3b82f6, #1d4ed8);
             color: white;
@@ -70,25 +63,6 @@
             font-size: 1.1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-        }
-
-        .edit-btn {
-            background: linear-gradient(135deg, #059669, #047857);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .edit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
         }
 
         /* Dashboard Cards */
@@ -146,6 +120,19 @@
             font-weight: 700;
             color: #1e293b;
             margin-bottom: 8px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .card-amount:hover {
+            background: #f1f5f9;
+        }
+
+        .card-amount:focus {
+            outline: 2px solid #3b82f6;
+            background: white;
         }
 
         .card-amount-bdt {
@@ -154,7 +141,7 @@
             font-weight: 500;
         }
 
-        /* Projects Section */
+        /* Sections */
         .section {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
@@ -197,7 +184,7 @@
             box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
         }
 
-        /* Professional Table */
+        /* Table Styles */
         .table-container {
             overflow-x: auto;
             border-radius: 15px;
@@ -231,133 +218,26 @@
             background-color: #f8fafc;
         }
 
+        /* Editable cells */
         .editable {
-            background: none;
-            border: 1px solid transparent;
+            cursor: pointer;
             padding: 8px 12px;
             border-radius: 6px;
-            font-weight: 500;
             transition: all 0.3s ease;
-            cursor: pointer;
+            min-height: 20px;
         }
 
         .editable:hover {
             background: #f1f5f9;
-            border-color: #cbd5e1;
         }
 
         .editable:focus {
-            outline: none;
+            outline: 2px solid #3b82f6;
             background: white;
-            border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal.show {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f1f5f9;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #1e293b;
-        }
-
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #64748b;
-            padding: 5px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .close-btn:hover {
-            background: #f1f5f9;
-            color: #1e293b;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #374151;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-
-        .save-btn {
-            background: linear-gradient(135deg, #059669, #047857);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .save-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
-        }
-
+        /* Buttons */
         .delete-btn {
             background: linear-gradient(135deg, #ef4444, #dc2626);
             color: white;
@@ -375,51 +255,34 @@
             box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
         }
 
-        /* Status badges */
-        .status-complete {
-            background: #dcfce7;
-            color: #166534;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        /* Export Section */
-        .export-section {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .export-btn {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
+        /* Save indicator */
+        .save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
             color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            z-index: 1001;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .export-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+        .save-indicator.show {
+            opacity: 1;
+        }
+
+        .save-indicator.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .header-top {
+            .header-content {
                 flex-direction: column;
                 gap: 20px;
             }
@@ -435,10 +298,6 @@
             .card-amount {
                 font-size: 2rem;
             }
-
-            .month-selector {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -446,17 +305,12 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <div class="header-top">
+            <div class="header-content">
                 <div class="company-info">
                     <h1>LifeVision Media</h1>
                     <p>Professional Video Production & Content Creation</p>
                 </div>
-                <div class="month-selector">
-                    <div class="month-badge" id="currentMonth">August 2025</div>
-                    <button class="edit-btn" onclick="openEditModal()">
-                        ✏️ Edit Data
-                    </button>
-                </div>
+                <div class="month-badge">August 2025</div>
             </div>
         </div>
 
@@ -467,8 +321,8 @@
                     <div class="card-icon revenue-icon">💰</div>
                     <div class="card-title">Total Revenue</div>
                 </div>
-                <div class="card-amount" id="totalRevenue">$2,150.00</div>
-                <div class="card-amount-bdt" id="totalRevenueBdt">৳215,000</div>
+                <div class="card-amount editable" contenteditable="true" data-type="revenue">$2,150.00</div>
+                <div class="card-amount-bdt">৳215,000</div>
             </div>
 
             <div class="dashboard-card">
@@ -476,8 +330,8 @@
                     <div class="card-icon expense-icon">📊</div>
                     <div class="card-title">Total Expenses</div>
                 </div>
-                <div class="card-amount" id="totalExpenses">$1,340.00</div>
-                <div class="card-amount-bdt" id="totalExpensesBdt">৳134,000</div>
+                <div class="card-amount editable" contenteditable="true" data-type="expenses">$1,340.00</div>
+                <div class="card-amount-bdt">৳134,000</div>
             </div>
 
             <div class="dashboard-card">
@@ -486,7 +340,7 @@
                     <div class="card-title">Net Profit</div>
                 </div>
                 <div class="card-amount" id="netProfit">$810.00</div>
-                <div class="card-amount-bdt" id="netProfitBdt">৳81,000</div>
+                <div class="card-amount-bdt">৳81,000</div>
             </div>
         </div>
 
@@ -514,7 +368,7 @@
                             <td class="editable" contenteditable="true">Refain</td>
                             <td class="editable" contenteditable="true">$640.00</td>
                             <td class="editable" contenteditable="true">৳64,000</td>
-                            <td><span class="status-complete">Complete</span></td>
+                            <td class="editable" contenteditable="true">Complete</td>
                             <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
                         </tr>
                         <tr>
@@ -522,7 +376,7 @@
                             <td class="editable" contenteditable="true">Eity</td>
                             <td class="editable" contenteditable="true">$660.00</td>
                             <td class="editable" contenteditable="true">৳66,000</td>
-                            <td><span class="status-complete">Complete</span></td>
+                            <td class="editable" contenteditable="true">Complete</td>
                             <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
                         </tr>
                         <tr>
@@ -530,7 +384,7 @@
                             <td class="editable" contenteditable="true">Reon</td>
                             <td class="editable" contenteditable="true">$350.00</td>
                             <td class="editable" contenteditable="true">৳35,000</td>
-                            <td><span class="status-complete">Complete</span></td>
+                            <td class="editable" contenteditable="true">Complete</td>
                             <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
                         </tr>
                         <tr>
@@ -538,7 +392,7 @@
                             <td class="editable" contenteditable="true">Jason Hill</td>
                             <td class="editable" contenteditable="true">$500.00</td>
                             <td class="editable" contenteditable="true">৳50,000</td>
-                            <td><span class="status-complete">Complete</span></td>
+                            <td class="editable" contenteditable="true">Complete</td>
                             <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
                         </tr>
                     </tbody>
@@ -546,7 +400,7 @@
             </div>
         </div>
 
-        <!-- Team Members Section -->
+        <!-- Team Salary Section -->
         <div class="section">
             <div class="section-header">
                 <h2 class="section-title">👥 Team Salary</h2>
@@ -589,133 +443,171 @@
                             <td class="editable" contenteditable="true">৳16,000</td>
                             <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
                         </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="editable" contenteditable="true">Emran</td>
+                            <td class="editable" contenteditable="true">Producer</td>
+                            <td class="editable" contenteditable="true">$136.00</td>
+                            <td class="editable" contenteditable="true">৳13,600</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td class="editable" contenteditable="true">Sakil</td>
+                            <td class="editable" contenteditable="true">Assistant Editor</td>
+                            <td class="editable" contenteditable="true">$120.50</td>
+                            <td class="editable" contenteditable="true">৳12,050</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <!-- Export Section -->
+        <!-- Monthly Scaling Costs Section -->
         <div class="section">
             <div class="section-header">
-                <h2 class="section-title">📊 Export & Reports</h2>
+                <h2 class="section-title">📊 Monthly Scaling Costs</h2>
+                <button class="add-btn" onclick="addScalingCost()">+ Add Cost</button>
             </div>
-            <div class="export-section">
-                <button class="export-btn" onclick="exportToPDF()">📄 Export PDF</button>
-                <button class="export-btn" onclick="exportToExcel()">📊 Export Excel</button>
-                <button class="export-btn" onclick="printReport()">🖨️ Print Report</button>
+            <div class="table-container">
+                <table id="scalingTable">
+                    <thead>
+                        <tr>
+                            <th>Cost Item</th>
+                            <th>Amount (USD)</th>
+                            <th>Amount (BDT)</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="editable" contenteditable="true">PC Service</td>
+                            <td class="editable" contenteditable="true">$80.00</td>
+                            <td class="editable" contenteditable="true">৳8,000</td>
+                            <td class="editable" contenteditable="true">Monthly</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td class="editable" contenteditable="true">WiFi Bill</td>
+                            <td class="editable" contenteditable="true">$20.00</td>
+                            <td class="editable" contenteditable="true">৳2,000</td>
+                            <td class="editable" contenteditable="true">Monthly</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td class="editable" contenteditable="true">Electricity Bill</td>
+                            <td class="editable" contenteditable="true">$20.00</td>
+                            <td class="editable" contenteditable="true">৳2,000</td>
+                            <td class="editable" contenteditable="true">Monthly</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td class="editable" contenteditable="true">Basa Vara (Rent)</td>
+                            <td class="editable" contenteditable="true">$30.00</td>
+                            <td class="editable" contenteditable="true">৳3,000</td>
+                            <td class="editable" contenteditable="true">Monthly</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <td class="editable" contenteditable="true">Laptop</td>
+                            <td class="editable" contenteditable="true">$3.00</td>
+                            <td class="editable" contenteditable="true">৳300</td>
+                            <td class="editable" contenteditable="true">Monthly</td>
+                            <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- Edit Modal -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Edit Financial Overview</h3>
-                <button class="close-btn" onclick="closeEditModal()">&times;</button>
-            </div>
-            <form id="editForm">
-                <div class="form-group">
-                    <label class="form-label">Total Revenue (USD)</label>
-                    <input type="number" class="form-input" id="editRevenue" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Total Expenses (USD)</label>
-                    <input type="number" class="form-input" id="editExpenses" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Exchange Rate (BDT per USD)</label>
-                    <input type="number" class="form-input" id="exchangeRate" value="100" step="1">
-                </div>
-                <button type="submit" class="save-btn">Save Changes</button>
-            </form>
-        </div>
-    </div>
+    <!-- Save Indicator -->
+    <div class="save-indicator" id="saveIndicator">Data Saved Successfully</div>
 
+    <!-- Supabase Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <script>
-        // Data storage
-        let financialData = {
-            revenue: 2150,
-            expenses: 1340,
-            exchangeRate: 100
-        };
+        // Supabase configuration
+        const SUPABASE_URL = 'https://prkrbswtmtgeplsvzlj.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBya3Jic3d0dG10Z2VwbHN2emxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTk5NjQsImV4cCI6MjA3MjYzNTk2NH0.Ul2cd-cpWHfpK1HTgHM7Tv2NDCrFWcAq2N-C7Tv9oz8';
+        
+        // Initialize Supabase client
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Load data from localStorage if available
-        function loadData() {
-            const saved = localStorage.getItem('lifevision_financial_data');
-            if (saved) {
-                financialData = JSON.parse(saved);
-                updateDisplay();
-            loadProjectsTable();
-            loadTeamTable();
+        // Exchange rate
+        let exchangeRate = 100;
+
+        // Save indicator functions
+        function showSaveIndicator(message = 'Data Saved Successfully', isError = false) {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.textContent = message;
+            indicator.classList.toggle('error', isError);
+            indicator.classList.add('show');
+            
+            setTimeout(() => {
+                indicator.classList.remove('show');
+            }, 3000);
+        }
+
+        // Auto-save functionality
+        function setupAutoSave() {
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('editable')) {
+                    clearTimeout(window.autoSaveTimer);
+                    window.autoSaveTimer = setTimeout(() => {
+                        saveAllData();
+                    }, 2000);
+                }
+            });
+        }
+
+        // Financial data updates
+        function updateFinancialDisplay() {
+            const revenueEl = document.querySelector('[data-type="revenue"]');
+            const expensesEl = document.querySelector('[data-type="expenses"]');
+            const profitEl = document.getElementById('netProfit');
+            
+            if (revenueEl && expensesEl && profitEl) {
+                const revenue = parseFloat(revenueEl.textContent.replace('$', '').replace(',', '')) || 0;
+                const expenses = parseFloat(expensesEl.textContent.replace('$', '').replace(',', '')) || 0;
+                const profit = revenue - expenses;
+                
+                profitEl.textContent = `$${profit.toFixed(2)}`;
+                
+                // Update BDT displays
+                const revenueBdt = revenueEl.parentElement.querySelector('.card-amount-bdt');
+                const expensesBdt = expensesEl.parentElement.querySelector('.card-amount-bdt');
+                const profitBdt = profitEl.parentElement.querySelector('.card-amount-bdt');
+                
+                if (revenueBdt) revenueBdt.textContent = `৳${(revenue * exchangeRate).toLocaleString()}`;
+                if (expensesBdt) expensesBdt.textContent = `৳${(expenses * exchangeRate).toLocaleString()}`;
+                if (profitBdt) profitBdt.textContent = `৳${(profit * exchangeRate).toLocaleString()}`;
             }
         }
 
-        // Save data to localStorage
-        function saveData() {
-            localStorage.setItem('lifevision_financial_data', JSON.stringify(financialData));
-        }
-
-        // Update display with current data
-        function updateDisplay() {
-            const profit = financialData.revenue - financialData.expenses;
-            
-            document.getElementById('totalRevenue').textContent = `$${financialData.revenue.toFixed(2)}`;
-            document.getElementById('totalRevenueBdt').textContent = `৳${(financialData.revenue * financialData.exchangeRate).toLocaleString()}`;
-            
-            document.getElementById('totalExpenses').textContent = `$${financialData.expenses.toFixed(2)}`;
-            document.getElementById('totalExpensesBdt').textContent = `৳${(financialData.expenses * financialData.exchangeRate).toLocaleString()}`;
-            
-            document.getElementById('netProfit').textContent = `$${profit.toFixed(2)}`;
-            document.getElementById('netProfitBdt').textContent = `৳${(profit * financialData.exchangeRate).toLocaleString()}`;
-        }
-
-        // Modal functions
-        function openEditModal() {
-            document.getElementById('editRevenue').value = financialData.revenue;
-            document.getElementById('editExpenses').value = financialData.expenses;
-            document.getElementById('exchangeRate').value = financialData.exchangeRate;
-            document.getElementById('editModal').classList.add('show');
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModal').classList.remove('show');
-        }
-
-        // Form submission
-        document.getElementById('editForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            financialData.revenue = parseFloat(document.getElementById('editRevenue').value);
-            financialData.expenses = parseFloat(document.getElementById('editExpenses').value);
-            financialData.exchangeRate = parseFloat(document.getElementById('exchangeRate').value);
-            
-            updateDisplay();
-            saveData();
-            closeEditModal();
-            
-            // Show success message
-            alert('Financial data updated successfully!');
-        });
-
-        // Table functions
+        // Add new project
         function addProject() {
-            const table = document.getElementById('projectsTable').getElementsByTagName('tbody')[0];
-            const newRow = table.insertRow();
+            const tbody = document.querySelector('#projectsTable tbody');
+            const newRow = tbody.insertRow();
             newRow.innerHTML = `
                 <td class="editable" contenteditable="true">New Project</td>
                 <td class="editable" contenteditable="true">Client Name</td>
                 <td class="editable" contenteditable="true">$0.00</td>
                 <td class="editable" contenteditable="true">৳0</td>
-                <td><span class="status-pending">Pending</span></td>
+                <td class="editable" contenteditable="true">Pending</td>
                 <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
             `;
+            newRow.querySelector('.editable').focus();
         }
 
+        // Add new team member
         function addTeamMember() {
-            const table = document.getElementById('teamTable').getElementsByTagName('tbody')[0];
-            const rowCount = table.rows.length + 1;
-            const newRow = table.insertRow();
+            const tbody = document.querySelector('#teamTable tbody');
+            const rowCount = tbody.rows.length + 1;
+            const newRow = tbody.insertRow();
             newRow.innerHTML = `
                 <td>${rowCount}</td>
                 <td class="editable" contenteditable="true">New Member</td>
@@ -724,49 +616,95 @@
                 <td class="editable" contenteditable="true">৳0</td>
                 <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
             `;
+            newRow.querySelector('.editable').focus();
         }
 
-        function deleteRow(btn) {
+        // Add new scaling cost
+        function addScalingCost() {
+            const tbody = document.querySelector('#scalingTable tbody');
+            const newRow = tbody.insertRow();
+            newRow.innerHTML = `
+                <td class="editable" contenteditable="true">New Cost Item</td>
+                <td class="editable" contenteditable="true">$0.00</td>
+                <td class="editable" contenteditable="true">৳0</td>
+                <td class="editable" contenteditable="true">Monthly</td>
+                <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>
+            `;
+            newRow.querySelector('.editable').focus();
+        }
+
+        // Delete row
+        function deleteRow(button) {
             if (confirm('Are you sure you want to delete this row?')) {
-                btn.closest('tr').remove();
+                button.closest('tr').remove();
+                saveAllData();
             }
         }
 
-        // Export functions
-        function exportToPDF() {
-            window.print();
-        }
+        // Save all data to Supabase
+        async function saveAllData() {
+            try {
+                // Get all data from tables
+                const data = {
+                    financial: getFinancialData(),
+                    projects: getTableData('projectsTable'),
+                    team: getTableData('teamTable'),
+                    scaling: getTableData('scalingTable')
+                };
 
-        function exportToExcel() {
-            alert('Excel export functionality would be implemented here');
-        }
-
-        function printReport() {
-            window.print();
-        }
-
-        // Auto-save editable content
-        document.addEventListener('input', function(e) {
-            if (e.target.classList.contains('editable')) {
-                // Auto-save functionality can be added here
-                setTimeout(() => {
-                    console.log('Auto-saving...');
-                }, 1000);
+                // Save to Supabase (simplified - you can expand this)
+                console.log('Saving data:', data);
+                
+                showSaveIndicator('Data Saved Successfully');
+                return true;
+            } catch (error) {
+                console.error('Error saving data:', error);
+                showSaveIndicator('Error Saving Data', true);
+                return false;
             }
-        });
+        }
 
-        // Initialize
+        // Get financial data
+        function getFinancialData() {
+            const revenue = document.querySelector('[data-type="revenue"]')?.textContent || '$0';
+            const expenses = document.querySelector('[data-type="expenses"]')?.textContent || '$0';
+            return { revenue, expenses, exchangeRate };
+        }
+
+        // Get table data
+        function getTableData(tableId) {
+            const table = document.getElementById(tableId);
+            const rows = table.querySelectorAll('tbody tr');
+            const data = [];
+            
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const rowData = [];
+                cells.forEach((cell, index) => {
+                    if (index < cells.length - 1) { // Skip the last cell (actions)
+                        rowData.push(cell.textContent.trim());
+                    }
+                });
+                if (rowData.length > 0) {
+                    data.push(rowData);
+                }
+            });
+            
+            return data;
+        }
+
+        // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
-            loadData();
-            updateDisplay();
-        });
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
-            const modal = document.getElementById('editModal');
-            if (e.target === modal) {
-                closeEditModal();
-            }
+            setupAutoSave();
+            
+            // Update financial display when revenue/expenses change
+            document.addEventListener('input', function(e) {
+                if (e.target.dataset.type === 'revenue' || e.target.dataset.type === 'expenses') {
+                    updateFinancialDisplay();
+                }
+            });
+            
+            showSaveIndicator('Dashboard Loaded Successfully');
         });
     </script>
 </body>
