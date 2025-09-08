@@ -697,12 +697,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             setupAutoSave();
             
-            // Update financial display when revenue/expenses change
-            document.addEventListener('input', function(e) {
-                if (e.target.dataset.type === 'revenue' || e.target.dataset.type === 'expenses') {
-                    updateFinancialDisplay();
-                }
-            });
+            // Calculate all financials on page load
+            updateAllFinancials();
             
             showSaveIndicator('Dashboard Loaded Successfully');
         });
