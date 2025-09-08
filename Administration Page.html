@@ -1048,7 +1048,24 @@
         // Initialize the application
         async function initialize() {
             try {
+                console.log('Starting dashboard initialization...');
                 showStatus('Connecting to database...', 'loading');
+                
+                // Test that add functions are accessible
+                window.addProject = addProject;
+                window.addTeamMember = addTeamMember;
+                window.addScalingCost = addScalingCost;
+                window.addShareholder = addShareholder;
+                window.deleteItem = deleteItem;
+                window.closeDeleteModal = closeDeleteModal;
+                window.confirmDelete = confirmDelete;
+                
+                console.log('Functions attached to window:', {
+                    addProject: typeof window.addProject,
+                    addTeamMember: typeof window.addTeamMember,
+                    addScalingCost: typeof window.addScalingCost,
+                    addShareholder: typeof window.addShareholder
+                });
                 
                 const dbConnected = await initializeDatabase();
                 if (dbConnected) {
@@ -1059,6 +1076,7 @@
                 
                 setupCellEditing();
                 showStatus('Dashboard ready!');
+                console.log('Dashboard initialization complete');
             } catch (error) {
                 console.error('Initialization error:', error);
                 showStatus('Error initializing dashboard', 'error');
@@ -1066,9 +1084,6 @@
                 setupCellEditing();
             }
         }
-
-        // Start the application when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initialize);
     </script>
 </body>
 </html>
