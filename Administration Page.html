@@ -273,8 +273,8 @@
             background: linear-gradient(135deg, #f39c12, #e67e22);
         }
 
-        /* Delete Modal */
-        .delete-modal {
+        /* Modal Styles (for both delete and input) */
+        .modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -288,22 +288,22 @@
             backdrop-filter: blur(10px);
         }
 
-        .delete-modal.show {
+        .modal.show {
             display: flex;
         }
 
-        .delete-modal-content {
+        .modal-content {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border-radius: 20px;
             padding: 30px;
             text-align: center;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
+            max-width: 500px;
             width: 90%;
             color: white;
         }
 
-        .delete-modal-icon {
+        .modal-icon {
             width: 80px;
             height: 80px;
             background: rgba(255, 255, 255, 0.2);
@@ -316,19 +316,76 @@
             border: 3px solid white;
         }
 
-        .delete-modal-title {
+        .modal-title {
             font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 15px;
         }
 
-        .delete-modal-message {
+        .modal-message {
             margin-bottom: 25px;
             opacity: 0.9;
             line-height: 1.5;
         }
 
-        .delete-modal-checkbox {
+        /* Input Form Styles */
+        .input-form {
+            text-align: left;
+            margin: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: white;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .form-select option {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .modal-checkbox {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -336,24 +393,24 @@
             gap: 10px;
         }
 
-        .delete-modal-checkbox input {
+        .modal-checkbox input {
             width: 18px;
             height: 18px;
             cursor: pointer;
         }
 
-        .delete-modal-checkbox label {
+        .modal-checkbox label {
             font-size: 0.9rem;
             cursor: pointer;
         }
 
-        .delete-modal-actions {
+        .modal-actions {
             display: flex;
             gap: 15px;
             justify-content: center;
         }
 
-        .delete-modal-btn {
+        .modal-btn {
             padding: 12px 24px;
             border: 2px solid white;
             border-radius: 25px;
@@ -363,25 +420,36 @@
             min-width: 100px;
         }
 
-        .delete-modal-confirm {
+        .modal-confirm {
             background: white;
-            color: var(--danger-color);
+            color: var(--primary-color);
         }
 
-        .delete-modal-confirm:hover {
-            background: var(--danger-color);
+        .modal-confirm:hover {
+            background: transparent;
             color: white;
             transform: scale(1.05);
         }
 
-        .delete-modal-cancel {
+        .modal-cancel {
             background: transparent;
             color: white;
         }
 
-        .delete-modal-cancel:hover {
+        .modal-cancel:hover {
             background: white;
             color: var(--primary-color);
+            transform: scale(1.05);
+        }
+
+        .delete-confirm {
+            background: white;
+            color: var(--danger-color);
+        }
+
+        .delete-confirm:hover {
+            background: var(--danger-color);
+            color: white;
             transform: scale(1.05);
         }
 
@@ -491,7 +559,7 @@
         <div class="section">
             <div class="section-header">
                 <h2 class="section-title">📋 Active Projects</h2>
-                <button class="add-btn" onclick="addProject()">+ Add Project</button>
+                <button class="add-btn" onclick="showAddProjectModal()">+ Add Project</button>
             </div>
             <div class="table-wrapper">
                 <table id="projectsTable">
@@ -516,7 +584,7 @@
         <div class="section">
             <div class="section-header">
                 <h2 class="section-title">👥 Team Salary</h2>
-                <button class="add-btn" onclick="addTeamMember()">+ Add Member</button>
+                <button class="add-btn" onclick="showAddTeamMemberModal()">+ Add Member</button>
             </div>
             <div class="table-wrapper">
                 <table id="teamTable">
@@ -541,7 +609,7 @@
         <div class="section">
             <div class="section-header">
                 <h2 class="section-title">📊 Monthly Scaling Costs</h2>
-                <button class="add-btn" onclick="addScalingCost()">+ Add Cost</button>
+                <button class="add-btn" onclick="showAddScalingCostModal()">+ Add Cost</button>
             </div>
             <div class="table-wrapper">
                 <table id="scalingTable">
@@ -565,7 +633,7 @@
         <div class="section">
             <div class="section-header">
                 <h2 class="section-title">🤝 Company Shareholders</h2>
-                <button class="add-btn" onclick="addShareholder()">+ Add Shareholder</button>
+                <button class="add-btn" onclick="showAddShareholderModal()">+ Add Shareholder</button>
             </div>
             <div class="table-wrapper">
                 <table id="shareholdersTable">
@@ -590,20 +658,142 @@
     <div class="status-indicator" id="statusIndicator"></div>
 
     <!-- Delete Modal -->
-    <div class="delete-modal" id="deleteModal">
-        <div class="delete-modal-content">
-            <div class="delete-modal-icon">⚠️</div>
-            <h3 class="delete-modal-title">Delete Confirmation</h3>
-            <p class="delete-modal-message">Are you sure you want to delete this item? This action cannot be undone.</p>
+    <div class="modal" id="deleteModal">
+        <div class="modal-content">
+            <div class="modal-icon">⚠️</div>
+            <h3 class="modal-title">Delete Confirmation</h3>
+            <p class="modal-message">Are you sure you want to delete this item? This action cannot be undone.</p>
             
-            <div class="delete-modal-checkbox">
+            <div class="modal-checkbox">
                 <input type="checkbox" id="dontAskAgain">
                 <label for="dontAskAgain">Don't ask me again for now</label>
             </div>
             
-            <div class="delete-modal-actions">
-                <button class="delete-modal-btn delete-modal-cancel" onclick="closeDeleteModal()">Cancel</button>
-                <button class="delete-modal-btn delete-modal-confirm" onclick="confirmDelete()">Delete</button>
+            <div class="modal-actions">
+                <button class="modal-btn modal-cancel" onclick="closeDeleteModal()">Cancel</button>
+                <button class="modal-btn delete-confirm" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Project Modal -->
+    <div class="modal" id="addProjectModal">
+        <div class="modal-content">
+            <div class="modal-icon">📋</div>
+            <h3 class="modal-title">Add New Project</h3>
+            
+            <div class="input-form">
+                <div class="form-group">
+                    <label class="form-label">Project Name</label>
+                    <input type="text" class="form-input" id="projectName" placeholder="Enter project name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Client Name</label>
+                    <input type="text" class="form-input" id="projectClient" placeholder="Enter client name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Amount (USD)</label>
+                    <input type="number" class="form-input" id="projectAmount" placeholder="Enter amount in USD" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select class="form-select" id="projectStatus">
+                        <option value="Pending">Pending</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Complete">Complete</option>
+                        <option value="On Hold">On Hold</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn modal-cancel" onclick="closeAddProjectModal()">Cancel</button>
+                <button class="modal-btn modal-confirm" onclick="addProject()">Add Project</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Team Member Modal -->
+    <div class="modal" id="addTeamMemberModal">
+        <div class="modal-content">
+            <div class="modal-icon">👥</div>
+            <h3 class="modal-title">Add New Team Member</h3>
+            
+            <div class="input-form">
+                <div class="form-group">
+                    <label class="form-label">Member Name</label>
+                    <input type="text" class="form-input" id="memberName" placeholder="Enter member name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <input type="text" class="form-input" id="memberRole" placeholder="Enter role">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Salary (USD)</label>
+                    <input type="number" class="form-input" id="memberSalary" placeholder="Enter salary in USD" step="0.01">
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn modal-cancel" onclick="closeAddTeamMemberModal()">Cancel</button>
+                <button class="modal-btn modal-confirm" onclick="addTeamMember()">Add Member</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Scaling Cost Modal -->
+    <div class="modal" id="addScalingCostModal">
+        <div class="modal-content">
+            <div class="modal-icon">📊</div>
+            <h3 class="modal-title">Add New Scaling Cost</h3>
+            
+            <div class="input-form">
+                <div class="form-group">
+                    <label class="form-label">Cost Item Name</label>
+                    <input type="text" class="form-input" id="costItemName" placeholder="Enter cost item name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Amount (USD)</label>
+                    <input type="number" class="form-input" id="costAmount" placeholder="Enter amount in USD" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Cost Type</label>
+                    <select class="form-select" id="costType">
+                        <option value="Monthly">Monthly</option>
+                        <option value="One-time">One-time</option>
+                        <option value="Quarterly">Quarterly</option>
+                        <option value="Annual">Annual</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn modal-cancel" onclick="closeAddScalingCostModal()">Cancel</button>
+                <button class="modal-btn modal-confirm" onclick="addScalingCost()">Add Cost</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Shareholder Modal -->
+    <div class="modal" id="addShareholderModal">
+        <div class="modal-content">
+            <div class="modal-icon">🤝</div>
+            <h3 class="modal-title">Add New Shareholder</h3>
+            
+            <div class="input-form">
+                <div class="form-group">
+                    <label class="form-label">Shareholder Name</label>
+                    <input type="text" class="form-input" id="shareholderName" placeholder="Enter shareholder name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Share Percentage (%)</label>
+                    <input type="number" class="form-input" id="shareholderPercentage" placeholder="Enter percentage" min="0" max="100" step="0.1">
+                </div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn modal-cancel" onclick="closeAddShareholderModal()">Cancel</button>
+                <button class="modal-btn modal-confirm" onclick="addShareholder()">Add Shareholder</button>
             </div>
         </div>
     </div>
@@ -670,13 +860,13 @@
             const totalExpenses = teamExpenses + scalingExpenses;
             const netProfit = totalRevenue - totalExpenses;
 
-            document.getElementById('totalRevenue').textContent = `$${totalRevenue.toFixed(2)}`;
+            document.getElementById('totalRevenue').textContent = `${totalRevenue.toFixed(2)}`;
             document.getElementById('totalRevenueBdt').textContent = `৳${(totalRevenue * exchangeRate).toLocaleString()}`;
             
-            document.getElementById('totalExpenses').textContent = `$${totalExpenses.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `${totalExpenses.toFixed(2)}`;
             document.getElementById('totalExpensesBdt').textContent = `৳${(totalExpenses * exchangeRate).toLocaleString()}`;
             
-            document.getElementById('netProfit').textContent = `$${netProfit.toFixed(2)}`;
+            document.getElementById('netProfit').textContent = `${netProfit.toFixed(2)}`;
             document.getElementById('netProfitBdt').textContent = `৳${(netProfit * exchangeRate).toLocaleString()}`;
 
             updateShareholdersTable();
@@ -692,7 +882,7 @@
                 row.innerHTML = `
                     <td data-label="Project Name" class="editable" contenteditable="true" data-field="name">${project.name}</td>
                     <td data-label="Client" class="editable" contenteditable="true" data-field="client">${project.client}</td>
-                    <td data-label="Amount (USD)" class="editable" contenteditable="true" data-field="amount_usd">$${project.amount_usd.toFixed(2)}</td>
+                    <td data-label="Amount (USD)" class="editable" contenteditable="true" data-field="amount_usd">${project.amount_usd.toFixed(2)}</td>
                     <td data-label="Amount (BDT)" class="auto-calculated">৳${(project.amount_usd * exchangeRate).toLocaleString()}</td>
                     <td data-label="Status" class="editable" contenteditable="true" data-field="status">${project.status}</td>
                     <td data-label="Actions"><button class="delete-btn" onclick="deleteItem('projects', ${project.id})">Delete</button></td>
@@ -714,7 +904,7 @@
                     <td data-label="Rank">${rankDisplay}</td>
                     <td data-label="Name" class="editable" contenteditable="true" data-field="name">${member.name}</td>
                     <td data-label="Role" class="editable" contenteditable="true" data-field="role">${member.role}</td>
-                    <td data-label="Salary (USD)" class="editable" contenteditable="true" data-field="salary_usd">$${member.salary_usd.toFixed(2)}</td>
+                    <td data-label="Salary (USD)" class="editable" contenteditable="true" data-field="salary_usd">${member.salary_usd.toFixed(2)}</td>
                     <td data-label="Salary (BDT)" class="auto-calculated">৳${(member.salary_usd * exchangeRate).toLocaleString()}</td>
                     <td data-label="Actions"><button class="delete-btn" onclick="deleteItem('team', ${member.id})">Delete</button></td>
                 `;
@@ -731,7 +921,7 @@
                 const row = tbody.insertRow();
                 row.innerHTML = `
                     <td data-label="Cost Item" class="editable" contenteditable="true" data-field="item_name">${cost.item_name}</td>
-                    <td data-label="Amount (USD)" class="editable" contenteditable="true" data-field="amount_usd">$${cost.amount_usd.toFixed(2)}</td>
+                    <td data-label="Amount (USD)" class="editable" contenteditable="true" data-field="amount_usd">${cost.amount_usd.toFixed(2)}</td>
                     <td data-label="Amount (BDT)" class="auto-calculated">৳${(cost.amount_usd * exchangeRate).toLocaleString()}</td>
                     <td data-label="Type" class="editable" contenteditable="true" data-field="cost_type">${cost.cost_type}</td>
                     <td data-label="Actions"><button class="delete-btn" onclick="deleteItem('scaling', ${cost.id})">Delete</button></td>
@@ -757,7 +947,7 @@
                 row.innerHTML = `
                     <td data-label="Shareholder Name" class="editable" contenteditable="true" data-field="name">${shareholder.name}</td>
                     <td data-label="Share Percentage" class="editable" contenteditable="true" data-field="percentage">${shareholder.percentage}%</td>
-                    <td data-label="Profit Share (USD)" class="auto-calculated">$${profitShare.toFixed(2)}</td>
+                    <td data-label="Profit Share (USD)" class="auto-calculated">${profitShare.toFixed(2)}</td>
                     <td data-label="Profit Share (BDT)" class="auto-calculated">৳${(profitShare * exchangeRate).toLocaleString()}</td>
                     <td data-label="Actions"><button class="delete-btn" onclick="deleteItem('shareholders', ${shareholder.id})">Delete</button></td>
                 `;
@@ -798,9 +988,6 @@
                     if (item && field) {
                         let value = cell.textContent.trim();
                         
-                        if (item && field) {
-                        let value = cell.textContent.trim();
-                        
                         if (field.includes('usd') || field === 'amount_usd' || field === 'salary_usd') {
                             value = parseFloat(value.replace(', '').replace(',', '')) || 0;
                         } else if (field === 'percentage') {
@@ -821,66 +1008,154 @@
             });
         }
 
-        // Add functions
+        // Modal functions for adding items
+        window.showAddProjectModal = function() {
+            document.getElementById('addProjectModal').classList.add('show');
+            document.getElementById('projectName').value = '';
+            document.getElementById('projectClient').value = '';
+            document.getElementById('projectAmount').value = '';
+            document.getElementById('projectStatus').value = 'Pending';
+        };
+
+        window.closeAddProjectModal = function() {
+            document.getElementById('addProjectModal').classList.remove('show');
+        };
+
         window.addProject = function() {
+            const name = document.getElementById('projectName').value.trim();
+            const client = document.getElementById('projectClient').value.trim();
+            const amount = parseFloat(document.getElementById('projectAmount').value) || 0;
+            const status = document.getElementById('projectStatus').value;
+
+            if (!name || !client) {
+                showStatus('Please fill in all required fields', 'error');
+                return;
+            }
+
             const newId = Date.now();
             const newProject = {
                 id: newId,
-                name: "New Project",
-                client: "Client Name",
-                amount_usd: 0,
-                status: "Pending"
+                name: name,
+                client: client,
+                amount_usd: amount,
+                status: status
             };
             
             projectsData.push(newProject);
             updateProjectsTable();
             calculateFinancials();
+            closeAddProjectModal();
             showStatus('New project added successfully!');
+            saveData();
+        };
+
+        window.showAddTeamMemberModal = function() {
+            document.getElementById('addTeamMemberModal').classList.add('show');
+            document.getElementById('memberName').value = '';
+            document.getElementById('memberRole').value = '';
+            document.getElementById('memberSalary').value = '';
+        };
+
+        window.closeAddTeamMemberModal = function() {
+            document.getElementById('addTeamMemberModal').classList.remove('show');
         };
 
         window.addTeamMember = function() {
+            const name = document.getElementById('memberName').value.trim();
+            const role = document.getElementById('memberRole').value.trim();
+            const salary = parseFloat(document.getElementById('memberSalary').value) || 0;
+
+            if (!name || !role) {
+                showStatus('Please fill in all required fields', 'error');
+                return;
+            }
+
             const newId = Date.now();
             const newMember = {
                 id: newId,
                 rank: teamData.length + 1,
-                name: "New Member",
-                role: "Role",
-                salary_usd: 0
+                name: name,
+                role: role,
+                salary_usd: salary
             };
             
             teamData.push(newMember);
             updateTeamTable();
             calculateFinancials();
+            closeAddTeamMemberModal();
             showStatus('New team member added successfully!');
+            saveData();
+        };
+
+        window.showAddScalingCostModal = function() {
+            document.getElementById('addScalingCostModal').classList.add('show');
+            document.getElementById('costItemName').value = '';
+            document.getElementById('costAmount').value = '';
+            document.getElementById('costType').value = 'Monthly';
+        };
+
+        window.closeAddScalingCostModal = function() {
+            document.getElementById('addScalingCostModal').classList.remove('show');
         };
 
         window.addScalingCost = function() {
+            const itemName = document.getElementById('costItemName').value.trim();
+            const amount = parseFloat(document.getElementById('costAmount').value) || 0;
+            const costType = document.getElementById('costType').value;
+
+            if (!itemName) {
+                showStatus('Please fill in all required fields', 'error');
+                return;
+            }
+
             const newId = Date.now();
             const newCost = {
                 id: newId,
-                item_name: "New Cost Item",
-                amount_usd: 0,
-                cost_type: "Monthly"
+                item_name: itemName,
+                amount_usd: amount,
+                cost_type: costType
             };
             
             scalingData.push(newCost);
             updateScalingTable();
             calculateFinancials();
+            closeAddScalingCostModal();
             showStatus('New cost item added successfully!');
+            saveData();
+        };
+
+        window.showAddShareholderModal = function() {
+            document.getElementById('addShareholderModal').classList.add('show');
+            document.getElementById('shareholderName').value = '';
+            document.getElementById('shareholderPercentage').value = '';
+        };
+
+        window.closeAddShareholderModal = function() {
+            document.getElementById('addShareholderModal').classList.remove('show');
         };
 
         window.addShareholder = function() {
+            const name = document.getElementById('shareholderName').value.trim();
+            const percentage = parseFloat(document.getElementById('shareholderPercentage').value) || 0;
+
+            if (!name || percentage <= 0 || percentage > 100) {
+                showStatus('Please enter valid shareholder details', 'error');
+                return;
+            }
+
             const newId = Date.now();
             const newShareholder = {
                 id: newId,
-                name: "New Shareholder",
-                percentage: 0
+                name: name,
+                percentage: percentage
             };
             
             shareholdersData.push(newShareholder);
             updateShareholdersTable();
             calculateFinancials();
+            closeAddShareholderModal();
             showStatus('New shareholder added successfully!');
+            saveData();
         };
 
         // Delete modal functions
@@ -932,6 +1207,7 @@
 
             calculateFinancials();
             showStatus('Item deleted successfully!');
+            saveData();
         }
 
         // Save data to Supabase
@@ -968,6 +1244,12 @@
                 updateAllTables();
                 calculateFinancials();
             }
+        }
+
+        // Initialize application
+        function initialize() {
+            setupCellEditing();
+            loadData();
         }
 
         // Start the application when DOM loads
