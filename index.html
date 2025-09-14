@@ -10,49 +10,51 @@
       --secondary-color: #764ba2;
       --success-color: #27ae60;
       --danger-color: #e74c3c;
-      --light-color: #f8f9fa;
       --dark-color: #2c3e50;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      padding: 20px;
       background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
       min-height: 100vh;
       color: var(--dark-color);
+      padding: 20px;
     }
 
     .container {
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 20px;
-      padding: 0;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
       max-width: 1200px;
       margin: 0 auto;
+      background: white;
+      border-radius: 20px;
       overflow: hidden;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
     }
 
-    /* Header Section */
-    .header-content {
-      padding: 25px 25px 20px 25px;
+    /* Header */
+    .header {
+      background: white;
+      padding: 25px;
+      border-bottom: 1px solid #e8ecf0;
     }
 
     h1 {
-      color: var(--dark-color);
       text-align: center;
-      margin-bottom: 20px;
       font-size: 2.2em;
       font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--dark-color);
     }
 
-    .header-section {
+    .header-nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 0;
       flex-wrap: wrap;
       gap: 15px;
     }
@@ -62,55 +64,53 @@
       color: white;
       padding: 10px 20px;
       border-radius: 20px;
-      display: inline-block;
       font-weight: 600;
     }
 
-    .admin-btn {
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-btn {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
       padding: 10px 20px;
       border-radius: 20px;
       text-decoration: none;
       font-weight: 600;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
       transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     }
 
-    .admin-btn:hover {
+    .nav-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
     }
 
-    /* Extended Status Container */
-    .status-container {
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      padding: 25px;
-      margin: 0;
+    /* Control Bar */
+    .control-bar {
+      background: #f8f9fa;
+      padding: 20px 25px;
+      border-bottom: 1px solid #e8ecf0;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 20px;
       flex-wrap: wrap;
-      border-top: 1px solid rgba(0, 0, 0, 0.05);
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
 
-    #supabaseStatus {
+    .status-indicator {
+      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
+      color: white;
       padding: 10px 18px;
       border-radius: 25px;
       font-weight: 600;
-      color: white;
-      display: inline-block;
-      background: linear-gradient(135deg, #00d2ff, #3a7bd5);
       box-shadow: 0 6px 20px rgba(58, 123, 213, 0.3);
-      border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
-    .reset-btn {
-      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
-      color: white;
+    .control-btn {
       padding: 10px 20px;
       border: none;
       border-radius: 25px;
@@ -118,8 +118,12 @@
       font-size: 14px;
       cursor: pointer;
       transition: all 0.3s ease;
+    }
+
+    .reset-btn {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
       box-shadow: 0 6px 20px rgba(238, 90, 36, 0.3);
-      border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
     .reset-btn:hover {
@@ -134,44 +138,35 @@
       box-shadow: none;
     }
 
-    .dropdown-container {
+    .dropdown-wrapper {
       position: relative;
-      display: inline-block;
+      z-index: 9999;
     }
 
-    .auto-reorder-btn {
+    .reorder-btn {
       background: linear-gradient(135deg, #a8e6cf, #56ab2f);
       color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 25px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
       box-shadow: 0 6px 20px rgba(86, 171, 47, 0.3);
-      border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
-    .auto-reorder-btn:hover {
+    .reorder-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 10px 30px rgba(86, 171, 47, 0.5);
     }
 
     .dropdown-menu {
-      display: none;
       position: absolute;
       top: 100%;
-      left: 0;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
       border-radius: 15px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-      z-index: 1000;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      z-index: 10000;
       min-width: 220px;
       margin-top: 8px;
       overflow: hidden;
+      display: none;
     }
 
     .dropdown-menu.show {
@@ -182,81 +177,77 @@
     @keyframes dropdownSlide {
       from {
         opacity: 0;
-        transform: translateY(-10px);
+        transform: translateX(-50%) translateY(-10px);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
       }
     }
 
     .dropdown-item {
-      padding: 12px 20px;
+      padding: 15px 20px;
       cursor: pointer;
       transition: background-color 0.3s ease;
       font-weight: 500;
       color: var(--dark-color);
+      border-bottom: 1px solid #e8ecf0;
+    }
+
+    .dropdown-item:last-child {
+      border-bottom: none;
     }
 
     .dropdown-item:hover {
-      background-color: rgba(102, 126, 234, 0.1);
+      background-color: #f8f9fa;
       color: var(--primary-color);
     }
 
-    .dropdown-item:not(:last-child) {
-      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-
-    /* Main Content Section */
+    /* Main Content */
     .main-content {
       padding: 25px;
-      background: white;
     }
 
+    /* Form Section */
     .form-section {
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 20px;
+      background: #f8f9fa;
+      border-radius: 15px;
       margin-bottom: 30px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
       overflow: hidden;
-      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     }
 
-    .form-toggle-btn {
-      width: 100%;
+    .form-header {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      border: none;
       padding: 15px 20px;
-      font-size: 16px;
-      font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
+      font-weight: 600;
+      font-size: 16px;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
       gap: 10px;
+      transition: all 0.3s ease;
     }
 
-    .form-toggle-btn:hover {
+    .form-header:hover {
       background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
     }
 
-    .form-content {
-      padding: 0;
+    .form-body {
       max-height: 0;
       overflow: hidden;
       transition: all 0.3s ease;
+      background: white;
     }
 
-    .form-content.expanded {
-      padding: 30px;
+    .form-body.expanded {
       max-height: 500px;
+      padding: 30px;
     }
 
-    .form-content input {
+    .form-body input {
       width: 100%;
       padding: 12px 16px;
       margin-bottom: 15px;
@@ -264,21 +255,15 @@
       border-radius: 8px;
       font-size: 14px;
       transition: all 0.3s ease;
-      background: white;
-      box-sizing: border-box;
     }
 
-    .form-content input:focus {
+    .form-body input:focus {
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
     }
 
-    .form-content input::placeholder {
-      color: #7f8c8d;
-    }
-
-    .form-content button {
+    .form-body button {
       width: 100%;
       background: linear-gradient(135deg, var(--success-color), #2ecc71);
       color: white;
@@ -286,117 +271,82 @@
       padding: 12px 20px;
       border-radius: 8px;
       font-weight: 600;
-      font-size: 14px;
       cursor: pointer;
       transition: all 0.3s ease;
       margin-top: 10px;
     }
 
-    .form-content button:hover {
+    .form-body button:hover {
       background: linear-gradient(135deg, #219150, #27ae60);
       transform: translateY(-1px);
     }
 
-    .table-wrapper {
-      overflow-x: auto;
+    /* Table */
+    .table-container {
+      background: white;
       border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background: transparent;
-    }
-
-    th, td {
-      padding: 12px 15px;
-      text-align: left;
-      border-bottom: 1px solid #e8ecf0;
     }
 
     th {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      position: sticky;
-      top: 0;
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
     }
 
-    th:nth-child(4), 
-    td:nth-child(4) {
+    th:nth-child(4) {
       text-align: center;
     }
 
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #e8ecf0;
+    }
+
     td:nth-child(4) {
+      text-align: center;
       font-weight: bold;
       font-size: 1.1em;
       color: var(--primary-color);
     }
 
     tr:nth-child(even) {
-      background-color: rgba(248, 249, 250, 0.5);
+      background-color: #f8f9fa;
     }
 
     tr:hover {
-      background-color: rgba(227, 242, 253, 0.5);
+      background-color: #e3f2fd;
     }
 
     .draggable-row {
       cursor: move;
       transition: all 0.3s ease;
-      user-select: none;
     }
 
     .draggable-row:hover {
-      background-color: rgba(227, 242, 253, 0.7) !important;
+      background-color: #e3f2fd !important;
     }
 
     .draggable-row.dragging {
       opacity: 0.5;
-      transform: rotate(2deg) scale(1.02);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      transform: scale(1.02);
       z-index: 1000;
-      background: white !important;
-    }
-
-    .draggable-row.drag-over {
-      border-top: 3px solid var(--primary-color);
-      background-color: rgba(102, 126, 234, 0.1) !important;
     }
 
     .drag-handle {
       color: var(--primary-color);
       font-size: 16px;
-      opacity: 0.5;
-      transition: opacity 0.3s ease;
+      opacity: 0.7;
       cursor: grab;
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    .channel-content {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      width: 100%;
-    }
-
-    .channel-content .drag-handle {
-      flex-shrink: 0;
-      margin-right: 0;
-    }
-
-    .channel-content .channel-display {
-      flex: 1;
-    }
-
-    .channel-content .channel-edit {
-      flex: 1;
-      max-width: none;
+      margin-right: 8px;
     }
 
     .drag-handle:active {
@@ -407,65 +357,71 @@
       opacity: 1;
     }
 
-    .status-btn {
-      padding: 8px 15px;
-      border-radius: 20px;
+    .channel-content {
+      display: flex;
+      align-items: center;
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 15px;
       font-weight: 600;
+      font-size: 0.8em;
+      text-transform: uppercase;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-completed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .status-btn {
+      padding: 8px 16px;
       border: none;
+      border-radius: 15px;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      width: 130px;
-      text-align: center;
     }
 
     .status-btn.completed {
       background: linear-gradient(135deg, var(--success-color), #2ecc71);
     }
 
-    .delete-icon {
+    .delete-btn {
       background: var(--danger-color);
       color: white;
       border: none;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: inline-flex;
+      width: 32px;
+      height: 32px;
+      display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      margin-left: 10px;
       transition: all 0.3s ease;
     }
 
-    .delete-icon:hover {
+    .delete-btn:hover {
       background: #c0392b;
       transform: scale(1.1);
     }
 
-    .status-badge {
-      padding: 8px 15px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.85em;
-      text-transform: uppercase;
-      display: inline-block;
-    }
-
-    .status-pending {
-      background-color: #ffecb3;
-      color: #ff9800;
-    }
-
-    .status-completed {
-      background-color: #c8e6c9;
-      color: #388e3c;
-    }
-
     .edit-pencil {
       color: var(--primary-color);
-      font-size: 16px;
       cursor: pointer;
       margin-left: 8px;
       opacity: 0.7;
@@ -477,82 +433,38 @@
       transform: scale(1.1);
     }
 
-    .row-editing {
-      background-color: #fff3cd !important;
-    }
-
     .edit-input {
-      width: 100%;
-      max-width: 100%;
-      padding: 6px 8px;
+      padding: 4px 8px;
       border: 2px solid var(--primary-color);
-      border-radius: 5px;
+      border-radius: 4px;
       font-size: 14px;
-      background: white;
-      box-sizing: border-box;
-    }
-
-    .videos-edit {
-      width: 60px;
-      max-width: 60px;
-    }
-
-    .collaborator-edit {
-      max-width: 120px;
-    }
-
-    .client-edit {
-      max-width: 150px;
-    }
-
-    .channel-edit {
-      max-width: 180px;
-    }
-
-    .edit-input:focus {
-      outline: none;
-      box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
     }
 
     .edit-actions {
       display: flex;
       gap: 5px;
-      justify-content: center;
-      align-items: center;
     }
 
-    .save-edit-btn {
+    .edit-btn {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .save-btn {
       background: var(--success-color);
       color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
     }
 
-    .save-edit-btn:hover {
-      background: #219150;
-      transform: scale(1.05);
-    }
-
-    .cancel-edit-btn {
+    .cancel-btn {
       background: var(--danger-color);
       color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
     }
 
-    .cancel-edit-btn:hover {
-      background: #c0392b;
-      transform: scale(1.05);
-    }
-
+    /* Celebration Modal */
     .celebration-modal {
       position: fixed;
       top: 0;
@@ -563,7 +475,7 @@
       display: none;
       justify-content: center;
       align-items: center;
-      z-index: 10000;
+      z-index: 20000;
       backdrop-filter: blur(10px);
     }
 
@@ -583,379 +495,161 @@
       padding: 40px;
       text-align: center;
       box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-      position: relative;
-      overflow: hidden;
       max-width: 500px;
       width: 90%;
-      transform: scale(0.8);
       animation: celebrationPop 0.6s ease forwards;
     }
 
     @keyframes celebrationPop {
-      0% {
-        transform: scale(0.8);
-        opacity: 0;
-      }
-      50% {
-        transform: scale(1.05);
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
     }
 
-    .celebration-emoji {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 20px;
-      animation: bounce 1.5s infinite;
-    }
-
-    .green-circle {
-      width: 120px;
-      height: 120px;
+    .celebration-icon {
+      width: 100px;
+      height: 100px;
       background: linear-gradient(135deg, #27ae60, #2ecc71);
       border-radius: 50%;
       display: flex;
-      justify-content: center;
       align-items: center;
-      box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4);
-      animation: pulse 2s infinite;
-    }
-
-    .white-tick {
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 48px;
       color: white;
-      font-size: 60px;
-      font-weight: bold;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    @keyframes pulse {
-      0% {
-        box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4), 0 0 0 0 rgba(39, 174, 96, 0.7);
-      }
-      70% {
-        box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4), 0 0 0 20px rgba(39, 174, 96, 0);
-      }
-      100% {
-        box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4), 0 0 0 0 rgba(39, 174, 96, 0);
-      }
+      animation: bounce 1.5s infinite;
     }
 
     @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-20px);
-      }
-      60% {
-        transform: translateY(-10px);
-      }
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-20px); }
+      60% { transform: translateY(-10px); }
     }
 
     .celebration-title {
       color: white;
-      font-size: 48px;
+      font-size: 36px;
       font-weight: bold;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      animation: glow 2s ease-in-out infinite alternate;
-    }
-
-    @keyframes glow {
-      from {
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.5);
-      }
-      to {
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 255, 255, 0.8);
-      }
-    }
-
-    .celebration-line {
-      width: 80%;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #fff, transparent);
-      margin: 20px auto;
-      border-radius: 2px;
-      animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-      0% {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(100%);
-        opacity: 0;
-      }
+      margin-bottom: 15px;
     }
 
     .celebration-message {
       color: white;
-      font-size: 22px;
-      font-weight: 600;
-      margin-bottom: 30px;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-      animation: fadeInUp 1s ease 0.5s both;
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      font-size: 18px;
+      margin-bottom: 25px;
     }
 
     .celebration-close {
       background: rgba(255, 255, 255, 0.2);
       color: white;
       border: 2px solid white;
-      padding: 12px 30px;
-      border-radius: 25px;
-      font-size: 16px;
+      padding: 10px 25px;
+      border-radius: 20px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
-      animation: fadeInUp 1s ease 1s both;
     }
 
     .celebration-close:hover {
       background: white;
       color: var(--primary-color);
-      transform: scale(1.05);
-      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
     }
 
-    .particle {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: white;
-      border-radius: 50%;
-      animation: float 3s infinite ease-in-out;
-      opacity: 0.7;
-    }
-
-    .particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
-    .particle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.5s; }
-    .particle:nth-child(3) { top: 80%; left: 40%; animation-delay: 1s; }
-    .particle:nth-child(4) { top: 40%; left: 70%; animation-delay: 1.5s; }
-    .particle:nth-child(5) { top: 30%; left: 10%; animation-delay: 2s; }
-
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-        opacity: 0.7;
-      }
-      50% {
-        transform: translateY(-20px) rotate(180deg);
-        opacity: 1;
-      }
-    }
-
+    /* Mobile Responsive */
     @media (max-width: 768px) {
-      .celebration-content {
-        padding: 30px 20px;
-        margin: 20px;
-      }
-
-      .celebration-title {
-        font-size: 36px;
-      }
-
-      .green-circle {
-        width: 80px;
-        height: 80px;
-      }
-
-      .white-tick {
-        font-size: 40px;
-      }
-
-      .celebration-message {
-        font-size: 18px;
-      }
-
       .container {
-        padding: 0;
+        margin: 10px;
       }
 
-      .header-content {
+      .header {
         padding: 15px;
       }
 
-      .header-section {
+      .header-nav {
         flex-direction: column;
-        align-items: center;
         gap: 10px;
       }
 
-      .status-container {
+      .control-bar {
         flex-direction: column;
         gap: 15px;
-        padding: 20px 15px;
+        padding: 15px;
       }
 
       .main-content {
         padding: 15px;
       }
 
-      .form-content input {
-        font-size: 16px;
-        margin-bottom: 12px;
-        padding: 10px 14px;
-      }
-
-      .form-content button {
-        font-size: 14px;
-        padding: 10px 16px;
-      }
-
-      .form-toggle-btn {
-        font-size: 14px;
-        padding: 12px 16px;
-      }
-
-      .table-wrapper table,
-      .table-wrapper thead,
-      .table-wrapper tbody,
-      .table-wrapper th,
-      .table-wrapper td,
-      .table-wrapper tr {
+      table, thead, tbody, th, td, tr {
         display: block;
       }
 
-      .table-wrapper thead tr {
+      thead tr {
         position: absolute;
         top: -9999px;
         left: -9999px;
       }
 
-      .table-wrapper tr {
-        background: white;
-        border: 1px solid #e8ecf0;
+      tr {
+        border: 1px solid #ccc;
         border-radius: 10px;
         margin-bottom: 15px;
         padding: 15px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .table-wrapper tr:nth-child(even) {
         background: white;
       }
 
-      .table-wrapper tr:hover {
-        background: white;
-        transform: none;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-      }
-
-      .table-wrapper td {
+      td {
         border: none;
-        padding: 8px 0;
-        text-align: left;
-        font-size: 14px;
+        padding: 10px 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
       }
 
-      .table-wrapper td::before {
+      td::before {
         content: attr(data-label);
         font-weight: bold;
         color: var(--primary-color);
-        flex-shrink: 0;
-        margin-right: 10px;
-        min-width: 80px;
+        min-width: 100px;
       }
 
-      .table-wrapper td:last-child {
-        justify-content: center;
+      .action-buttons {
         flex-direction: column;
-        gap: 10px;
-        margin-top: 10px;
-        border-top: 1px solid #e8ecf0;
-        padding-top: 15px;
-      }
-
-      .table-wrapper td:last-child::before {
-        display: none;
+        width: 100%;
       }
 
       .status-btn {
         width: 100%;
-        max-width: 200px;
-        padding: 10px;
-        font-size: 14px;
-      }
-
-      .delete-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-        margin-left: 0;
-        margin-top: 5px;
-      }
-
-      h1 {
-        font-size: 1.8em;
-        margin-bottom: 15px;
-      }
-
-      #currentDateTime {
-        font-size: 12px;
-        padding: 8px 15px;
-      }
-
-      .admin-btn {
-        font-size: 14px;
-        padding: 8px 15px;
-      }
-
-      .drag-handle {
-        font-size: 14px;
-      }
-
-      .edit-pencil {
-        font-size: 14px;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header Section -->
-    <div class="header-content">
+    <!-- Header -->
+    <div class="header">
       <h1>Video Production Tracker</h1>
-      <div class="header-section">
+      <div class="header-nav">
         <div id="currentDateTime">Loading time...</div>
-        <div>
-          <a href="task-dashboard.html" class="admin-btn">Manager Task</a>
-          <a href="channel-status-tracker.html" class="admin-btn">📊 Channel Status</a>
-          <a href="payment_tracker.html" class="admin-btn">💰 Payment Tracker</a>
+        <div class="nav-links">
+          <a href="task-dashboard.html" class="nav-btn">Manager Task</a>
+          <a href="channel-status-tracker.html" class="nav-btn">📊 Channel Status</a>
+          <a href="payment_tracker.html" class="nav-btn">💰 Payment Tracker</a>
         </div>
       </div>
     </div>
 
-    <!-- Status Container with White Background -->
-    <div class="status-container">
-      <div id="supabaseStatus">🟢 Connected to Database</div>
-      <button class="reset-btn" onclick="resetAllChannels()" id="resetBtn">
+    <!-- Control Bar -->
+    <div class="control-bar">
+      <div class="status-indicator" id="statusIndicator">
+        🟢 Connected to Database
+      </div>
+      
+      <button class="control-btn reset-btn" onclick="resetAllChannels()" id="resetBtn">
         🔄 Reset All Channels
       </button>
-      <div class="dropdown-container">
-        <button class="auto-reorder-btn" onclick="toggleDropdown()">
+      
+      <div class="dropdown-wrapper">
+        <button class="control-btn reorder-btn" onclick="toggleDropdown()">
           🔄 Auto Reorder ▼
         </button>
         <div class="dropdown-menu" id="dropdownMenu">
@@ -971,12 +665,13 @@
 
     <!-- Main Content -->
     <div class="main-content">
-      <div class="form-section" id="formSection">
-        <button class="form-toggle-btn" onclick="toggleForm()">
+      <!-- Add Channel Form -->
+      <div class="form-section">
+        <div class="form-header" onclick="toggleForm()">
           ➕ Add New Channel
-          <span class="toggle-icon">▼</span>
-        </button>
-        <div class="form-content" id="formContent">
+          <span id="formToggleIcon">▼</span>
+        </div>
+        <div class="form-body" id="formBody">
           <input type="text" id="channelId" placeholder="Channel ID (e.g. my-channel)" required />
           <input type="text" id="channelName" placeholder="Channel Name" required />
           <input type="text" id="client" placeholder="Client Name" />
@@ -986,7 +681,8 @@
         </div>
       </div>
 
-      <div class="table-wrapper">
+      <!-- Table -->
+      <div class="table-container">
         <table>
           <thead>
             <tr>
@@ -998,7 +694,9 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody id="tasksBody"></tbody>
+          <tbody id="tasksBody">
+            <!-- Table content will be loaded here -->
+          </tbody>
         </table>
       </div>
     </div>
@@ -1006,19 +704,8 @@
     <!-- Celebration Modal -->
     <div class="celebration-modal" id="celebrationModal">
       <div class="celebration-content">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        
-        <div class="celebration-emoji">
-          <div class="green-circle">
-            <div class="white-tick">✓</div>
-          </div>
-        </div>
-        <h1 class="celebration-title">CONGRATULATIONS!</h1>
-        <div class="celebration-line"></div>
+        <div class="celebration-icon">✓</div>
+        <h2 class="celebration-title">CONGRATULATIONS!</h2>
         <p class="celebration-message">
           You Are Helping LemonCore To Grow, Keep That Up Champ!
         </p>
@@ -1036,22 +723,28 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBya3Jic3d0dG10Z2VwbHN2emxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTk5NjQsImV4cCI6MjA3MjYzNTk2NH0.Ul2cd-cpWHfpK1HTgHM7Tv2NDCrFWcAq2N-C7Tv9oz8'
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const tasksBody = document.getElementById('tasksBody');
-    const currentDateTime = document.getElementById('currentDateTime');
-    let draggedElement = null;
-    let channelOrder = [];
     let tasks = [];
+    let channelOrder = [];
+    let draggedElement = null;
 
+    // Initialize
     function init() {
       updateDateTime();
       setInterval(updateDateTime, 1000);
       loadTasks();
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.dropdown-wrapper')) {
+          document.getElementById('dropdownMenu').classList.remove('show');
+        }
+      });
     }
 
     function updateDateTime() {
       const now = new Date();
       const bdt = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
-      currentDateTime.textContent = bdt.toLocaleString('en-US', {
+      document.getElementById('currentDateTime').textContent = bdt.toLocaleString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
         hour: '2-digit', minute: '2-digit', second: '2-digit'
       });
@@ -1059,6 +752,7 @@
 
     async function loadTasks() {
       try {
+        // Load channel order
         const { data: orderData } = await supabase
           .from('channel_order')
           .select('*')
@@ -1066,6 +760,7 @@
         
         channelOrder = orderData || [];
         
+        // Load tasks
         const { data: tasksData, error } = await supabase
           .from('tasks')
           .select('*');
@@ -1075,234 +770,7 @@
         tasks = tasksData || [];
         renderTasks();
         
-        document.getElementById('supabaseStatus').innerHTML = '🟢 Connected to Database';
-      } catch (error) {
-        console.error('Error loading tasks:', error);
-        document.getElementById('supabaseStatus').innerHTML = '🔴 Connection Error';
-      }
-    }
-
-    function sortChannelsByOrder(tasks) {
-      if (channelOrder.length === 0) {
-        return tasks;
-      }
-      
-      const orderMap = {};
-      channelOrder.forEach(item => {
-        orderMap[item.channel_id] = item.order_position;
-      });
-      
-      const sortedTasks = [...tasks].sort((a, b) => {
-        const orderA = orderMap[a.id] !== undefined ? orderMap[a.id] : 999;
-        const orderB = orderMap[b.id] !== undefined ? orderMap[b.id] : 999;
-        return orderA - orderB;
-      });
-      
-      return sortedTasks;
-    }
-
-    function renderTasks() {
-      tasksBody.innerHTML = '';
-      
-      const sortedTasks = sortChannelsByOrder(tasks);
-      
-      sortedTasks.forEach(task => {
-        const row = document.createElement('tr');
-        row.setAttribute('data-channel-id', task.id);
-        row.className = 'draggable-row';
-        row.draggable = true;
-
-        row.innerHTML = `
-          <td data-label="Channel">
-            <div class="channel-content">
-              <span class="drag-handle">⋮⋮</span>
-              <span class="channel-display">${task.channel}</span>
-              <input type="text" class="edit-input channel-edit" value="${task.channel}" style="display: none;" />
-            </div>
-          </td>
-          <td data-label="Client">
-            <span class="client-display">${task.client || ''}</span>
-            <input type="text" class="edit-input client-edit" value="${task.client || ''}" style="display: none;" />
-          </td>
-          <td data-label="Collaborator">
-            <span class="collaborator-display">${task.collaborator || 'Unassigned'}</span>
-            <input type="text" class="edit-input collaborator-edit" value="${task.collaborator || ''}" style="display: none;" />
-          </td>
-          <td data-label="Videos/Month">
-            <span class="videos-display">${task.daily_videos || 0}</span>
-            <span class="edit-pencil" onclick="editRow('${task.id}')" title="Edit this row">✏️</span>
-            <input type="number" class="edit-input videos-edit" value="${task.daily_videos || 0}" style="display: none;" min="0" />
-          </td>
-          <td data-label="Status"><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
-          <td class="action-cell">
-            <div class="normal-actions">
-              <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${task.id}')">
-                ${task.status === 'completed' ? 'Completed' : 'Mark Complete'}
-              </button>
-              <button class="delete-icon" onclick="deleteChannel('${task.id}')">🗑️</button>
-            </div>
-            <div class="edit-actions" style="display: none;">
-              <button class="save-edit-btn" onclick="saveRowEdit('${task.id}')">✅ Save</button>
-              <button class="cancel-edit-btn" onclick="cancelRowEdit('${task.id}')">❌ Cancel</button>
-            </div>
-          </td>
-        `;
-        
-        row.addEventListener('dragstart', handleDragStart);
-        row.addEventListener('dragover', handleDragOver);
-        row.addEventListener('dragenter', handleDragEnter);
-        row.addEventListener('dragleave', handleDragLeave);
-        row.addEventListener('drop', handleDrop);
-        row.addEventListener('dragend', handleDragEnd);
-        
-        tasksBody.appendChild(row);
-      });
-    }
-
-    function handleDragStart(e) {
-      draggedElement = this;
-      this.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', this.outerHTML);
-    }
-
-    function handleDragOver(e) {
-      if (e.preventDefault) {
-        e.preventDefault();
-      }
-      e.dataTransfer.dropEffect = 'move';
-      return false;
-    }
-
-    function handleDragEnter(e) {
-      this.classList.add('drag-over');
-    }
-
-    function handleDragLeave(e) {
-      this.classList.remove('drag-over');
-    }
-
-    function handleDrop(e) {
-      if (e.stopPropagation) {
-        e.stopPropagation();
-      }
-
-      if (draggedElement !== this) {
-        const targetRect = this.getBoundingClientRect();
-        const targetMiddle = targetRect.top + targetRect.height / 2;
-        
-        if (e.clientY < targetMiddle) {
-          this.parentNode.insertBefore(draggedElement, this);
-        } else {
-          this.parentNode.insertBefore(draggedElement, this.nextSibling);
-        }
-        
-        saveChannelOrder();
-      }
-
-      this.classList.remove('drag-over');
-      return false;
-    }
-
-    function handleDragEnd(e) {
-      const allRows = document.querySelectorAll('#tasksBody tr');
-      allRows.forEach(row => {
-        row.classList.remove('dragging', 'drag-over');
-      });
-      draggedElement = null;
-    }
-
-    async function saveChannelOrder() {
-      try {
-        const rows = document.querySelectorAll('#tasksBody tr');
-        const newOrder = [];
-        
-        rows.forEach((row, index) => {
-          const channelId = row.getAttribute('data-channel-id');
-          if (channelId) {
-            newOrder.push({
-              channel_id: channelId,
-              order_position: index
-            });
-          }
-        });
-        
-        await supabase.from('channel_order').delete().gt('id', 0);
-        if (newOrder.length > 0) {
-          await supabase.from('channel_order').insert(newOrder);
-        }
-        
-        channelOrder = newOrder;
-      } catch (error) {
-        console.error('Error saving channel order:', error);
-      }
-    }
-
-    window.toggleForm = function() {
-      const formSection = document.getElementById('formSection');
-      const formContent = document.getElementById('formContent');
-      const toggleBtn = document.querySelector('.form-toggle-btn');
-      
-      if (formContent.classList.contains('expanded')) {
-        formContent.classList.remove('expanded');
-        formSection.classList.remove('expanded');
-        toggleBtn.innerHTML = `➕ Add New Channel <span class="toggle-icon">▼</span>`;
-      } else {
-        formContent.classList.add('expanded');
-        formSection.classList.add('expanded');
-        toggleBtn.innerHTML = `➖ Hide Form <span class="toggle-icon">▲</span>`;
-        setTimeout(() => {
-          document.getElementById('channelId').focus();
-        }, 300);
-      }
-    };
-
-    window.addChannel = async function() {
-      const id = document.getElementById('channelId').value.trim();
-      const channel = document.getElementById('channelName').value.trim();
-      const client = document.getElementById('client').value.trim();
-      const collaborator = document.getElementById('collaborator').value.trim();
-      const monthlyVideos = +document.getElementById('monthlyVideos').value || 0;
-
-      if (!id || !channel) {
-        alert("Channel ID and Name are required.");
-        return;
-      }
-
-      try {
-        const { error } = await supabase
-          .from('tasks')
-          .insert([{
-            id: id,
-            channel: channel,
-            client: client,
-            collaborator: collaborator,
-            daily_videos: monthlyVideos,
-            status: 'pending',
-            last_updated: new Date().toISOString(),
-            created_at: new Date().toISOString()
-          }]);
-
-        if (error) throw error;
-
-        tasks.push({
-          id: id,
-          channel: channel,
-          client: client,
-          collaborator: collaborator,
-          daily_videos: monthlyVideos,
-          status: 'pending'
-        });
-
-        document.getElementById('channelId').value = '';
-        document.getElementById('channelName').value = '';
-        document.getElementById('client').value = '';
-        document.getElementById('collaborator').value = '';
-        document.getElementById('monthlyVideos').value = '';
-        
-        toggleForm();
-        renderTasks();
-        alert('✅ Channel added successfully!');
+        document.getElementById('statusIndicator').innerHTML = '🟢 Connected to Database';
       } catch (error) {
         console.error('Error adding channel:', error);
         if (error.code === '23505') {
@@ -1355,6 +823,7 @@
           tasks = tasks.filter(t => t.id !== id);
           renderTasks();
           
+          // Also remove from channel order
           await supabase
             .from('channel_order')
             .delete()
@@ -1370,112 +839,37 @@
     };
 
     window.editRow = function(id) {
-      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
-      if (!row) return;
-      
-      row.draggable = false;
-      row.classList.add('row-editing');
-      
-      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
-      const inputs = row.querySelectorAll('.edit-input');
-      
-      displays.forEach(display => display.style.display = 'none');
-      inputs.forEach(input => input.style.display = 'block');
-      
-      const normalActions = row.querySelector('.normal-actions');
-      const editActions = row.querySelector('.edit-actions');
-      normalActions.style.display = 'none';
-      editActions.style.display = 'flex';
-      
-      const firstInput = row.querySelector('.channel-edit');
-      if (firstInput) {
-        firstInput.focus();
-        firstInput.select();
+      // Simple edit functionality - you can expand this
+      const newName = prompt('Enter new channel name:');
+      if (newName && newName.trim()) {
+        updateChannelName(id, newName.trim());
       }
     };
 
-    window.saveRowEdit = async function(id) {
-      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
-      if (!row) return;
-      
-      const newChannel = row.querySelector('.channel-edit').value.trim();
-      const newClient = row.querySelector('.client-edit').value.trim();
-      const newCollaborator = row.querySelector('.collaborator-edit').value.trim();
-      const newVideos = parseInt(row.querySelector('.videos-edit').value) || 0;
-      
-      if (!newChannel) {
-        alert('Channel name cannot be empty!');
-        return;
-      }
-      
+    async function updateChannelName(id, newName) {
       try {
         const { error } = await supabase
           .from('tasks')
-          .update({
-            channel: newChannel,
-            client: newClient,
-            collaborator: newCollaborator,
-            daily_videos: newVideos,
-            last_updated: new Date().toISOString()
+          .update({ 
+            channel: newName,
+            last_updated: new Date().toISOString() 
           })
           .eq('id', id);
         
         if (error) throw error;
         
-        const taskIndex = tasks.findIndex(t => t.id === id);
-        if (taskIndex !== -1) {
-          tasks[taskIndex] = {
-            ...tasks[taskIndex],
-            channel: newChannel,
-            client: newClient,
-            collaborator: newCollaborator,
-            daily_videos: newVideos
-          };
+        const task = tasks.find(t => t.id === id);
+        if (task) {
+          task.channel = newName;
+          renderTasks();
         }
         
-        row.querySelector('.channel-display').textContent = newChannel;
-        row.querySelector('.client-display').textContent = newClient;
-        row.querySelector('.collaborator-display').textContent = newCollaborator || 'Unassigned';
-        row.querySelector('.videos-display').textContent = newVideos;
-        
-        cancelRowEdit(id);
-        
-        alert('✅ Row updated successfully!');
-        
+        alert('✅ Channel name updated successfully!');
       } catch (error) {
-        console.error('Error updating row:', error);
-        alert('❌ Failed to update row. Please try again.');
+        console.error('Error updating channel:', error);
+        alert('❌ Failed to update channel name');
       }
-    };
-
-    window.cancelRowEdit = function(id) {
-      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
-      if (!row) return;
-      
-      row.draggable = true;
-      row.classList.remove('row-editing');
-      
-      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
-      const inputs = row.querySelectorAll('.edit-input');
-      
-      displays.forEach(display => display.style.display = 'inline');
-      inputs.forEach(input => input.style.display = 'none');
-      
-      const normalActions = row.querySelector('.normal-actions');
-      const editActions = row.querySelector('.edit-actions');
-      normalActions.style.display = 'block';
-      editActions.style.display = 'none';
-      
-      const originalChannel = row.querySelector('.channel-display').textContent;
-      const originalClient = row.querySelector('.client-display').textContent;
-      const originalCollaborator = row.querySelector('.collaborator-display').textContent;
-      const originalVideos = row.querySelector('.videos-display').textContent;
-      
-      row.querySelector('.channel-edit').value = originalChannel;
-      row.querySelector('.client-edit').value = originalClient;
-      row.querySelector('.collaborator-edit').value = originalCollaborator === 'Unassigned' ? '' : originalCollaborator;
-      row.querySelector('.videos-edit').value = originalVideos;
-    };
+    }
 
     window.resetAllChannels = async function() {
       const confirmation = confirm(
@@ -1521,13 +915,6 @@
     window.toggleDropdown = function() {
       const dropdown = document.getElementById('dropdownMenu');
       dropdown.classList.toggle('show');
-      
-      document.addEventListener('click', function closeDropdown(e) {
-        if (!e.target.closest('.dropdown-container')) {
-          dropdown.classList.remove('show');
-          document.removeEventListener('click', closeDropdown);
-        }
-      });
     };
 
     window.reorderBy = async function(type) {
@@ -1535,16 +922,16 @@
       dropdown.classList.remove('show');
       
       try {
-        const { data: tasks, error } = await supabase
+        const { data: fetchedTasks, error } = await supabase
           .from('tasks')
           .select('*')
         
         if (error) throw error;
 
-        let sortedEntries;
+        let sortedTasks;
         
         if (type === 'collaborator') {
-          sortedEntries = tasks.sort((a, b) => {
+          sortedTasks = fetchedTasks.sort((a, b) => {
             const collabA = (a.collaborator || 'Unassigned').toLowerCase();
             const collabB = (b.collaborator || 'Unassigned').toLowerCase();
             if (collabA === collabB) {
@@ -1553,12 +940,12 @@
             return collabA.localeCompare(collabB);
           });
         } else if (type === 'project') {
-          sortedEntries = tasks.sort((a, b) => {
+          sortedTasks = fetchedTasks.sort((a, b) => {
             return a.channel.toLowerCase().localeCompare(b.channel.toLowerCase());
           });
         }
         
-        const newOrder = sortedEntries.map((task, index) => ({
+        const newOrder = sortedTasks.map((task, index) => ({
           channel_id: task.id,
           order_position: index
         }));
@@ -1567,7 +954,6 @@
         await supabase.from('channel_order').insert(newOrder);
         
         channelOrder = newOrder;
-        
         await loadTasks();
         
         const orderType = type === 'collaborator' ? 'Collaborator' : 'Project';
@@ -1584,7 +970,7 @@
       
       setTimeout(() => {
         closeCelebration();
-      }, 10000);
+      }, 5000);
     };
 
     window.closeCelebration = function() {
@@ -1592,20 +978,198 @@
       modal.classList.remove('show');
     };
 
-    document.addEventListener('keydown', function(e) {
-      if (e.target.classList.contains('edit-input')) {
-        const row = e.target.closest('tr');
-        const channelId = row.getAttribute('data-channel-id');
-        
-        if (e.key === 'Enter') {
-          saveRowEdit(channelId);
-        } else if (e.key === 'Escape') {
-          cancelRowEdit(channelId);
-        }
-      }
-    });
-
+    // Initialize the app
     init();
   </script>
 </body>
 </html>
+        console.error('Error loading tasks:', error);
+        document.getElementById('statusIndicator').innerHTML = '🔴 Connection Error';
+      }
+    }
+
+    function sortChannelsByOrder(tasks) {
+      if (channelOrder.length === 0) {
+        return tasks;
+      }
+      
+      const orderMap = {};
+      channelOrder.forEach(item => {
+        orderMap[item.channel_id] = item.order_position;
+      });
+      
+      return [...tasks].sort((a, b) => {
+        const orderA = orderMap[a.id] !== undefined ? orderMap[a.id] : 999;
+        const orderB = orderMap[b.id] !== undefined ? orderMap[b.id] : 999;
+        return orderA - orderB;
+      });
+    }
+
+    function renderTasks() {
+      const tbody = document.getElementById('tasksBody');
+      
+      if (tasks.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No channels found. Add a channel to get started.</td></tr>';
+        return;
+      }
+
+      const sortedTasks = sortChannelsByOrder(tasks);
+      
+      tbody.innerHTML = sortedTasks.map(task => `
+        <tr class="draggable-row" data-channel-id="${task.id}" draggable="true">
+          <td data-label="Channel">
+            <div class="channel-content">
+              <span class="drag-handle">⋮⋮</span>
+              <span class="channel-name">${task.channel}</span>
+              <span class="edit-pencil" onclick="editRow('${task.id}')" title="Edit">✏️</span>
+            </div>
+          </td>
+          <td data-label="Client">${task.client || 'Not specified'}</td>
+          <td data-label="Collaborator">${task.collaborator || 'Unassigned'}</td>
+          <td data-label="Videos/Month">${task.daily_videos || 0}</td>
+          <td data-label="Status">
+            <span class="status-badge status-${task.status}">
+              ${task.status.toUpperCase()}
+            </span>
+          </td>
+          <td data-label="Action">
+            <div class="action-buttons">
+              <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" 
+                      onclick="toggleTask('${task.id}')">
+                ${task.status === 'completed' ? 'Completed' : 'Mark Complete'}
+              </button>
+              <button class="delete-btn" onclick="deleteChannel('${task.id}')" title="Delete">
+                🗑️
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+
+      // Add drag event listeners
+      document.querySelectorAll('.draggable-row').forEach(row => {
+        row.addEventListener('dragstart', handleDragStart);
+        row.addEventListener('dragover', handleDragOver);
+        row.addEventListener('drop', handleDrop);
+        row.addEventListener('dragend', handleDragEnd);
+      });
+    }
+
+    // Drag and Drop
+    function handleDragStart(e) {
+      draggedElement = this;
+      this.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      if (draggedElement !== this) {
+        const tbody = this.parentNode;
+        const targetRect = this.getBoundingClientRect();
+        const targetMiddle = targetRect.top + targetRect.height / 2;
+        
+        if (e.clientY < targetMiddle) {
+          tbody.insertBefore(draggedElement, this);
+        } else {
+          tbody.insertBefore(draggedElement, this.nextSibling);
+        }
+        
+        saveChannelOrder();
+      }
+    }
+
+    function handleDragEnd() {
+      document.querySelectorAll('.draggable-row').forEach(row => {
+        row.classList.remove('dragging');
+      });
+      draggedElement = null;
+    }
+
+    async function saveChannelOrder() {
+      try {
+        const rows = document.querySelectorAll('.draggable-row');
+        const newOrder = Array.from(rows).map((row, index) => ({
+          channel_id: row.getAttribute('data-channel-id'),
+          order_position: index
+        }));
+        
+        await supabase.from('channel_order').delete().gt('id', 0);
+        if (newOrder.length > 0) {
+          await supabase.from('channel_order').insert(newOrder);
+        }
+        
+        channelOrder = newOrder;
+      } catch (error) {
+        console.error('Error saving channel order:', error);
+      }
+    }
+
+    // Global Functions
+    window.toggleForm = function() {
+      const formBody = document.getElementById('formBody');
+      const icon = document.getElementById('formToggleIcon');
+      
+      if (formBody.classList.contains('expanded')) {
+        formBody.classList.remove('expanded');
+        icon.textContent = '▼';
+      } else {
+        formBody.classList.add('expanded');
+        icon.textContent = '▲';
+        setTimeout(() => document.getElementById('channelId').focus(), 300);
+      }
+    };
+
+    window.addChannel = async function() {
+      const id = document.getElementById('channelId').value.trim();
+      const channel = document.getElementById('channelName').value.trim();
+      const client = document.getElementById('client').value.trim();
+      const collaborator = document.getElementById('collaborator').value.trim();
+      const monthlyVideos = +document.getElementById('monthlyVideos').value || 0;
+
+      if (!id || !channel) {
+        alert("Channel ID and Name are required.");
+        return;
+      }
+
+      try {
+        const { error } = await supabase
+          .from('tasks')
+          .insert([{
+            id: id,
+            channel: channel,
+            client: client,
+            collaborator: collaborator,
+            daily_videos: monthlyVideos,
+            status: 'pending',
+            last_updated: new Date().toISOString(),
+            created_at: new Date().toISOString()
+          }]);
+
+        if (error) throw error;
+
+        tasks.push({
+          id: id,
+          channel: channel,
+          client: client,
+          collaborator: collaborator,
+          daily_videos: monthlyVideos,
+          status: 'pending'
+        });
+
+        // Clear form
+        document.getElementById('channelId').value = '';
+        document.getElementById('channelName').value = '';
+        document.getElementById('client').value = '';
+        document.getElementById('collaborator').value = '';
+        document.getElementById('monthlyVideos').value = '';
+        
+        toggleForm();
+        renderTasks();
+        alert('✅ Channel added successfully!');
+      } catch (error) {
