@@ -613,15 +613,15 @@
             <!-- Summary Cards -->
             <div class="summary-grid" id="summaryGrid">
                 <div class="summary-card revenue-card">
-                    <h3>💰 Total Daily Revenue</h3>
+                    <h3>💰 Total Monthly Revenue</h3>
                     <div class="amount" id="totalRevenue">৳0.00</div>
                 </div>
                 <div class="summary-card expense-card">
-                    <h3>💸 Total Daily Expenses</h3>
+                    <h3>💸 Total Monthly Expenses</h3>
                     <div class="amount" id="totalExpenses">৳0.00</div>
                 </div>
                 <div class="summary-card profit-card">
-                    <h3>💎 Net Daily Profit</h3>
+                    <h3>💎 Net Monthly Profit</h3>
                     <div class="amount" id="netProfit">৳0.00</div>
                 </div>
             </div>
@@ -629,7 +629,7 @@
             <!-- Collaborators Earnings Table -->
             <div id="collaboratorsSection" style="margin-bottom: 40px;">
                 <h2 style="text-align: center; color: #2c3e50; margin-bottom: 25px; font-size: 1.8em; font-weight: 300;">
-                    🤝 Collaborators Daily Earnings
+                    🤝 Collaborators Monthly Earnings
                 </h2>
                 <div id="collaboratorsTable">
                     <div class="loading-state">
@@ -840,29 +840,29 @@
 
             const channelsHTML = channels.map(channel => {
                 const payments = channelPayments[channel.id] || { client_rate: 0, collaborator_rate: 0 };
-                const dailyVideos = parseInt(channel.daily_videos) || 0;
+                const monthlyVideos = parseInt(channel.daily_videos) || 0;
                 
-                // Calculate daily amounts
-                const dailyClientRevenue = payments.client_rate * dailyVideos;
-                const dailyCollaboratorCost = payments.collaborator_rate * dailyVideos;
-                const dailyProfit = dailyClientRevenue - dailyCollaboratorCost;
+                // Calculate monthly amounts
+                const monthlyClientRevenue = payments.client_rate * monthlyVideos;
+                const monthlyCollaboratorCost = payments.collaborator_rate * monthlyVideos;
+                const monthlyProfit = monthlyClientRevenue - monthlyCollaboratorCost;
                 
                 let profitClass = 'profit-neutral';
                 let profitText = 'No data available';
                 
-                if (dailyVideos > 0 && (payments.client_rate > 0 || payments.collaborator_rate > 0)) {
-                    profitClass = dailyProfit >= 0 ? 'profit-positive' : 'profit-negative';
-                    profitText = `Daily ${dailyProfit >= 0 ? 'Profit' : 'Loss'}: ৳${Math.abs(dailyProfit).toFixed(2)}`;
+                if (monthlyVideos > 0 && (payments.client_rate > 0 || payments.collaborator_rate > 0)) {
+                    profitClass = monthlyProfit >= 0 ? 'profit-positive' : 'profit-negative';
+                    profitText = `Monthly ${monthlyProfit >= 0 ? 'Profit' : 'Loss'}: ৳${Math.abs(monthlyProfit).toFixed(2)}`;
                     
-                    if (dailyClientRevenue > 0) {
-                        const margin = ((dailyProfit / dailyClientRevenue) * 100).toFixed(1);
+                    if (monthlyClientRevenue > 0) {
+                        const margin = ((monthlyProfit / monthlyClientRevenue) * 100).toFixed(1);
                         profitText += ` (${margin}% margin)`;
                     }
                     
                     // Add breakdown
-                    profitText += `<br><small>Revenue: ৳${dailyClientRevenue.toFixed(2)} | Cost: ৳${dailyCollaboratorCost.toFixed(2)}</small>`;
-                } else if (dailyVideos === 0) {
-                    profitText = 'Set daily video count first';
+                    profitText += `<br><small>Revenue: ৳${monthlyClientRevenue.toFixed(2)} | Cost: ৳${monthlyCollaboratorCost.toFixed(2)}</small>`;
+                } else if (monthlyVideos === 0) {
+                    profitText = 'Set monthly video count first';
                 }
 
                 return `
@@ -872,7 +872,7 @@
                                 <h3>📺 ${channel.channel}</h3>
                                 <div class="channel-meta">👤 Client: ${channel.client || 'Not specified'}</div>
                                 <div class="channel-meta">🤝 Collaborator: ${channel.collaborator || 'Unassigned'}</div>
-                                <div class="channel-meta">📹 Videos/Day: ${dailyVideos}</div>
+                                <div class="channel-meta">📹 Videos/Month: ${monthlyVideos}</div>
                             </div>
                             <div class="status-badge status-${channel.status}">
                                 ${channel.status || 'pending'}
@@ -934,8 +934,8 @@
                 if (collaborator === 'Unassigned') return; // Skip unassigned channels
                 
                 const payments = channelPayments[channel.id] || { client_rate: 0, collaborator_rate: 0 };
-                const dailyVideos = parseInt(channel.daily_videos) || 0;
-                const dailyEarning = payments.collaborator_rate * dailyVideos;
+                const monthlyVideos = parseInt(channel.daily_videos) || 0;
+                const monthlyEarning = payments.collaborator_rate * monthlyVideos;
                 
                 if (!collaboratorData[collaborator]) {
                     collaboratorData[collaborator] = {
@@ -945,11 +945,11 @@
                     };
                 }
                 
-                collaboratorData[collaborator].totalEarnings += dailyEarning;
+                collaboratorData[collaborator].totalEarnings += monthlyEarning;
                 collaboratorData[collaborator].channels.push({
                     name: channel.channel,
-                    earning: dailyEarning,
-                    videos: dailyVideos,
+                    earning: monthlyEarning,
+                    videos: monthlyVideos,
                     rate: payments.collaborator_rate
                 });
             });
@@ -991,7 +991,7 @@
                         </div>
                         
                         <div class="collaborator-earnings">
-                            ৳${collaborator.totalEarnings.toFixed(2)}/day
+                            ৳${collaborator.totalEarnings.toFixed(2)}/month
                         </div>
                         
                         <div class="collaborator-channels">
@@ -1047,26 +1047,26 @@
         };
 
         function updateSummary() {
-            let totalDailyRevenue = 0;
-            let totalDailyExpenses = 0;
+            let totalMonthlyRevenue = 0;
+            let totalMonthlyExpenses = 0;
 
             channels.forEach(channel => {
                 const payments = channelPayments[channel.id] || { client_rate: 0, collaborator_rate: 0 };
-                const dailyVideos = parseInt(channel.daily_videos) || 0;
+                const monthlyVideos = parseInt(channel.daily_videos) || 0;
                 
-                totalDailyRevenue += (payments.client_rate || 0) * dailyVideos;
-                totalDailyExpenses += (payments.collaborator_rate || 0) * dailyVideos;
+                totalMonthlyRevenue += (payments.client_rate || 0) * monthlyVideos;
+                totalMonthlyExpenses += (payments.collaborator_rate || 0) * monthlyVideos;
             });
 
-            const netDailyProfit = totalDailyRevenue - totalDailyExpenses;
+            const netMonthlyProfit = totalMonthlyRevenue - totalMonthlyExpenses;
 
-            document.getElementById('totalRevenue').textContent = `৳${totalDailyRevenue.toFixed(2)}`;
-            document.getElementById('totalExpenses').textContent = `৳${totalDailyExpenses.toFixed(2)}`;
-            document.getElementById('netProfit').textContent = `৳${netDailyProfit.toFixed(2)}`;
+            document.getElementById('totalRevenue').textContent = `৳${totalMonthlyRevenue.toFixed(2)}`;
+            document.getElementById('totalExpenses').textContent = `৳${totalMonthlyExpenses.toFixed(2)}`;
+            document.getElementById('netProfit').textContent = `৳${netMonthlyProfit.toFixed(2)}`;
             
             // Update profit card color based on profit/loss
             const profitCard = document.querySelector('.profit-card .amount');
-            if (netDailyProfit >= 0) {
+            if (netMonthlyProfit >= 0) {
                 profitCard.style.color = 'white';
             } else {
                 profitCard.style.color = '#ffeb3b';
