@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Video Production Tracker</title>
+  <title>Enhanced Video Production Tracker</title>
   <style>
     :root {
       --primary-color: #667eea;
       --secondary-color: #764ba2;
       --success-color: #27ae60;
       --danger-color: #e74c3c;
+      --warning-color: #f39c12;
       --light-color: #f8f9fa;
       --dark-color: #2c3e50;
     }
@@ -28,7 +29,7 @@
       border-radius: 15px;
       padding: 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
     }
 
@@ -47,150 +48,219 @@
       gap: 15px;
     }
 
-    .status-container {
-      text-align: center;
-      margin-bottom: 20px;
+    .nav-buttons {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
+      gap: 10px;
       flex-wrap: wrap;
     }
 
-    #supabaseStatus {
-      padding: 8px 15px;
-      border-radius: 20px;
-      font-weight: 600;
-      color: white;
-      display: inline-block;
-      background: linear-gradient(135deg, var(--success-color), #2ecc71);
-    }
-
-    #currentDateTime {
+    .nav-btn, .admin-btn {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      padding: 10px 20px;
-      border-radius: 20px;
-      display: inline-block;
-    }
-
-    .admin-btn {
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: white;
-      padding: 10px 20px;
+      padding: 10px 15px;
       border-radius: 20px;
       text-decoration: none;
       font-weight: 600;
       box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
       transition: all 0.3s ease;
+      font-size: 12px;
     }
 
-    .admin-btn:hover {
+    .nav-btn:hover, .admin-btn:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
     }
 
-    /* Reset Button - GREEN COLOR */
-    .reset-btn {
-      background: linear-gradient(135deg, #27ae60, #2ecc71);
+    /* Analytics Dashboard */
+    .analytics-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-      display: inline-block;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
     }
 
-    .reset-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(39, 174, 96, 0.5);
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 10px;
     }
 
-    .reset-btn:disabled {
-      background: #95a5a6;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
+    .stat-label {
+      font-size: 0.9em;
+      opacity: 0.9;
     }
 
-    /* Auto Reorder Dropdown Styles */
-    .dropdown-container {
-      position: relative;
-      display: inline-block;
+    /* Search and Filter Section */
+    .controls-section {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 15px;
+      padding: 20px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     }
 
-    .auto-reorder-btn {
-      background: linear-gradient(135deg, #f39c12, #e67e22);
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
-      display: inline-block;
-    }
-
-    .auto-reorder-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(243, 156, 18, 0.5);
-    }
-
-    .dropdown-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      z-index: 1000;
-      min-width: 200px;
-      margin-top: 5px;
-      overflow: hidden;
-    }
-
-    .dropdown-menu.show {
-      display: block;
-      animation: dropdownSlide 0.3s ease;
-    }
-
-    @keyframes dropdownSlide {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .dropdown-item {
+    .search-bar {
+      width: 100%;
       padding: 12px 20px;
+      border: 2px solid #e8ecf0;
+      border-radius: 25px;
+      font-size: 14px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .search-bar:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .filter-select {
+      padding: 8px 15px;
+      border: 2px solid #e8ecf0;
+      border-radius: 20px;
+      font-size: 12px;
+      background: white;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-      font-weight: 500;
-      color: var(--dark-color);
     }
 
-    .dropdown-item:hover {
-      background-color: #f8f9fa;
-      color: var(--primary-color);
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--primary-color);
     }
 
-    .dropdown-item:not(:last-child) {
-      border-bottom: 1px solid #e8ecf0;
+    /* Bulk Operations */
+    .bulk-actions {
+      display: none;
+      background: rgba(243, 156, 18, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      border-left: 4px solid var(--warning-color);
     }
 
-    /* Collapsible Form Styles */
+    .bulk-actions.show {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .bulk-btn {
+      padding: 8px 15px;
+      background: var(--warning-color);
+      color: white;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .bulk-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+    }
+
+    .bulk-btn.danger {
+      background: var(--danger-color);
+    }
+
+    .bulk-btn.danger:hover {
+      box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+    }
+
+    /* Export and Action Buttons */
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+
+    .action-btn {
+      padding: 10px 20px;
+      background: linear-gradient(135deg, var(--success-color), #2ecc71);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+    }
+
+    .action-btn.secondary {
+      background: linear-gradient(135deg, #17a2b8, #138496);
+    }
+
+    .action-btn.secondary:hover {
+      box-shadow: 0 6px 20px rgba(23, 162, 184, 0.4);
+    }
+
+    /* Notification System */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      z-index: 1000;
+      transform: translateX(400px);
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    .notification.success {
+      background: var(--success-color);
+    }
+
+    .notification.error {
+      background: var(--danger-color);
+    }
+
+    .notification.warning {
+      background: var(--warning-color);
+    }
+
+    /* Form Styles */
     .form-section {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
@@ -229,13 +299,21 @@
 
     .form-content.expanded {
       padding: 30px;
-      max-height: 500px;
+      max-height: 800px;
     }
 
-    .form-content input {
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .form-content input,
+    .form-content select,
+    .form-content textarea {
       width: 100%;
       padding: 12px 16px;
-      margin-bottom: 15px;
       border: 2px solid #e8ecf0;
       border-radius: 8px;
       font-size: 14px;
@@ -244,14 +322,38 @@
       box-sizing: border-box;
     }
 
-    .form-content input:focus {
+    .form-content input:focus,
+    .form-content select:focus,
+    .form-content textarea:focus {
       outline: none;
       border-color: var(--primary-color);
       box-shadow: 0 0 10px rgba(102, 126, 234, 0.2);
     }
 
-    .form-content input::placeholder {
+    .file-upload {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .file-upload input[type=file] {
+      display: none;
+    }
+
+    .file-upload-label {
+      display: block;
+      padding: 12px 16px;
+      border: 2px dashed #e8ecf0;
+      border-radius: 8px;
+      text-align: center;
       color: #7f8c8d;
+      transition: all 0.3s ease;
+    }
+
+    .file-upload:hover .file-upload-label {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
     }
 
     .form-content button {
@@ -273,6 +375,7 @@
       transform: translateY(-1px);
     }
 
+    /* Table Styles */
     .table-wrapper {
       overflow-x: auto;
       border-radius: 8px;
@@ -290,6 +393,7 @@
       padding: 12px 15px;
       text-align: left;
       border-bottom: 1px solid #e8ecf0;
+      position: relative;
     }
 
     th {
@@ -297,17 +401,18 @@
       color: white;
       position: sticky;
       top: 0;
+      font-weight: 600;
+      font-size: 13px;
     }
 
-    /* Center and bold the Videos/Day column */
-    th:nth-child(4), 
-    td:nth-child(4) {
+    th:first-child {
+      width: 40px;
       text-align: center;
     }
 
-    td:nth-child(4) {
+    td:nth-child(5) {
+      text-align: center;
       font-weight: bold;
-      font-size: 1.1em;
       color: var(--primary-color);
     }
 
@@ -319,7 +424,6 @@
       background-color: #e3f2fd;
     }
 
-    /* Drag and Drop Styles */
     .draggable-row {
       cursor: move;
       transition: all 0.3s ease;
@@ -353,7 +457,15 @@
       vertical-align: middle;
     }
 
-    /* Channel column layout fix */
+    .drag-handle:active {
+      cursor: grabbing;
+    }
+
+    .draggable-row:hover .drag-handle {
+      opacity: 1;
+    }
+
+    /* Channel row content */
     .channel-content {
       display: flex;
       align-items: center;
@@ -366,23 +478,11 @@
       margin-right: 0;
     }
 
-    .channel-content .channel-display {
+    .channel-display, .channel-edit {
       flex: 1;
     }
 
-    .channel-content .channel-edit {
-      flex: 1;
-      max-width: none;
-    }
-
-    .drag-handle:active {
-      cursor: grabbing;
-    }
-
-    .draggable-row:hover .drag-handle {
-      opacity: 1;
-    }
-
+    /* Status and Action Buttons */
     .status-btn {
       padding: 8px 15px;
       border-radius: 20px;
@@ -394,380 +494,164 @@
       color: white;
       width: 130px;
       text-align: center;
+      font-size: 12px;
     }
 
     .status-btn.completed {
       background: linear-gradient(135deg, var(--success-color), #2ecc71);
     }
 
-    .delete-icon {
-      background: var(--danger-color);
-      color: white;
+    .row-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .action-icon {
+      background: transparent;
       border: none;
+      cursor: pointer;
+      padding: 8px;
       border-radius: 50%;
-      width: 30px;
-      height: 30px;
-      display: inline-flex;
+      color: #7f8c8d;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      width: 32px;
+      height: 32px;
+      display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      margin-left: 10px;
-      transition: all 0.3s ease;
+    }
+
+    .action-icon:hover {
+      background: rgba(102, 126, 234, 0.1);
+      color: var(--primary-color);
+      transform: scale(1.1);
     }
 
     .delete-icon:hover {
-      background: #c0392b;
-      transform: scale(1.1);
+      background: rgba(231, 76, 60, 0.1);
+      color: var(--danger-color);
     }
 
-    .status-badge {
-      padding: 8px 15px;
-      border-radius: 20px;
-      font-weight: 600;
-      font-size: 0.85em;
-      text-transform: uppercase;
-      display: inline-block;
+    /* Notes/Comments System */
+    .notes-btn {
+      background: rgba(23, 162, 184, 0.1);
+      color: #17a2b8;
     }
 
-    .status-pending {
-      background-color: #ffecb3;
-      color: #ff9800;
+    .notes-btn:hover {
+      background: rgba(23, 162, 184, 0.2);
     }
 
-    .status-completed {
-      background-color: #c8e6c9;
-      color: #388e3c;
+    .notes-btn.has-notes {
+      background: #17a2b8;
+      color: white;
     }
 
-    /* Row Edit Styles */
-    .edit-pencil {
-      color: var(--primary-color);
-      font-size: 16px;
-      cursor: pointer;
-      margin-left: 8px;
-      opacity: 0.7;
-      transition: all 0.3s ease;
+    /* Time Tracking */
+    .time-display {
+      font-size: 11px;
+      color: #6c757d;
+      font-weight: normal;
     }
 
-    .edit-pencil:hover {
-      opacity: 1;
-      transform: scale(1.1);
-    }
-
-    .row-editing {
-      background-color: #fff3cd !important;
-    }
-
-    .edit-input {
+    /* Progress bars for completion rates */
+    .progress-bar {
       width: 100%;
-      max-width: 100%;
-      padding: 6px 8px;
-      border: 2px solid var(--primary-color);
-      border-radius: 5px;
-      font-size: 14px;
-      background: white;
-      box-sizing: border-box;
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 8px;
     }
 
-    /* Specific width constraints for different columns */
-    .videos-edit {
-      width: 60px;
-      max-width: 60px;
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(135deg, var(--success-color), #2ecc71);
+      border-radius: 4px;
+      transition: width 0.3s ease;
     }
 
-    .collaborator-edit {
-      max-width: 120px;
-    }
-
-    .client-edit {
-      max-width: 150px;
-    }
-
-    .channel-edit {
-      max-width: 180px;
-    }
-
-    .edit-input:focus {
-      outline: none;
-      box-shadow: 0 0 8px rgba(102, 126, 234, 0.3);
-    }
-
-    .edit-actions {
-      display: flex;
-      gap: 5px;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .save-edit-btn {
-      background: var(--success-color);
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .save-edit-btn:hover {
-      background: #219150;
-      transform: scale(1.05);
-    }
-
-    .cancel-edit-btn {
-      background: var(--danger-color);
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: all 0.3s ease;
-    }
-
-    .cancel-edit-btn:hover {
-      background: #c0392b;
-      transform: scale(1.05);
-    }
-
-    /* Celebration Modal Styles */
-    .celebration-modal {
+    /* Modal Styles */
+    .modal {
+      display: none;
       position: fixed;
-      top: 0;
+      z-index: 1000;
       left: 0;
+      top: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 10000;
-      backdrop-filter: blur(10px);
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
     }
 
-    .celebration-modal.show {
+    .modal.show {
       display: flex;
-      animation: modalFadeIn 0.5s ease;
+      align-items: center;
+      justify-content: center;
     }
 
-    @keyframes modalFadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .celebration-content {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      border-radius: 20px;
-      padding: 40px;
-      text-align: center;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-      position: relative;
-      overflow: hidden;
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
       max-width: 500px;
       width: 90%;
-      transform: scale(0.8);
-      animation: celebrationPop 0.6s ease forwards;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     }
 
-    @keyframes celebrationPop {
-      0% {
-        transform: scale(0.8);
-        opacity: 0;
-      }
-      50% {
-        transform: scale(1.05);
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    .celebration-emoji {
+    .modal-header {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
       margin-bottom: 20px;
-      animation: bounce 1.5s infinite;
     }
 
-    .green-circle {
-      width: 120px;
-      height: 120px;
-      background: linear-gradient(135deg, #27ae60, #2ecc71);
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4);
-      animation: pulse 2s infinite;
-    }
-
-    .white-tick {
-      color: white;
-      font-size: 60px;
-      font-weight: bold;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    @keyframes pulse {
-      0% {
-        box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4), 0 0 0 0 rgba(39, 174, 96, 0.7);
-      }
-      70% {
-        box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4), 0 0 0 20px rgba(39, 174, 96, 0);
-      }
-      100% {
-        box-shadow: 0 10px 30px rgba(39, 174, 96, 0.4), 0 0 0 0 rgba(39, 174, 96, 0);
-      }
-    }
-
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-      }
-      40% {
-        transform: translateY(-20px);
-      }
-      60% {
-        transform: translateY(-10px);
-      }
-    }
-
-    .celebration-title {
-      color: white;
-      font-size: 48px;
-      font-weight: bold;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      animation: glow 2s ease-in-out infinite alternate;
-    }
-
-    @keyframes glow {
-      from {
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(255, 255, 255, 0.5);
-      }
-      to {
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3), 0 0 30px rgba(255, 255, 255, 0.8);
-      }
-    }
-
-    .celebration-line {
-      width: 80%;
-      height: 3px;
-      background: linear-gradient(90deg, transparent, #fff, transparent);
-      margin: 20px auto;
-      border-radius: 2px;
-      animation: shimmer 2s infinite;
-    }
-
-    @keyframes shimmer {
-      0% {
-        transform: translateX(-100%);
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(100%);
-        opacity: 0;
-      }
-    }
-
-    .celebration-message {
-      color: white;
-      font-size: 22px;
+    .modal-title {
+      font-size: 1.5em;
       font-weight: 600;
-      margin-bottom: 30px;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-      animation: fadeInUp 1s ease 0.5s both;
+      color: var(--dark-color);
     }
 
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .celebration-close {
-      background: rgba(255, 255, 255, 0.2);
-      color: white;
-      border: 2px solid white;
-      padding: 12px 30px;
-      border-radius: 25px;
-      font-size: 16px;
-      font-weight: 600;
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      animation: fadeInUp 1s ease 1s both;
+      color: #7f8c8d;
     }
 
-    .celebration-close:hover {
-      background: white;
-      color: var(--primary-color);
-      transform: scale(1.05);
-      box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+    .close-btn:hover {
+      color: var(--danger-color);
     }
 
-    /* Floating particles */
-    .particle {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      background: white;
-      border-radius: 50%;
-      animation: float 3s infinite ease-in-out;
-      opacity: 0.7;
+    /* Calendar integration styles */
+    .date-input {
+      position: relative;
     }
 
-    .particle:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
-    .particle:nth-child(2) { top: 60%; left: 80%; animation-delay: 0.5s; }
-    .particle:nth-child(3) { top: 80%; left: 40%; animation-delay: 1s; }
-    .particle:nth-child(4) { top: 40%; left: 70%; animation-delay: 1.5s; }
-    .particle:nth-child(5) { top: 30%; left: 10%; animation-delay: 2s; }
-
-    @keyframes float {
-      0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-        opacity: 0.7;
-      }
-      50% {
-        transform: translateY(-20px) rotate(180deg);
-        opacity: 1;
-      }
+    .overdue {
+      background-color: rgba(231, 76, 60, 0.1) !important;
+      border-left: 4px solid var(--danger-color);
     }
 
-    @media (max-width: 768px) {
-      .celebration-content {
-        padding: 30px 20px;
-        margin: 20px;
-      }
-
-      .celebration-title {
-        font-size: 36px;
-      }
-
-      .green-circle {
-        width: 80px;
-        height: 80px;
-      }
-
-      .white-tick {
-        font-size: 40px;
-      }
-
-      .celebration-message {
-        font-size: 18px;
-      }
+    .due-soon {
+      background-color: rgba(243, 156, 18, 0.1) !important;
+      border-left: 4px solid var(--warning-color);
     }
 
+    /* Loading states */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #7f8c8d;
+    }
+
+    /* Responsive Design */
     @media (max-width: 768px) {
       .container {
         padding: 10px;
@@ -776,41 +660,30 @@
       .header-section {
         flex-direction: column;
         align-items: center;
-        gap: 10px;
       }
 
-      .status-container {
+      .nav-buttons {
+        justify-content: center;
+      }
+
+      .analytics-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .filter-controls {
         flex-direction: column;
-        gap: 15px;
+        align-items: stretch;
       }
 
-      .reset-btn, .auto-reorder-btn {
-        padding: 10px 20px;
-        font-size: 12px;
+      .action-buttons {
+        justify-content: center;
       }
 
-      .dropdown-menu {
-        left: 50%;
-        transform: translateX(-50%);
+      .form-grid {
+        grid-template-columns: 1fr;
       }
 
-      .form-content input {
-        font-size: 16px;
-        margin-bottom: 12px;
-        padding: 10px 14px;
-      }
-
-      .form-content button {
-        font-size: 14px;
-        padding: 10px 16px;
-      }
-
-      .form-toggle-btn {
-        font-size: 14px;
-        padding: 12px 16px;
-      }
-
-      /* Hide table headers on mobile */
+      /* Mobile table view */
       .table-wrapper table,
       .table-wrapper thead,
       .table-wrapper tbody,
@@ -835,16 +708,6 @@
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       }
 
-      .table-wrapper tr:nth-child(even) {
-        background: white;
-      }
-
-      .table-wrapper tr:hover {
-        background: white;
-        transform: none;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-      }
-
       .table-wrapper td {
         border: none;
         padding: 8px 0;
@@ -861,7 +724,11 @@
         color: var(--primary-color);
         flex-shrink: 0;
         margin-right: 10px;
-        min-width: 80px;
+        min-width: 100px;
+      }
+
+      .table-wrapper td:first-child::before {
+        content: "Select";
       }
 
       .table-wrapper td:last-child {
@@ -876,118 +743,247 @@
       .table-wrapper td:last-child::before {
         display: none;
       }
+    }
 
-      .status-btn {
-        width: 100%;
-        max-width: 200px;
-        padding: 10px;
-        font-size: 14px;
-      }
-
-      .delete-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 18px;
-        margin-left: 0;
-        margin-top: 5px;
-      }
-
-      h1 {
-        font-size: 1.8em;
-        margin-bottom: 15px;
-      }
-
-      #currentDateTime {
-        font-size: 12px;
-        padding: 8px 15px;
-      }
-
-      .admin-btn {
-        font-size: 14px;
-        padding: 8px 15px;
-      }
-
-      .drag-handle {
-        font-size: 14px;
-      }
-
-      .edit-pencil {
-        font-size: 14px;
-      }
+    /* Dark mode support */
+    @media (prefers-color-scheme: dark) {
+      /* You can add dark mode styles here if needed */
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Video Production Tracker</h1>
+    <h1>🎬 Enhanced Video Production Tracker</h1>
 
     <div class="header-section">
       <div id="currentDateTime">Loading time...</div>
-      <a href="task-dashboard.html" class="admin-btn">Manager Task</a>
-      <a href="channel-status-tracker.html" class="admin-btn">📊 Channel Status</a>
-      <a href="payment_tracker.html" class="admin-btn">💰 Payment Tracker</a>
+      <div class="nav-buttons">
+        <a href="task-dashboard.html" class="nav-btn">📋 Tasks</a>
+        <a href="channel-status-tracker.html" class="nav-btn">📊 Status</a>
+        <a href="payment_tracker.html" class="nav-btn">💰 Payment</a>
+        <a href="Administration Page.html" class="nav-btn">🔐 Admin</a>
+      </div>
     </div>
 
+    <!-- Analytics Dashboard -->
+    <div class="analytics-section">
+      <h2 style="text-align: center; margin-bottom: 20px; color: var(--dark-color);">📈 Analytics Dashboard</h2>
+      <div class="analytics-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="totalChannels">0</div>
+          <div class="stat-label">Total Channels</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="completedChannels">0</div>
+          <div class="stat-label">Completed</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pendingChannels">0</div>
+          <div class="stat-label">Pending</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalVideosPerMonth">0</div>
+          <div class="stat-label">Videos/Month</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="overdueChannels">0</div>
+          <div class="stat-label">Overdue</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="avgCompletionTime">0</div>
+          <div class="stat-label">Avg. Completion (hrs)</div>
+        </div>
+      </div>
+      
+      <!-- Collaborator Performance Chart -->
+      <div id="collaboratorChart" style="margin-top: 20px;">
+        <h3 style="color: var(--dark-color); margin-bottom: 15px;">👥 Collaborator Performance</h3>
+        <div id="collaboratorBars"></div>
+      </div>
+    </div>
+
+    <!-- Search and Filter Controls -->
+    <div class="controls-section">
+      <input type="text" id="searchBar" class="search-bar" placeholder="🔍 Search channels, clients, or collaborators...">
+      
+      <div class="filter-controls">
+        <select id="statusFilter" class="filter-select">
+          <option value="">All Status</option>
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+        </select>
+        
+        <select id="clientFilter" class="filter-select">
+          <option value="">All Clients</option>
+        </select>
+        
+        <select id="collaboratorFilter" class="filter-select">
+          <option value="">All Collaborators</option>
+        </select>
+        
+        <select id="videosFilter" class="filter-select">
+          <option value="">All Video Counts</option>
+          <option value="1-30">1-30 videos/month</option>
+          <option value="31-60">31-60 videos/month</option>
+          <option value="61-100">61-100 videos/month</option>
+          <option value="100+">100+ videos/month</option>
+        </select>
+
+        <button id="clearFilters" class="action-btn secondary">🗑️ Clear Filters</button>
+      </div>
+
+      <!-- Bulk Actions -->
+      <div id="bulkActions" class="bulk-actions">
+        <span id="selectedCount">0 selected</span>
+        <button class="bulk-btn" onclick="bulkMarkCompleted()">✅ Mark Completed</button>
+        <button class="bulk-btn" onclick="bulkMarkPending()">⏳ Mark Pending</button>
+        <button class="bulk-btn danger" onclick="bulkDelete()">🗑️ Delete Selected</button>
+        <button class="bulk-btn secondary" onclick="clearSelection()">❌ Clear Selection</button>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="action-btn" onclick="exportToCSV()">📊 Export CSV</button>
+        <button class="action-btn" onclick="exportToPDF()">📄 Export PDF</button>
+        <button class="action-btn secondary" onclick="showNotificationCenter()">🔔 Notifications</button>
+        <button class="action-btn secondary" onclick="toggleAnalytics()">📈 Toggle Analytics</button>
+      </div>
+    </div>
+
+    <!-- Form Section -->
     <div class="form-section" id="formSection">
       <button class="form-toggle-btn" onclick="toggleForm()">
         ➕ Add New Channel
         <span class="toggle-icon">▼</span>
       </button>
       <div class="form-content" id="formContent">
-        <input type="text" id="channelId" placeholder="Channel ID (e.g. my-channel)" required />
-        <input type="text" id="channelName" placeholder="Channel Name" required />
-        <input type="text" id="client" placeholder="Client Name" />
-        <input type="text" id="collaborator" placeholder="Collaborator Name" />
-        <input type="number" id="dailyVideos" placeholder="Daily Videos" min="0" />
+        <div class="form-grid">
+          <input type="text" id="channelId" placeholder="Channel ID (e.g. my-channel)" required />
+          <input type="text" id="channelName" placeholder="Channel Name" required />
+          <input type="text" id="client" placeholder="Client Name" />
+          <input type="text" id="collaborator" placeholder="Collaborator Name" />
+          <input type="number" id="monthlyVideos" placeholder="Videos per Month" min="0" />
+          <input type="date" id="dueDate" placeholder="Due Date" />
+          <select id="priority">
+            <option value="low">Low Priority</option>
+            <option value="medium" selected>Medium Priority</option>
+            <option value="high">High Priority</option>
+          </select>
+          <div class="file-upload">
+            <input type="file" id="fileUpload" multiple accept=".pdf,.doc,.docx,.txt,.jpg,.png">
+            <label for="fileUpload" class="file-upload-label">
+              📎 Upload Files (Optional)
+            </label>
+          </div>
+        </div>
+        <textarea id="notes" placeholder="Initial notes or comments..." rows="3"></textarea>
         <button onclick="addChannel()">Create Channel</button>
       </div>
     </div>
 
+    <!-- Status Container -->
     <div class="status-container">
       <div id="supabaseStatus">🟢 Connected to Database</div>
       <button class="reset-btn" onclick="resetAllChannels()" id="resetBtn">
         🔄 Reset All Channels
       </button>
-      <div class="dropdown-container">
-        <button class="auto-reorder-btn" onclick="toggleDropdown()">
-          🔄 Auto Reorder ▼
-        </button>
-        <div class="dropdown-menu" id="dropdownMenu">
-          <div class="dropdown-item" onclick="reorderBy('collaborator')">
-            👥 Collaborator Arrangement
-          </div>
-          <div class="dropdown-item" onclick="reorderBy('project')">
-            📁 Project Arrangement
-          </div>
-        </div>
-      </div>
     </div>
 
+    <!-- Main Table -->
     <div class="table-wrapper">
       <table>
         <thead>
           <tr>
+            <th><input type="checkbox" id="selectAll" onchange="toggleSelectAll()"></th>
             <th>Channel</th>
             <th>Client</th>
             <th>Collaborator</th>
-            <th>Videos/Day</th>
+            <th>Videos/Month</th>
+            <th>Due Date</th>
+            <th>Priority</th>
             <th>Status</th>
-            <th>Action</th>
+            <th>Progress</th>
+            <th>Actions</th>
           </tr>
         </thead>
-        <tbody id="tasksBody"></tbody>
+        <tbody id="tasksBody">
+          <tr>
+            <td colspan="10" class="loading">🔄 Loading channels from database...</td>
+          </tr>
+        </tbody>
       </table>
+    </div>
+
+    <!-- Notes Modal -->
+    <div id="notesModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">📝 Channel Notes</h3>
+          <button class="close-btn" onclick="closeModal('notesModal')">&times;</button>
+        </div>
+        <div id="notesContent">
+          <textarea id="noteText" rows="6" placeholder="Add your notes here..." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; resize: vertical;"></textarea>
+          <div style="margin-top: 15px;">
+            <button onclick="saveNote()" style="background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-right: 10px;">💾 Save Note</button>
+            <button onclick="closeModal('notesModal')" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">❌ Cancel</button>
+          </div>
+          <div id="noteHistory" style="margin-top: 20px; max-height: 200px; overflow-y: auto;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Time Tracking Modal -->
+    <div id="timeModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">⏱️ Time Tracking</h3>
+          <button class="close-btn" onclick="closeModal('timeModal')">&times;</button>
+        </div>
+        <div id="timeContent">
+          <p id="currentTimer">Timer: 00:00:00</p>
+          <button id="startStopBtn" onclick="toggleTimer()" style="background: var(--success-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-right: 10px;">▶️ Start Timer</button>
+          <button onclick="resetTimer()" style="background: var(--warning-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-right: 10px;">🔄 Reset</button>
+          <button onclick="saveTimeLog()" style="background: var(--primary-color); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">💾 Log Time</button>
+          <div id="timeHistory" style="margin-top: 20px; max-height: 200px; overflow-y: auto;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- File Viewer Modal -->
+    <div id="filesModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">📎 Channel Files</h3>
+          <button class="close-btn" onclick="closeModal('filesModal')">&times;</button>
+        </div>
+        <div id="filesContent">
+          <div class="file-upload" style="margin-bottom: 20px;">
+            <input type="file" id="modalFileUpload" multiple accept=".pdf,.doc,.docx,.txt,.jpg,.png,.mp4,.avi">
+            <label for="modalFileUpload" class="file-upload-label">
+              📎 Upload New Files
+            </label>
+          </div>
+          <div id="filesList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Center Modal -->
+    <div id="notificationModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">🔔 Notification Center</h3>
+          <button class="close-btn" onclick="closeModal('notificationModal')">&times;</button>
+        </div>
+        <div id="notificationContent">
+          <div id="notificationList"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Celebration Modal -->
     <div class="celebration-modal" id="celebrationModal">
       <div class="celebration-content">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        
         <div class="celebration-emoji">
           <div class="green-circle">
             <div class="white-tick">✓</div>
@@ -1003,6 +999,9 @@
         </button>
       </div>
     </div>
+
+    <!-- Notification Toast -->
+    <div id="notification" class="notification"></div>
   </div>
 
   <script type="module">
@@ -1013,362 +1012,313 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBya3Jic3d0dG10Z2VwbHN2emxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTk5NjQsImV4cCI6MjA3MjYzNTk2NH0.Ul2cd-cpWHfpK1HTgHM7Tv2NDCrFWcAq2N-C7Tv9oz8'
     const supabase = createClient(supabaseUrl, supabaseKey)
 
-    const tasksBody = document.getElementById('tasksBody');
-    const currentDateTime = document.getElementById('currentDateTime');
-
-    // Drag and Drop Variables
-    let draggedElement = null;
-    let channelOrder = [];
+    // Global variables
     let tasks = [];
+    let selectedTasks = new Set();
+    let filteredTasks = [];
+    let currentEditingTask = null;
+    let timer = { start: null, elapsed: 0, running: false };
+    let timerInterval = null;
 
-    // Dropdown functionality
-    window.toggleDropdown = function() {
-      const dropdown = document.getElementById('dropdownMenu');
-      dropdown.classList.toggle('show');
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeApp();
+    });
+
+    async function initializeApp() {
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
       
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function closeDropdown(e) {
-        if (!e.target.closest('.dropdown-container')) {
-          dropdown.classList.remove('show');
-          document.removeEventListener('click', closeDropdown);
-        }
-      });
-    };
-
-    // Auto reorder functionality
-    window.reorderBy = async function(type) {
-      const dropdown = document.getElementById('dropdownMenu');
-      dropdown.classList.remove('show');
+      await loadTasks();
+      setupEventListeners();
+      updateAnalytics();
+      checkNotifications();
       
-      try {
-        const { data: tasks, error } = await supabase
-          .from('tasks')
-          .select('*')
-        
-        if (error) throw error;
+      // Check for overdue tasks every hour
+      setInterval(checkNotifications, 3600000);
+    }
 
-        let sortedEntries;
-        
-        if (type === 'collaborator') {
-          // Sort by collaborator name, then by channel name
-          sortedEntries = tasks.sort((a, b) => {
-            const collabA = (a.collaborator || 'Unassigned').toLowerCase();
-            const collabB = (b.collaborator || 'Unassigned').toLowerCase();
-            if (collabA === collabB) {
-              return a.channel.toLowerCase().localeCompare(b.channel.toLowerCase());
-            }
-            return collabA.localeCompare(collabB);
-          });
-        } else if (type === 'project') {
-          // Sort by channel/project name
-          sortedEntries = tasks.sort((a, b) => {
-            return a.channel.toLowerCase().localeCompare(b.channel.toLowerCase());
-          });
-        }
-        
-        // Create new order array
-        const newOrder = sortedEntries.map((task, index) => ({
-          channel_id: task.id,
-          order_position: index
-        }));
-        
-        // Clear existing order and insert new one
-        await supabase.from('channel_order').delete().gt('id', 0);
-        await supabase.from('channel_order').insert(newOrder);
-        
-        channelOrder = newOrder;
-        
-        // Re-load and render tasks
-        await loadTasks();
-        
-        const orderType = type === 'collaborator' ? 'Collaborator' : 'Project';
-        alert(`✅ Channels reordered by ${orderType} successfully!`);
-      } catch (error) {
-        console.error('Error reordering:', error);
-        alert('❌ Failed to reorder channels');
-      }
-    };
+    function setupEventListeners() {
+      // Search functionality
+      document.getElementById('searchBar').addEventListener('input', debounce(filterTasks, 300));
+      
+      // Filter dropdowns
+      document.getElementById('statusFilter').addEventListener('change', filterTasks);
+      document.getElementById('clientFilter').addEventListener('change', filterTasks);
+      document.getElementById('collaboratorFilter').addEventListener('change', filterTasks);
+      document.getElementById('videosFilter').addEventListener('change', filterTasks);
+      
+      // Clear filters
+      document.getElementById('clearFilters').addEventListener('click', clearAllFilters);
+      
+      // File upload in modal
+      document.getElementById('modalFileUpload').addEventListener('change', handleModalFileUpload);
+    }
 
+    // Utility function for debouncing
+    function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+        const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+      };
+    }
+
+    // Load tasks from database
     async function loadTasks() {
       try {
-        // Load channel order
-        const { data: orderData } = await supabase
-          .from('channel_order')
-          .select('*')
-          .order('order_position');
-        
-        channelOrder = orderData || [];
-        
-        // Load tasks
-        const { data: tasksData, error } = await supabase
+        const { data, error } = await supabase
           .from('tasks')
-          .select('*');
+          .select('*')
+          .order('created_at', { ascending: false });
         
         if (error) throw error;
         
-        tasks = tasksData || [];
-        renderTasks();
+        tasks = data || [];
         
-        document.getElementById('supabaseStatus').innerHTML = '🟢 Connected to Database';
+        // Load additional data (notes, time logs, files)
+        await loadAdditionalData();
+        
+        populateFilterDropdowns();
+        filterTasks();
+        updateAnalytics();
+        
+        showNotification('✅ Data loaded successfully', 'success');
       } catch (error) {
         console.error('Error loading tasks:', error);
-        document.getElementById('supabaseStatus').innerHTML = '🔴 Connection Error';
+        showNotification('❌ Error loading data', 'error');
       }
     }
 
-    async function saveChannelOrder() {
+    async function loadAdditionalData() {
       try {
-        const rows = document.querySelectorAll('#tasksBody tr');
-        const newOrder = [];
+        // Load notes
+        const { data: notesData } = await supabase
+          .from('channel_notes')
+          .select('*')
+          .order('created_at', { ascending: false });
         
-        rows.forEach((row, index) => {
-          const channelId = row.getAttribute('data-channel-id');
-          if (channelId) {
-            newOrder.push({
-              channel_id: channelId,
-              order_position: index
-            });
-          }
+        // Load time logs
+        const { data: timeLogsData } = await supabase
+          .from('time_logs')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        // Load files
+        const { data: filesData } = await supabase
+          .from('channel_files')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        // Attach data to tasks
+        tasks.forEach(task => {
+          task.notes = notesData?.filter(note => note.channel_id === task.id) || [];
+          task.timeLogs = timeLogsData?.filter(log => log.channel_id === task.id) || [];
+          task.files = filesData?.filter(file => file.channel_id === task.id) || [];
         });
+      } catch (error) {
+        console.error('Error loading additional data:', error);
+      }
+    }
+
+    // Populate filter dropdowns
+    function populateFilterDropdowns() {
+      const clients = [...new Set(tasks.map(task => task.client).filter(Boolean))];
+      const collaborators = [...new Set(tasks.map(task => task.collaborator).filter(Boolean))];
+      
+      populateSelect('clientFilter', clients);
+      populateSelect('collaboratorFilter', collaborators);
+    }
+
+    function populateSelect(selectId, options) {
+      const select = document.getElementById(selectId);
+      const currentValue = select.value;
+      
+      // Clear existing options except the first one
+      select.innerHTML = select.children[0].outerHTML;
+      
+      options.forEach(option => {
+        const optionElement = document.createElement('option');
+        optionElement.value = option;
+        optionElement.textContent = option;
+        select.appendChild(optionElement);
+      });
+      
+      // Restore previous selection
+      select.value = currentValue;
+    }
+
+    // Filter and search functionality
+    function filterTasks() {
+      const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+      const statusFilter = document.getElementById('statusFilter').value;
+      const clientFilter = document.getElementById('clientFilter').value;
+      const collaboratorFilter = document.getElementById('collaboratorFilter').value;
+      const videosFilter = document.getElementById('videosFilter').value;
+      
+      filteredTasks = tasks.filter(task => {
+        const matchesSearch = !searchTerm || 
+          task.channel.toLowerCase().includes(searchTerm) ||
+          (task.client && task.client.toLowerCase().includes(searchTerm)) ||
+          (task.collaborator && task.collaborator.toLowerCase().includes(searchTerm));
         
-        // Clear existing order and insert new one
-        await supabase.from('channel_order').delete().gt('id', 0);
-        if (newOrder.length > 0) {
-          await supabase.from('channel_order').insert(newOrder);
+        const matchesStatus = !statusFilter || task.status === statusFilter;
+        const matchesClient = !clientFilter || task.client === clientFilter;
+        const matchesCollaborator = !collaboratorFilter || task.collaborator === collaboratorFilter;
+        
+        let matchesVideos = true;
+        if (videosFilter) {
+          const monthlyVideos = parseInt(task.monthly_videos) || 0;
+          switch (videosFilter) {
+            case '1-30': matchesVideos = monthlyVideos >= 1 && monthlyVideos <= 30; break;
+            case '31-60': matchesVideos = monthlyVideos >= 31 && monthlyVideos <= 60; break;
+            case '61-100': matchesVideos = monthlyVideos >= 61 && monthlyVideos <= 100; break;
+            case '100+': matchesVideos = monthlyVideos > 100; break;
+          }
         }
         
-        channelOrder = newOrder;
-      } catch (error) {
-        console.error('Error saving channel order:', error);
-      }
-    }
-
-    function sortChannelsByOrder(tasks) {
-      if (channelOrder.length === 0) {
-        return tasks;
-      }
-      
-      const orderMap = {};
-      channelOrder.forEach(item => {
-        orderMap[item.channel_id] = item.order_position;
+        return matchesSearch && matchesStatus && matchesClient && matchesCollaborator && matchesVideos;
       });
       
-      const sortedTasks = [...tasks].sort((a, b) => {
-        const orderA = orderMap[a.id] !== undefined ? orderMap[a.id] : 999;
-        const orderB = orderMap[b.id] !== undefined ? orderMap[b.id] : 999;
-        return orderA - orderB;
-      });
-      
-      return sortedTasks;
+      renderTasks();
+      updateAnalytics();
     }
 
+    function clearAllFilters() {
+      document.getElementById('searchBar').value = '';
+      document.getElementById('statusFilter').value = '';
+      document.getElementById('clientFilter').value = '';
+      document.getElementById('collaboratorFilter').value = '';
+      document.getElementById('videosFilter').value = '';
+      filterTasks();
+      showNotification('🗑️ Filters cleared', 'success');
+    }
+
+    // Render tasks in table
     function renderTasks() {
-      tasksBody.innerHTML = '';
+      const tasksBody = document.getElementById('tasksBody');
       
-      const sortedTasks = sortChannelsByOrder(tasks);
+      if (filteredTasks.length === 0) {
+        tasksBody.innerHTML = `
+          <tr>
+            <td colspan="10" style="text-align: center; padding: 40px; color: #7f8c8d;">
+              <h3>No channels found</h3>
+              <p>Try adjusting your filters or add new channels.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
       
-      sortedTasks.forEach(task => {
-        const row = document.createElement('tr');
-        row.setAttribute('data-channel-id', task.id);
-        row.className = 'draggable-row';
-        row.draggable = true;
-
-        row.innerHTML = `
-          <td data-label="Channel">
-            <div class="channel-content">
-              <span class="drag-handle">⋮⋮</span>
-              <span class="channel-display">${task.channel}</span>
-              <input type="text" class="edit-input channel-edit" value="${task.channel}" style="display: none;" />
-            </div>
-          </td>
-          <td data-label="Client">
-            <span class="client-display">${task.client || ''}</span>
-            <input type="text" class="edit-input client-edit" value="${task.client || ''}" style="display: none;" />
-          </td>
-          <td data-label="Collaborator">
-            <span class="collaborator-display">${task.collaborator || 'Unassigned'}</span>
-            <input type="text" class="edit-input collaborator-edit" value="${task.collaborator || ''}" style="display: none;" />
-          </td>
-          <td data-label="Videos/Day">
-            <span class="videos-display">${task.daily_videos || 0}</span>
-            <span class="edit-pencil" onclick="editRow('${task.id}')" title="Edit this row">✏️</span>
-            <input type="number" class="edit-input videos-edit" value="${task.daily_videos || 0}" style="display: none;" min="0" />
-          </td>
-          <td data-label="Status"><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
-          <td class="action-cell">
-            <div class="normal-actions">
-              <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" onclick="toggleTask('${task.id}')">
+      tasksBody.innerHTML = filteredTasks.map(task => {
+        const isOverdue = task.due_date && new Date(task.due_date) < new Date() && task.status !== 'completed';
+        const isDueSoon = task.due_date && !isOverdue && 
+          new Date(task.due_date) <= new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+        
+        const totalTimeSpent = task.timeLogs?.reduce((acc, log) => acc + (log.duration || 0), 0) || 0;
+        const progressPercent = task.status === 'completed' ? 100 : 
+          (task.monthly_videos ? Math.min((totalTimeSpent / (task.monthly_videos * 2)) * 100, 95) : 0);
+        
+        const rowClass = isOverdue ? 'overdue' : isDueSoon ? 'due-soon' : '';
+        
+        return `
+          <tr class="draggable-row ${rowClass}" data-channel-id="${task.id}" draggable="true">
+            <td data-label="Select">
+              <input type="checkbox" class="task-checkbox" 
+                     ${selectedTasks.has(task.id) ? 'checked' : ''}
+                     onchange="toggleTaskSelection('${task.id}')">
+            </td>
+            <td data-label="Channel">
+              <div class="channel-content">
+                <span class="drag-handle">⋮⋮</span>
+                <div class="channel-display">
+                  <strong>${task.channel}</strong>
+                  <div class="time-display">
+                    ⏱️ ${Math.round(totalTimeSpent)}h logged
+                  </div>
+                </div>
+              </div>
+            </td>
+            <td data-label="Client">${task.client || 'Not specified'}</td>
+            <td data-label="Collaborator">${task.collaborator || 'Unassigned'}</td>
+            <td data-label="Videos/Month">
+              <strong>${task.monthly_videos || 0}</strong>
+            </td>
+            <td data-label="Due Date">
+              ${task.due_date ? 
+                `<span style="color: ${isOverdue ? 'var(--danger-color)' : isDueSoon ? 'var(--warning-color)' : 'inherit'}">
+                  ${new Date(task.due_date).toLocaleDateString()}
+                  ${isOverdue ? ' ⚠️' : isDueSoon ? ' ⏰' : ''}
+                </span>` : 
+                'Not set'
+              }
+            </td>
+            <td data-label="Priority">
+              <span class="task-priority priority-${task.priority || 'medium'}">
+                ${(task.priority || 'medium').toUpperCase()}
+              </span>
+            </td>
+            <td data-label="Status">
+              <button class="status-btn ${task.status === 'completed' ? 'completed' : ''}" 
+                      onclick="toggleTaskStatus('${task.id}')">
                 ${task.status === 'completed' ? 'Completed' : 'Mark Complete'}
               </button>
-              <button class="delete-icon" onclick="deleteChannel('${task.id}')">🗑️</button>
-            </div>
-            <div class="edit-actions" style="display: none;">
-              <button class="save-edit-btn" onclick="saveRowEdit('${task.id}')">✅ Save</button>
-              <button class="cancel-edit-btn" onclick="cancelRowEdit('${task.id}')">❌ Cancel</button>
-            </div>
-          </td>
+            </td>
+            <td data-label="Progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${progressPercent}%"></div>
+              </div>
+              <small>${Math.round(progressPercent)}%</small>
+            </td>
+            <td data-label="Actions">
+              <div class="row-actions">
+                <button class="action-icon notes-btn ${task.notes?.length ? 'has-notes' : ''}" 
+                        onclick="openNotesModal('${task.id}')" title="Notes">
+                  📝 ${task.notes?.length || ''}
+                </button>
+                <button class="action-icon" onclick="openTimeModal('${task.id}')" title="Time Tracking">⏱️</button>
+                <button class="action-icon" onclick="openFilesModal('${task.id}')" title="Files">
+                  📎 ${task.files?.length || ''}
+                </button>
+                <button class="action-icon" onclick="editTask('${task.id}')" title="Edit">✏️</button>
+                <button class="action-icon delete-icon" onclick="deleteChannel('${task.id}')" title="Delete">🗑️</button>
+              </div>
+            </td>
+          </tr>
         `;
-        
-        // Add drag event listeners
+      }).join('');
+      
+      // Re-attach drag and drop event listeners
+      setupDragAndDrop();
+    }
+
+    // Drag and drop functionality
+    function setupDragAndDrop() {
+      const rows = document.querySelectorAll('.draggable-row');
+      rows.forEach(row => {
         row.addEventListener('dragstart', handleDragStart);
         row.addEventListener('dragover', handleDragOver);
         row.addEventListener('dragenter', handleDragEnter);
         row.addEventListener('dragleave', handleDragLeave);
         row.addEventListener('drop', handleDrop);
         row.addEventListener('dragend', handleDragEnd);
-        
-        tasksBody.appendChild(row);
       });
     }
 
-    // Row editing functionality
-    window.editRow = function(id) {
-      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
-      if (!row) return;
-      
-      // Disable dragging while editing
-      row.draggable = false;
-      row.classList.add('row-editing');
-      
-      // Hide display elements and show input elements
-      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
-      const inputs = row.querySelectorAll('.edit-input');
-      
-      displays.forEach(display => display.style.display = 'none');
-      inputs.forEach(input => input.style.display = 'block');
-      
-      // Show edit actions, hide normal actions
-      const normalActions = row.querySelector('.normal-actions');
-      const editActions = row.querySelector('.edit-actions');
-      normalActions.style.display = 'none';
-      editActions.style.display = 'flex';
-      
-      // Focus on first input
-      const firstInput = row.querySelector('.channel-edit');
-      if (firstInput) {
-        firstInput.focus();
-        firstInput.select();
-      }
-    };
+    let draggedElement = null;
 
-    window.saveRowEdit = async function(id) {
-      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
-      if (!row) return;
-      
-      // Get new values from inputs
-      const newChannel = row.querySelector('.channel-edit').value.trim();
-      const newClient = row.querySelector('.client-edit').value.trim();
-      const newCollaborator = row.querySelector('.collaborator-edit').value.trim();
-      const newVideos = parseInt(row.querySelector('.videos-edit').value) || 0;
-      
-      if (!newChannel) {
-        alert('Channel name cannot be empty!');
-        return;
-      }
-      
-      try {
-        // Update Supabase
-        const { error } = await supabase
-          .from('tasks')
-          .update({
-            channel: newChannel,
-            client: newClient,
-            collaborator: newCollaborator,
-            daily_videos: newVideos,
-            last_updated: new Date().toISOString()
-          })
-          .eq('id', id);
-        
-        if (error) throw error;
-        
-        // Update local tasks array
-        const taskIndex = tasks.findIndex(t => t.id === id);
-        if (taskIndex !== -1) {
-          tasks[taskIndex] = {
-            ...tasks[taskIndex],
-            channel: newChannel,
-            client: newClient,
-            collaborator: newCollaborator,
-            daily_videos: newVideos
-          };
-        }
-        
-        // Update display elements
-        row.querySelector('.channel-display').textContent = newChannel;
-        row.querySelector('.client-display').textContent = newClient;
-        row.querySelector('.collaborator-display').textContent = newCollaborator || 'Unassigned';
-        row.querySelector('.videos-display').textContent = newVideos;
-        
-        // Exit edit mode
-        cancelRowEdit(id);
-        
-        alert('✅ Row updated successfully!');
-        
-      } catch (error) {
-        console.error('Error updating row:', error);
-        alert('❌ Failed to update row. Please try again.');
-      }
-    };
-
-    window.cancelRowEdit = function(id) {
-      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
-      if (!row) return;
-      
-      // Re-enable dragging
-      row.draggable = true;
-      row.classList.remove('row-editing');
-      
-      // Show display elements and hide input elements
-      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
-      const inputs = row.querySelectorAll('.edit-input');
-      
-      displays.forEach(display => display.style.display = 'inline');
-      inputs.forEach(input => input.style.display = 'none');
-      
-      // Show normal actions, hide edit actions
-      const normalActions = row.querySelector('.normal-actions');
-      const editActions = row.querySelector('.edit-actions');
-      normalActions.style.display = 'block';
-      editActions.style.display = 'none';
-      
-      // Reset input values to original
-      const originalChannel = row.querySelector('.channel-display').textContent;
-      const originalClient = row.querySelector('.client-display').textContent;
-      const originalCollaborator = row.querySelector('.collaborator-display').textContent;
-      const originalVideos = row.querySelector('.videos-display').textContent;
-      
-      row.querySelector('.channel-edit').value = originalChannel;
-      row.querySelector('.client-edit').value = originalClient;
-      row.querySelector('.collaborator-edit').value = originalCollaborator === 'Unassigned' ? '' : originalCollaborator;
-      row.querySelector('.videos-edit').value = originalVideos;
-    };
-
-    // Handle Enter key for saving edits
-    document.addEventListener('keydown', function(e) {
-      if (e.target.classList.contains('edit-input')) {
-        const row = e.target.closest('tr');
-        const channelId = row.getAttribute('data-channel-id');
-        
-        if (e.key === 'Enter') {
-          saveRowEdit(channelId);
-        } else if (e.key === 'Escape') {
-          cancelRowEdit(channelId);
-        }
-      }
-    });
-
-    // Drag and Drop Event Handlers
     function handleDragStart(e) {
       draggedElement = this;
       this.classList.add('dragging');
       e.dataTransfer.effectAllowed = 'move';
-      e.dataTransfer.setData('text/html', this.outerHTML);
     }
 
     function handleDragOver(e) {
-      if (e.preventDefault) {
-        e.preventDefault();
-      }
+      if (e.preventDefault) e.preventDefault();
       e.dataTransfer.dropEffect = 'move';
       return false;
     }
@@ -1382,10 +1332,8 @@
     }
 
     function handleDrop(e) {
-      if (e.stopPropagation) {
-        e.stopPropagation();
-      }
-
+      if (e.stopPropagation) e.stopPropagation();
+      
       if (draggedElement !== this) {
         const targetRect = this.getBoundingClientRect();
         const targetMiddle = targetRect.top + targetRect.height / 2;
@@ -1395,95 +1343,145 @@
         } else {
           this.parentNode.insertBefore(draggedElement, this.nextSibling);
         }
-        
-        saveChannelOrder();
       }
-
+      
       this.classList.remove('drag-over');
       return false;
     }
 
     function handleDragEnd(e) {
-      const allRows = document.querySelectorAll('#tasksBody tr');
+      const allRows = document.querySelectorAll('.draggable-row');
       allRows.forEach(row => {
         row.classList.remove('dragging', 'drag-over');
       });
       draggedElement = null;
     }
 
-    window.toggleTask = async function(id) {
+    // Task selection for bulk operations
+    window.toggleTaskSelection = function(taskId) {
+      const checkbox = event.target;
+      if (checkbox.checked) {
+        selectedTasks.add(taskId);
+      } else {
+        selectedTasks.delete(taskId);
+      }
+      updateBulkActions();
+    };
+
+    window.toggleSelectAll = function() {
+      const selectAllCheckbox = document.getElementById('selectAll');
+      const taskCheckboxes = document.querySelectorAll('.task-checkbox');
+      
+      if (selectAllCheckbox.checked) {
+        taskCheckboxes.forEach(checkbox => {
+          checkbox.checked = true;
+          const taskId = checkbox.closest('tr').dataset.channelId;
+          selectedTasks.add(taskId);
+        });
+      } else {
+        taskCheckboxes.forEach(checkbox => {
+          checkbox.checked = false;
+        });
+        selectedTasks.clear();
+      }
+      updateBulkActions();
+    };
+
+    function updateBulkActions() {
+      const bulkActions = document.getElementById('bulkActions');
+      const selectedCount = document.getElementById('selectedCount');
+      
+      if (selectedTasks.size > 0) {
+        bulkActions.classList.add('show');
+        selectedCount.textContent = `${selectedTasks.size} selected`;
+      } else {
+        bulkActions.classList.remove('show');
+      }
+    }
+
+    // Bulk operations
+    window.bulkMarkCompleted = async function() {
+      await bulkUpdateStatus('completed');
+      showNotification(`✅ ${selectedTasks.size} channels marked as completed`, 'success');
+    };
+
+    window.bulkMarkPending = async function() {
+      await bulkUpdateStatus('pending');
+      showNotification(`⏳ ${selectedTasks.size} channels marked as pending`, 'success');
+    };
+
+    window.bulkDelete = async function() {
+      if (confirm(`Are you sure you want to delete ${selectedTasks.size} selected channels?`)) {
+        try {
+          const selectedIds = Array.from(selectedTasks);
+          
+          const { error } = await supabase
+            .from('tasks')
+            .delete()
+            .in('id', selectedIds);
+          
+          if (error) throw error;
+          
+          tasks = tasks.filter(task => !selectedTasks.has(task.id));
+          selectedTasks.clear();
+          filterTasks();
+          updateAnalytics();
+          
+          showNotification(`🗑️ ${selectedIds.length} channels deleted`, 'success');
+        } catch (error) {
+          console.error('Error deleting tasks:', error);
+          showNotification('❌ Error deleting channels', 'error');
+        }
+      }
+    };
+
+    window.clearSelection = function() {
+      selectedTasks.clear();
+      document.querySelectorAll('.task-checkbox').forEach(cb => cb.checked = false);
+      document.getElementById('selectAll').checked = false;
+      updateBulkActions();
+    };
+
+    async function bulkUpdateStatus(status) {
       try {
-        const task = tasks.find(t => t.id === id);
-        if (!task) return;
-        
-        const newStatus = task.status === 'completed' ? 'pending' : 'completed';
+        const selectedIds = Array.from(selectedTasks);
         
         const { error } = await supabase
           .from('tasks')
           .update({ 
-            status: newStatus, 
-            last_updated: new Date().toISOString() 
+            status: status,
+            last_updated: new Date().toISOString()
           })
-          .eq('id', id);
+          .in('id', selectedIds);
         
         if (error) throw error;
         
-        // Update local array
-        task.status = newStatus;
-        renderTasks();
+        // Update local data
+        tasks.forEach(task => {
+          if (selectedTasks.has(task.id)) {
+            task.status = status;
+          }
+        });
         
-        // Show celebration when marking as completed
-        if (newStatus === 'completed') {
-          showCelebration();
-        }
+        clearSelection();
+        filterTasks();
+        updateAnalytics();
       } catch (error) {
-        console.error('Error updating task:', error);
-        alert('❌ Failed to update task status');
+        console.error('Error updating tasks:', error);
+        showNotification('❌ Error updating channels', 'error');
       }
-    };
+    }
 
-    window.deleteChannel = async function(id) {
-      if (confirm("Are you sure you want to delete this channel?")) {
-        try {
-          const { error } = await supabase
-            .from('tasks')
-            .delete()
-            .eq('id', id);
-          
-          if (error) throw error;
-          
-          // Remove from local array
-          tasks = tasks.filter(t => t.id !== id);
-          renderTasks();
-          
-          // Also remove from channel order
-          await supabase
-            .from('channel_order')
-            .delete()
-            .eq('channel_id', id);
-          
-          channelOrder = channelOrder.filter(o => o.channel_id !== id);
-          
-        } catch (error) {
-          console.error('Error deleting channel:', error);
-          alert('❌ Failed to delete channel');
-        }
-      }
-    };
-
-    // Toggle form visibility
+    // Add new channel
     window.toggleForm = function() {
-      const formSection = document.getElementById('formSection');
       const formContent = document.getElementById('formContent');
       const toggleBtn = document.querySelector('.form-toggle-btn');
       
       if (formContent.classList.contains('expanded')) {
         formContent.classList.remove('expanded');
-        formSection.classList.remove('expanded');
         toggleBtn.innerHTML = `➕ Add New Channel <span class="toggle-icon">▼</span>`;
       } else {
         formContent.classList.add('expanded');
-        formSection.classList.add('expanded');
         toggleBtn.innerHTML = `➖ Hide Form <span class="toggle-icon">▲</span>`;
         setTimeout(() => {
           document.getElementById('channelId').focus();
@@ -1496,11 +1494,19 @@
       const channel = document.getElementById('channelName').value.trim();
       const client = document.getElementById('client').value.trim();
       const collaborator = document.getElementById('collaborator').value.trim();
-      const dailyVideos = +document.getElementById('dailyVideos').value || 0;
+      const monthlyVideos = +document.getElementById('monthlyVideos').value || 0;
+      const dueDate = document.getElementById('dueDate').value;
+      const priority = document.getElementById('priority').value;
+      const notes = document.getElementById('notes').value.trim();
+      const fileInput = document.getElementById('fileUpload');
 
-      if (!id || !channel) return alert("Channel ID and Name are required.");
+      if (!id || !channel) {
+        showNotification('❌ Channel ID and Name are required', 'error');
+        return;
+      }
 
       try {
+        // Insert main task
         const { error } = await supabase
           .from('tasks')
           .insert([{
@@ -1508,7 +1514,9 @@
             channel: channel,
             client: client,
             collaborator: collaborator,
-            daily_videos: dailyVideos,
+            monthly_videos: monthlyVideos,
+            due_date: dueDate || null,
+            priority: priority,
             status: 'pending',
             last_updated: new Date().toISOString(),
             created_at: new Date().toISOString()
@@ -1516,30 +1524,687 @@
 
         if (error) throw error;
 
-        // Add to local array
-        tasks.push({
-          id: id,
-          channel: channel,
-          client: client,
-          collaborator: collaborator,
-          daily_videos: dailyVideos,
-          status: 'pending'
-        });
+        // Add initial note if provided
+        if (notes) {
+          await supabase
+            .from('channel_notes')
+            .insert([{
+              channel_id: id,
+              note: notes,
+              created_at: new Date().toISOString()
+            }]);
+        }
 
-        document.querySelectorAll('.form-content input').forEach(i => i.value = '');
+        // Handle file uploads
+        if (fileInput.files.length > 0) {
+          await handleFileUploads(id, fileInput.files);
+        }
+
+        // Update local data
+        const newTask = {
+          id, channel, client, collaborator, monthly_videos: monthlyVideos,
+          due_date: dueDate, priority, status: 'pending',
+          notes: notes ? [{ note: notes, created_at: new Date().toISOString() }] : [],
+          timeLogs: [],
+          files: []
+        };
+        
+        tasks.unshift(newTask);
+
+        // Clear form
+        document.querySelectorAll('.form-content input, .form-content select, .form-content textarea').forEach(i => i.value = '');
+        document.getElementById('priority').value = 'medium';
+        
         toggleForm();
-        renderTasks();
-        alert('✅ Channel added successfully!');
+        populateFilterDropdowns();
+        filterTasks();
+        updateAnalytics();
+        
+        showNotification('✅ Channel added successfully!', 'success');
       } catch (error) {
         console.error('Error adding channel:', error);
         if (error.code === '23505') {
-          alert('❌ Channel ID already exists. Please use a different ID.');
+          showNotification('❌ Channel ID already exists', 'error');
         } else {
-          alert('❌ Failed to add channel. Please try again.');
+          showNotification('❌ Failed to add channel', 'error');
         }
       }
     };
 
+    // File upload handling
+    async function handleFileUploads(channelId, files) {
+      try {
+        const filePromises = Array.from(files).map(async (file) => {
+          // In a real application, you'd upload to storage first
+          // For now, we'll just store file metadata
+          return supabase
+            .from('channel_files')
+            .insert([{
+              channel_id: channelId,
+              filename: file.name,
+              file_size: file.size,
+              file_type: file.type,
+              created_at: new Date().toISOString()
+            }]);
+        });
+        
+        await Promise.all(filePromises);
+      } catch (error) {
+        console.error('Error uploading files:', error);
+      }
+    }
+
+    // Task status toggle
+    window.toggleTaskStatus = async function(id) {
+      try {
+        const task = tasks.find(t => t.id === id);
+        if (!task) return;
+        
+        const newStatus = task.status === 'completed' ? 'pending' : 'completed';
+        
+        const { error } = await supabase
+          .from('tasks')
+          .update({ 
+            status: newStatus, 
+            last_updated: new Date().toISOString(),
+            completed_at: newStatus === 'completed' ? new Date().toISOString() : null
+          })
+          .eq('id', id);
+        
+        if (error) throw error;
+        
+        // Update local data
+        task.status = newStatus;
+        if (newStatus === 'completed') {
+          task.completed_at = new Date().toISOString();
+          showCelebration();
+        }
+        
+        filterTasks();
+        updateAnalytics();
+        
+        showNotification(`${newStatus === 'completed' ? '✅ Channel completed!' : '⏳ Channel marked as pending'}`, 'success');
+      } catch (error) {
+        console.error('Error updating task:', error);
+        showNotification('❌ Failed to update channel status', 'error');
+      }
+    };
+
+    // Delete channel
+    window.deleteChannel = async function(id) {
+      if (confirm("Are you sure you want to delete this channel? This will also delete all associated notes, time logs, and file records.")) {
+        try {
+          // Delete from multiple tables
+          await Promise.all([
+            supabase.from('tasks').delete().eq('id', id),
+            supabase.from('channel_notes').delete().eq('channel_id', id),
+            supabase.from('time_logs').delete().eq('channel_id', id),
+            supabase.from('channel_files').delete().eq('channel_id', id)
+          ]);
+          
+          // Remove from local data
+          tasks = tasks.filter(t => t.id !== id);
+          selectedTasks.delete(id);
+          
+          filterTasks();
+          updateAnalytics();
+          updateBulkActions();
+          
+          showNotification('🗑️ Channel deleted successfully', 'success');
+        } catch (error) {
+          console.error('Error deleting channel:', error);
+          showNotification('❌ Failed to delete channel', 'error');
+        }
+      }
+    };
+
+    // Notes Modal
+    window.openNotesModal = function(taskId) {
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+      
+      currentEditingTask = taskId;
+      document.getElementById('noteText').value = '';
+      
+      // Display note history
+      const noteHistory = document.getElementById('noteHistory');
+      if (task.notes && task.notes.length > 0) {
+        noteHistory.innerHTML = '<h4>Previous Notes:</h4>' + 
+          task.notes.map(note => `
+            <div style="background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 5px; border-left: 3px solid var(--primary-color);">
+              <p>${note.note}</p>
+              <small style="color: #6c757d;">${new Date(note.created_at).toLocaleString()}</small>
+            </div>
+          `).join('');
+      } else {
+        noteHistory.innerHTML = '<p style="color: #6c757d;">No previous notes</p>';
+      }
+      
+      showModal('notesModal');
+    };
+
+    window.saveNote = async function() {
+      const noteText = document.getElementById('noteText').value.trim();
+      if (!noteText || !currentEditingTask) return;
+      
+      try {
+        const { error } = await supabase
+          .from('channel_notes')
+          .insert([{
+            channel_id: currentEditingTask,
+            note: noteText,
+            created_at: new Date().toISOString()
+          }]);
+        
+        if (error) throw error;
+        
+        // Update local data
+        const task = tasks.find(t => t.id === currentEditingTask);
+        if (task) {
+          if (!task.notes) task.notes = [];
+          task.notes.unshift({ note: noteText, created_at: new Date().toISOString() });
+        }
+        
+        filterTasks();
+        closeModal('notesModal');
+        showNotification('📝 Note saved successfully', 'success');
+      } catch (error) {
+        console.error('Error saving note:', error);
+        showNotification('❌ Failed to save note', 'error');
+      }
+    };
+
+    // Time Tracking Modal
+    window.openTimeModal = function(taskId) {
+      currentEditingTask = taskId;
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+      
+      // Display time history
+      const timeHistory = document.getElementById('timeHistory');
+      if (task.timeLogs && task.timeLogs.length > 0) {
+        const totalTime = task.timeLogs.reduce((acc, log) => acc + (log.duration || 0), 0);
+        timeHistory.innerHTML = `<h4>Total Time: ${totalTime.toFixed(1)} hours</h4>` +
+          task.timeLogs.map(log => `
+            <div style="background: #f8f9fa; padding: 10px; margin: 5px 0; border-radius: 5px; border-left: 3px solid var(--success-color);">
+              <p>⏱️ ${log.duration?.toFixed(1) || 0} hours</p>
+              ${log.description ? `<p>${log.description}</p>` : ''}
+              <small style="color: #6c757d;">${new Date(log.created_at).toLocaleString()}</small>
+            </div>
+          `).join('');
+      } else {
+        timeHistory.innerHTML = '<p style="color: #6c757d;">No time logged yet</p>';
+      }
+      
+      updateTimerDisplay();
+      showModal('timeModal');
+    };
+
+    window.toggleTimer = function() {
+      if (timer.running) {
+        stopTimer();
+      } else {
+        startTimer();
+      }
+    };
+
+    function startTimer() {
+      timer.start = Date.now() - timer.elapsed;
+      timer.running = true;
+      document.getElementById('startStopBtn').innerHTML = '⏸️ Pause Timer';
+      
+      timerInterval = setInterval(updateTimerDisplay, 1000);
+    }
+
+    function stopTimer() {
+      timer.running = false;
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      document.getElementById('startStopBtn').innerHTML = '▶️ Start Timer';
+    }
+
+    function updateTimerDisplay() {
+      if (timer.running) {
+        timer.elapsed = Date.now() - timer.start;
+      }
+      
+      const totalSeconds = Math.floor(timer.elapsed / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      
+      const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      document.getElementById('currentTimer').textContent = `Timer: ${display}`;
+    }
+
+    window.resetTimer = function() {
+      stopTimer();
+      timer.elapsed = 0;
+      updateTimerDisplay();
+    };
+
+    window.saveTimeLog = async function() {
+      if (timer.elapsed === 0) {
+        showNotification('⏱️ No time to log', 'warning');
+        return;
+      }
+      
+      const hours = timer.elapsed / (1000 * 60 * 60);
+      const description = prompt('Add a description for this time log (optional):');
+      
+      try {
+        const { error } = await supabase
+          .from('time_logs')
+          .insert([{
+            channel_id: currentEditingTask,
+            duration: hours,
+            description: description || null,
+            created_at: new Date().toISOString()
+          }]);
+        
+        if (error) throw error;
+        
+        // Update local data
+        const task = tasks.find(t => t.id === currentEditingTask);
+        if (task) {
+          if (!task.timeLogs) task.timeLogs = [];
+          task.timeLogs.unshift({ 
+            duration: hours, 
+            description: description || null, 
+            created_at: new Date().toISOString() 
+          });
+        }
+        
+        resetTimer();
+        filterTasks();
+        updateAnalytics();
+        
+        showNotification(`⏱️ ${hours.toFixed(1)} hours logged successfully`, 'success');
+        
+        // Refresh the time history display
+        openTimeModal(currentEditingTask);
+      } catch (error) {
+        console.error('Error saving time log:', error);
+        showNotification('❌ Failed to log time', 'error');
+      }
+    };
+
+    // Files Modal
+    window.openFilesModal = function(taskId) {
+      currentEditingTask = taskId;
+      const task = tasks.find(t => t.id === taskId);
+      if (!task) return;
+      
+      displayFilesList(task.files || []);
+      showModal('filesModal');
+    };
+
+    function displayFilesList(files) {
+      const filesList = document.getElementById('filesList');
+      
+      if (files.length === 0) {
+        filesList.innerHTML = '<p style="color: #6c757d;">No files uploaded yet</p>';
+        return;
+      }
+      
+      filesList.innerHTML = '<h4>Uploaded Files:</h4>' +
+        files.map(file => `
+          <div style="background: #f8f9fa; padding: 15px; margin: 10px 0; border-radius: 8px; border-left: 3px solid var(--primary-color); display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <strong>📄 ${file.filename}</strong>
+              <br>
+              <small style="color: #6c757d;">
+                ${formatFileSize(file.file_size)} • ${file.file_type} • 
+                ${new Date(file.created_at).toLocaleString()}
+              </small>
+            </div>
+            <button onclick="deleteFile('${file.id}')" style="background: var(--danger-color); color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer;">
+              🗑️ Delete
+            </button>
+          </div>
+        `).join('');
+    }
+
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    window.handleModalFileUpload = async function() {
+      const files = event.target.files;
+      if (files.length === 0 || !currentEditingTask) return;
+      
+      try {
+        await handleFileUploads(currentEditingTask, files);
+        
+        // Refresh task data
+        await loadAdditionalData();
+        
+        const task = tasks.find(t => t.id === currentEditingTask);
+        displayFilesList(task.files || []);
+        
+        filterTasks();
+        showNotification(`📎 ${files.length} file(s) uploaded successfully`, 'success');
+        
+        // Clear the file input
+        event.target.value = '';
+      } catch (error) {
+        console.error('Error uploading files:', error);
+        showNotification('❌ Failed to upload files', 'error');
+      }
+    };
+
+    window.deleteFile = async function(fileId) {
+      if (confirm('Are you sure you want to delete this file?')) {
+        try {
+          const { error } = await supabase
+            .from('channel_files')
+            .delete()
+            .eq('id', fileId);
+          
+          if (error) throw error;
+          
+          // Update local data
+          const task = tasks.find(t => t.id === currentEditingTask);
+          if (task && task.files) {
+            task.files = task.files.filter(f => f.id !== fileId);
+            displayFilesList(task.files);
+          }
+          
+          filterTasks();
+          showNotification('🗑️ File deleted successfully', 'success');
+        } catch (error) {
+          console.error('Error deleting file:', error);
+          showNotification('❌ Failed to delete file', 'error');
+        }
+      }
+    };
+
+    // Export functionality
+    window.exportToCSV = function() {
+      const csvContent = generateCSVContent();
+      downloadFile(csvContent, 'channels_export.csv', 'text/csv');
+      showNotification('📊 CSV export completed', 'success');
+    };
+
+    function generateCSVContent() {
+      const headers = ['Channel ID', 'Channel Name', 'Client', 'Collaborator', 'Videos/Month', 'Status', 'Due Date', 'Priority', 'Time Logged (hrs)', 'Notes Count', 'Files Count', 'Created Date'];
+      
+      const rows = filteredTasks.map(task => [
+        task.id,
+        task.channel,
+        task.client || '',
+        task.collaborator || '',
+        task.monthly_videos || 0,
+        task.status,
+        task.due_date || '',
+        task.priority || 'medium',
+        task.timeLogs?.reduce((acc, log) => acc + (log.duration || 0), 0).toFixed(2) || '0',
+        task.notes?.length || 0,
+        task.files?.length || 0,
+        new Date(task.created_at).toLocaleDateString()
+      ]);
+      
+      const csvContent = [headers, ...rows]
+        .map(row => row.map(field => `"${field}"`).join(','))
+        .join('\n');
+      
+      return csvContent;
+    }
+
+    window.exportToPDF = async function() {
+      // Create a simple PDF content (in a real app, you'd use a PDF library)
+      const pdfContent = generatePDFContent();
+      downloadFile(pdfContent, 'channels_export.txt', 'text/plain');
+      showNotification('📄 PDF export completed (as text)', 'success');
+    };
+
+    function generatePDFContent() {
+      const date = new Date().toLocaleDateString();
+      let content = `CHANNEL REPORT - ${date}\n`;
+      content += '='.repeat(50) + '\n\n';
+      
+      content += `Total Channels: ${filteredTasks.length}\n`;
+      content += `Completed: ${filteredTasks.filter(t => t.status === 'completed').length}\n`;
+      content += `Pending: ${filteredTasks.filter(t => t.status === 'pending').length}\n\n`;
+      
+      filteredTasks.forEach((task, index) => {
+        content += `${index + 1}. ${task.channel}\n`;
+        content += `   Client: ${task.client || 'Not specified'}\n`;
+        content += `   Collaborator: ${task.collaborator || 'Unassigned'}\n`;
+        content += `   Videos/Month: ${task.monthly_videos || 0}\n`;
+        content += `   Status: ${task.status}\n`;
+        content += `   Priority: ${task.priority || 'medium'}\n`;
+        if (task.due_date) content += `   Due Date: ${new Date(task.due_date).toLocaleDateString()}\n`;
+        content += '\n';
+      });
+      
+      return content;
+    }
+
+    function downloadFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    // Analytics and Statistics
+    function updateAnalytics() {
+      const total = filteredTasks.length;
+      const completed = filteredTasks.filter(t => t.status === 'completed').length;
+      const pending = total - completed;
+      const totalVideos = filteredTasks.reduce((acc, task) => acc + (parseInt(task.monthly_videos) || 0), 0);
+      
+      const now = new Date();
+      const overdue = filteredTasks.filter(task => 
+        task.due_date && new Date(task.due_date) < now && task.status !== 'completed'
+      ).length;
+      
+      // Calculate average completion time
+      const completedTasks = filteredTasks.filter(t => t.status === 'completed' && t.created_at);
+      let avgCompletionTime = 0;
+      if (completedTasks.length > 0) {
+        const totalTime = completedTasks.reduce((acc, task) => {
+          const created = new Date(task.created_at);
+          const completed = new Date(task.completed_at || task.last_updated);
+          return acc + (completed - created);
+        }, 0);
+        avgCompletionTime = (totalTime / completedTasks.length) / (1000 * 60 * 60); // Convert to hours
+      }
+      
+      document.getElementById('totalChannels').textContent = total;
+      document.getElementById('completedChannels').textContent = completed;
+      document.getElementById('pendingChannels').textContent = pending;
+      document.getElementById('totalVideosPerMonth').textContent = totalVideos;
+      document.getElementById('overdueChannels').textContent = overdue;
+      document.getElementById('avgCompletionTime').textContent = avgCompletionTime.toFixed(1);
+      
+      updateCollaboratorChart();
+    }
+
+    function updateCollaboratorChart() {
+      const collaboratorData = {};
+      
+      filteredTasks.forEach(task => {
+        const collaborator = task.collaborator || 'Unassigned';
+        if (!collaboratorData[collaborator]) {
+          collaboratorData[collaborator] = { total: 0, completed: 0 };
+        }
+        collaboratorData[collaborator].total++;
+        if (task.status === 'completed') {
+          collaboratorData[collaborator].completed++;
+        }
+      });
+      
+      const collaboratorBars = document.getElementById('collaboratorBars');
+      
+      if (Object.keys(collaboratorData).length === 0) {
+        collaboratorBars.innerHTML = '<p style="color: #6c757d;">No data available</p>';
+        return;
+      }
+      
+      collaboratorBars.innerHTML = Object.entries(collaboratorData)
+        .map(([name, data]) => {
+          const completionRate = data.total > 0 ? (data.completed / data.total) * 100 : 0;
+          return `
+            <div style="margin-bottom: 15px; padding: 15px; background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <strong>👤 ${name}</strong>
+                <span style="color: var(--primary-color); font-weight: 600;">${data.completed}/${data.total} (${completionRate.toFixed(1)}%)</span>
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: ${completionRate}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+    }
+
+    // Notification System
+    function checkNotifications() {
+      const now = new Date();
+      const notifications = [];
+      
+      // Check for overdue tasks
+      const overdueTasks = tasks.filter(task => 
+        task.due_date && new Date(task.due_date) < now && task.status !== 'completed'
+      );
+      
+      if (overdueTasks.length > 0) {
+        notifications.push({
+          type: 'error',
+          message: `⚠️ ${overdueTasks.length} channel(s) are overdue!`,
+          action: () => {
+            document.getElementById('statusFilter').value = 'pending';
+            filterTasks();
+          }
+        });
+      }
+      
+      // Check for tasks due soon (within 3 days)
+      const soonDueTasks = tasks.filter(task => {
+        if (!task.due_date || task.status === 'completed') return false;
+        const dueDate = new Date(task.due_date);
+        const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+        return dueDate >= now && dueDate <= threeDaysFromNow;
+      });
+      
+      if (soonDueTasks.length > 0) {
+        notifications.push({
+          type: 'warning',
+          message: `⏰ ${soonDueTasks.length} channel(s) due within 3 days`,
+          action: () => {
+            // Filter to show due soon tasks
+            filterTasks();
+          }
+        });
+      }
+      
+      // Check for low activity (no time logged recently)
+      const inactiveTasks = tasks.filter(task => {
+        if (task.status === 'completed') return false;
+        const lastActivity = task.timeLogs?.length > 0 ? 
+          new Date(Math.max(...task.timeLogs.map(log => new Date(log.created_at)))) : 
+          new Date(task.created_at);
+        const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        return lastActivity < sevenDaysAgo;
+      });
+      
+      if (inactiveTasks.length > 0) {
+        notifications.push({
+          type: 'warning',
+          message: `📊 ${inactiveTasks.length} channel(s) with no activity in 7 days`,
+          action: () => {
+            document.getElementById('statusFilter').value = 'pending';
+            filterTasks();
+          }
+        });
+      }
+      
+      // Store notifications globally for the notification center
+      window.currentNotifications = notifications;
+      
+      // Show the most critical notification
+      if (notifications.length > 0 && notifications.some(n => n.type === 'error')) {
+        const criticalNotification = notifications.find(n => n.type === 'error');
+        showNotification(criticalNotification.message, criticalNotification.type);
+      }
+    }
+
+    window.showNotificationCenter = function() {
+      const notificationList = document.getElementById('notificationList');
+      
+      if (!window.currentNotifications || window.currentNotifications.length === 0) {
+        notificationList.innerHTML = `
+          <div style="text-align: center; padding: 40px; color: #6c757d;">
+            <h3>✅ All Good!</h3>
+            <p>No notifications at this time.</p>
+          </div>
+        `;
+      } else {
+        notificationList.innerHTML = window.currentNotifications.map(notification => `
+          <div style="background: rgba(${notification.type === 'error' ? '231, 76, 60' : '243, 156, 18'}, 0.1); 
+                      padding: 15px; margin: 10px 0; border-radius: 8px; 
+                      border-left: 4px solid ${notification.type === 'error' ? 'var(--danger-color)' : 'var(--warning-color)'};">
+            <p style="margin: 0; font-weight: 600;">${notification.message}</p>
+            ${notification.action ? `<button onclick="closeModal('notificationModal'); (${notification.action.toString()})()" 
+              style="margin-top: 10px; background: var(--primary-color); color: white; border: none; 
+                     padding: 8px 15px; border-radius: 5px; cursor: pointer;">
+              View Related Channels
+            </button>` : ''}
+          </div>
+        `).join('');
+      }
+      
+      showModal('notificationModal');
+    };
+
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById('notification');
+      notification.textContent = message;
+      notification.className = `notification show ${type}`;
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 4000);
+    }
+
+    // Modal Management
+    function showModal(modalId) {
+      document.getElementById(modalId).classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    window.closeModal = function(modalId) {
+      document.getElementById(modalId).classList.remove('show');
+      document.body.style.overflow = 'auto';
+      
+      // Stop timer if closing time modal
+      if (modalId === 'timeModal' && timer.running) {
+        stopTimer();
+      }
+    };
+
+    // Close modals when clicking outside
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('modal')) {
+        const modalId = e.target.id;
+        closeModal(modalId);
+      }
+    });
+
+    // Reset all channels
     window.resetAllChannels = async function() {
       const confirmation = confirm(
         "🔄 Are you sure you want to reset ALL channels?\n\n" +
@@ -1571,11 +2236,12 @@
           }
         });
 
-        renderTasks();
-        alert('✅ All channels have been reset to pending status!');
+        filterTasks();
+        updateAnalytics();
+        showNotification('✅ All channels have been reset to pending status!', 'success');
       } catch (error) {
         console.error('Error resetting channels:', error);
-        alert('❌ Error resetting channels. Please try again.');
+        showNotification('❌ Error resetting channels. Please try again.', 'error');
       } finally {
         resetBtn.disabled = false;
         resetBtn.textContent = '🔄 Reset All Channels';
@@ -1598,18 +2264,118 @@
       modal.classList.remove('show');
     };
 
+    // Toggle analytics visibility
+    window.toggleAnalytics = function() {
+      const analyticsSection = document.querySelector('.analytics-section');
+      if (analyticsSection.style.display === 'none') {
+        analyticsSection.style.display = 'block';
+        showNotification('📈 Analytics shown', 'success');
+      } else {
+        analyticsSection.style.display = 'none';
+        showNotification('📈 Analytics hidden', 'success');
+      }
+    };
+
+    // Date/time functions
     function updateDateTime() {
       const now = new Date();
       const bdt = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
-      currentDateTime.textContent = bdt.toLocaleString('en-US', {
+      document.getElementById('currentDateTime').textContent = bdt.toLocaleString('en-US', {
         weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
         hour: '2-digit', minute: '2-digit', second: '2-digit'
       });
     }
 
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
-    loadTasks();
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // Ctrl/Cmd + N for new channel
+      if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        if (!document.getElementById('formContent').classList.contains('expanded')) {
+          toggleForm();
+        }
+      }
+      
+      // Escape to close modals
+      if (e.key === 'Escape') {
+        const openModal = document.querySelector('.modal.show');
+        if (openModal) {
+          closeModal(openModal.id);
+        }
+      }
+      
+      // Ctrl/Cmd + A to select all
+      if ((e.ctrlKey || e.metaKey) && e.key === 'a' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        document.getElementById('selectAll').checked = true;
+        toggleSelectAll();
+      }
+    });
+
+    // Initialize tooltips and other UI enhancements
+    document.addEventListener('mouseover', function(e) {
+      if (e.target.hasAttribute('title')) {
+        // You could add custom tooltip logic here
+      }
+    });
+
+    // Auto-save draft functionality for forms
+    let formDraftTimer;
+    document.addEventListener('input', function(e) {
+      if (e.target.closest('.form-content')) {
+        clearTimeout(formDraftTimer);
+        formDraftTimer = setTimeout(() => {
+          // Save form data to localStorage as draft
+          const formData = {
+            channelId: document.getElementById('channelId').value,
+            channelName: document.getElementById('channelName').value,
+            client: document.getElementById('client').value,
+            collaborator: document.getElementById('collaborator').value,
+            monthlyVideos: document.getElementById('monthlyVideos').value,
+            dueDate: document.getElementById('dueDate').value,
+            priority: document.getElementById('priority').value,
+            notes: document.getElementById('notes').value
+          };
+          localStorage.setItem('channelFormDraft', JSON.stringify(formData));
+        }, 2000);
+      }
+    });
+
+    // Load form draft on page load
+    window.addEventListener('load', function() {
+      const savedDraft = localStorage.getItem('channelFormDraft');
+      if (savedDraft) {
+        try {
+          const formData = JSON.parse(savedDraft);
+          // Only restore if form is empty
+          if (!document.getElementById('channelId').value) {
+            Object.keys(formData).forEach(key => {
+              const element = document.getElementById(key);
+              if (element && formData[key]) {
+                element.value = formData[key];
+              }
+            });
+          }
+        } catch (e) {
+          console.error('Error loading form draft:', e);
+        }
+      }
+    });
+
+    // Clear draft when form is submitted successfully
+    function clearFormDraft() {
+      localStorage.removeItem('channelFormDraft');
+    }
+
+    // Add to the addChannel function
+    const originalAddChannel = window.addChannel;
+    window.addChannel = async function() {
+      const result = await originalAddChannel();
+      if (result !== false) { // If successful
+        clearFormDraft();
+      }
+      return result;
+    };
   </script>
 </body>
 </html>
