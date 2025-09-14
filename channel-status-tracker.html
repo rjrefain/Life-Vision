@@ -558,34 +558,7 @@
       }
     }
 
-    function updateVisitWarnings() {
-      const now = new Date().getTime();
-      const FORTY_EIGHT_HOURS = 48 * 60 * 60 * 1000;
-
-      channels.forEach(async (channel) => {
-        if (channel.visited_at && channel.last_visited) {
-          const visitTime = new Date(channel.visited_at).getTime();
-          const timeDiff = now - visitTime;
-          
-          if (timeDiff > FORTY_EIGHT_HOURS) {
-            try {
-              await supabase
-                .from('channel_status')
-                .upsert({
-                  channel_id: channel.id,
-                  last_visited: false,
-                  visited_at: null
-                });
-              
-              channel.last_visited = false;
-              channel.visited_at = null;
-            } catch (error) {
-              console.error('Error resetting visit status:', error);
-            }
-          }
-        }
-      });
-    }
+    function updateVisitWarnings() {}
 
     function getVisitStatus(channel) {
       if (!channel.visited_at || !channel.last_visited) {
