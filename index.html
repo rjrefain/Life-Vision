@@ -90,7 +90,6 @@
       box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
     }
 
-    /* Reset Button - GREEN COLOR */
     .reset-btn {
       background: linear-gradient(135deg, #27ae60, #2ecc71);
       color: white;
@@ -118,7 +117,6 @@
       box-shadow: none;
     }
 
-    /* Auto Reorder Dropdown Styles */
     .dropdown-container {
       position: relative;
       display: inline-block;
@@ -190,7 +188,6 @@
       border-bottom: 1px solid #e8ecf0;
     }
 
-    /* Collapsible Form Styles */
     .form-section {
       background: rgba(255, 255, 255, 0.95);
       border-radius: 15px;
@@ -299,7 +296,6 @@
       top: 0;
     }
 
-    /* Center and bold the Videos/Month column */
     th:nth-child(4), 
     td:nth-child(4) {
       text-align: center;
@@ -319,7 +315,6 @@
       background-color: #e3f2fd;
     }
 
-    /* Drag and Drop Styles */
     .draggable-row {
       cursor: move;
       transition: all 0.3s ease;
@@ -353,7 +348,6 @@
       vertical-align: middle;
     }
 
-    /* Channel column layout fix */
     .channel-content {
       display: flex;
       align-items: center;
@@ -439,7 +433,6 @@
       color: #388e3c;
     }
 
-    /* Row Edit Styles */
     .edit-pencil {
       color: var(--primary-color);
       font-size: 16px;
@@ -469,7 +462,6 @@
       box-sizing: border-box;
     }
 
-    /* Specific width constraints for different columns */
     .videos-edit {
       width: 60px;
       max-width: 60px;
@@ -531,7 +523,6 @@
       transform: scale(1.05);
     }
 
-    /* Celebration Modal Styles */
     .celebration-modal {
       position: fixed;
       top: 0;
@@ -716,7 +707,6 @@
       box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
     }
 
-    /* Floating particles */
     .particle {
       position: absolute;
       width: 8px;
@@ -766,9 +756,7 @@
       .celebration-message {
         font-size: 18px;
       }
-    }
 
-    @media (max-width: 768px) {
       .container {
         padding: 10px;
       }
@@ -810,7 +798,6 @@
         padding: 12px 16px;
       }
 
-      /* Hide table headers on mobile */
       .table-wrapper table,
       .table-wrapper thead,
       .table-wrapper tbody,
@@ -938,69 +925,8 @@
         <input type="text" id="channelName" placeholder="Channel Name" required />
         <input type="text" id="client" placeholder="Client Name" />
         <input type="text" id="collaborator" placeholder="Collaborator Name" />
-        <input type="number" id="monthlyVideos" placeholder="Monthly Videos" min="0" />
+        <input type="number" id="monthlyVideos" placeholder="Videos Per Month" min="0" />
         <button onclick="addChannel()">Create Channel</button>
-      </div>
-    </div>
-
-    <div class="status-container">
-      <div id="supabaseStatus">🟢 Connected to Database</div>
-      <button class="reset-btn" onclick="resetAllChannels()" id="resetBtn">
-        🔄 Reset All Channels
-      </button>
-      <div class="dropdown-container">
-        <button class="auto-reorder-btn" onclick="toggleDropdown()">
-          🔄 Auto Reorder ▼
-        </button>
-        <div class="dropdown-menu" id="dropdownMenu">
-          <div class="dropdown-item" onclick="reorderBy('collaborator')">
-            👥 Collaborator Arrangement
-          </div>
-          <div class="dropdown-item" onclick="reorderBy('project')">
-            📁 Project Arrangement
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="table-wrapper">
-      <table>
-        <thead>
-          <tr>
-            <th>Channel</th>
-            <th>Client</th>
-            <th>Collaborator</th>
-            <th>Videos/Month</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="tasksBody"></tbody>
-      </table>
-    </div>
-
-    <!-- Celebration Modal -->
-    <div class="celebration-modal" id="celebrationModal">
-      <div class="celebration-content">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        
-        <div class="celebration-emoji">
-          <div class="green-circle">
-            <div class="white-tick">✓</div>
-          </div>
-        </div>
-        <h1 class="celebration-title">CONGRATULATIONS!</h1>
-        <div class="celebration-line"></div>
-        <p class="celebration-message">
-          You Are Helping LemonCore To Grow, Keep That Up Champ!
-        </p>
-        <button class="celebration-close" onclick="closeCelebration()">
-          ✨ Continue The Great Work! ✨
-        </button>
       </div>
     </div>
   </div>
@@ -1013,82 +939,31 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBya3Jic3d0dG10Z2VwbHN2emxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTk5NjQsImV4cCI6MjA3MjYzNTk2NH0.Ul2cd-cpWHfpK1HTgHM7Tv2NDCrFWcAq2N-C7Tv9oz8'
     const supabase = createClient(supabaseUrl, supabaseKey)
 
+    // Global variables
     const tasksBody = document.getElementById('tasksBody');
     const currentDateTime = document.getElementById('currentDateTime');
-
-    // Drag and Drop Variables
     let draggedElement = null;
     let channelOrder = [];
     let tasks = [];
 
-    // Dropdown functionality
-    window.toggleDropdown = function() {
-      const dropdown = document.getElementById('dropdownMenu');
-      dropdown.classList.toggle('show');
-      
-      // Close dropdown when clicking outside
-      document.addEventListener('click', function closeDropdown(e) {
-        if (!e.target.closest('.dropdown-container')) {
-          dropdown.classList.remove('show');
-          document.removeEventListener('click', closeDropdown);
-        }
+    // Initialize the application
+    function init() {
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
+      loadTasks();
+    }
+
+    // Update date and time display
+    function updateDateTime() {
+      const now = new Date();
+      const bdt = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
+      currentDateTime.textContent = bdt.toLocaleString('en-US', {
+        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
       });
-    };
+    }
 
-    // Auto reorder functionality
-    window.reorderBy = async function(type) {
-      const dropdown = document.getElementById('dropdownMenu');
-      dropdown.classList.remove('show');
-      
-      try {
-        const { data: tasks, error } = await supabase
-          .from('tasks')
-          .select('*')
-        
-        if (error) throw error;
-
-        let sortedEntries;
-        
-        if (type === 'collaborator') {
-          // Sort by collaborator name, then by channel name
-          sortedEntries = tasks.sort((a, b) => {
-            const collabA = (a.collaborator || 'Unassigned').toLowerCase();
-            const collabB = (b.collaborator || 'Unassigned').toLowerCase();
-            if (collabA === collabB) {
-              return a.channel.toLowerCase().localeCompare(b.channel.toLowerCase());
-            }
-            return collabA.localeCompare(collabB);
-          });
-        } else if (type === 'project') {
-          // Sort by channel/project name
-          sortedEntries = tasks.sort((a, b) => {
-            return a.channel.toLowerCase().localeCompare(b.channel.toLowerCase());
-          });
-        }
-        
-        // Create new order array
-        const newOrder = sortedEntries.map((task, index) => ({
-          channel_id: task.id,
-          order_position: index
-        }));
-        
-        // Clear existing order and insert new one
-        await supabase.from('channel_order').delete().gt('id', 0);
-        await supabase.from('channel_order').insert(newOrder);
-        
-        channelOrder = newOrder;
-        
-        // Re-load and render tasks
-        await loadTasks();
-        
-        const orderType = type === 'collaborator' ? 'Collaborator' : 'Project';
-        alert(`✅ Channels reordered by ${orderType} successfully!`);
-      } catch (error) {
-        console.error('Error reordering:', error);
-        alert('❌ Failed to reorder channels');
-      }
-    };
-
+    // Load tasks from database
     async function loadTasks() {
       try {
         // Load channel order
@@ -1116,33 +991,7 @@
       }
     }
 
-    async function saveChannelOrder() {
-      try {
-        const rows = document.querySelectorAll('#tasksBody tr');
-        const newOrder = [];
-        
-        rows.forEach((row, index) => {
-          const channelId = row.getAttribute('data-channel-id');
-          if (channelId) {
-            newOrder.push({
-              channel_id: channelId,
-              order_position: index
-            });
-          }
-        });
-        
-        // Clear existing order and insert new one
-        await supabase.from('channel_order').delete().gt('id', 0);
-        if (newOrder.length > 0) {
-          await supabase.from('channel_order').insert(newOrder);
-        }
-        
-        channelOrder = newOrder;
-      } catch (error) {
-        console.error('Error saving channel order:', error);
-      }
-    }
-
+    // Sort channels by custom order
     function sortChannelsByOrder(tasks) {
       if (channelOrder.length === 0) {
         return tasks;
@@ -1162,6 +1011,7 @@
       return sortedTasks;
     }
 
+    // Render tasks in the table
     function renderTasks() {
       tasksBody.innerHTML = '';
       
@@ -1190,9 +1040,9 @@
             <input type="text" class="edit-input collaborator-edit" value="${task.collaborator || ''}" style="display: none;" />
           </td>
           <td data-label="Videos/Month">
-            <span class="videos-display">${task.monthly_videos || 0}</span>
+            <span class="videos-display">${task.daily_videos || 0}</span>
             <span class="edit-pencil" onclick="editRow('${task.id}')" title="Edit this row">✏️</span>
-            <input type="number" class="edit-input videos-edit" value="${task.monthly_videos || 0}" style="display: none;" min="0" />
+            <input type="number" class="edit-input videos-edit" value="${task.daily_videos || 0}" style="display: none;" min="0" />
           </td>
           <td data-label="Status"><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
           <td class="action-cell">
@@ -1220,142 +1070,6 @@
         tasksBody.appendChild(row);
       });
     }
-
-    // Row editing functionality
-    window.editRow = function(id) {
-      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
-      if (!row) return;
-      
-      // Disable dragging while editing
-      row.draggable = false;
-      row.classList.add('row-editing');
-      
-      // Hide display elements and show input elements
-      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
-      const inputs = row.querySelectorAll('.edit-input');
-      
-      displays.forEach(display => display.style.display = 'none');
-      inputs.forEach(input => input.style.display = 'block');
-      
-      // Show edit actions, hide normal actions
-      const normalActions = row.querySelector('.normal-actions');
-      const editActions = row.querySelector('.edit-actions');
-      normalActions.style.display = 'none';
-      editActions.style.display = 'flex';
-      
-      // Focus on first input
-      const firstInput = row.querySelector('.channel-edit');
-      if (firstInput) {
-        firstInput.focus();
-        firstInput.select();
-      }
-    };
-
-    window.saveRowEdit = async function(id) {
-      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
-      if (!row) return;
-      
-      // Get new values from inputs
-      const newChannel = row.querySelector('.channel-edit').value.trim();
-      const newClient = row.querySelector('.client-edit').value.trim();
-      const newCollaborator = row.querySelector('.collaborator-edit').value.trim();
-      const newVideos = parseInt(row.querySelector('.videos-edit').value) || 0;
-      
-      if (!newChannel) {
-        alert('Channel name cannot be empty!');
-        return;
-      }
-      
-      try {
-        // Update Supabase
-        const { error } = await supabase
-          .from('tasks')
-          .update({
-            channel: newChannel,
-            client: newClient,
-            collaborator: newCollaborator,
-            monthly_videos: newVideos,
-            last_updated: new Date().toISOString()
-          })
-          .eq('id', id);
-        
-        if (error) throw error;
-        
-        // Update local tasks array
-        const taskIndex = tasks.findIndex(t => t.id === id);
-        if (taskIndex !== -1) {
-          tasks[taskIndex] = {
-            ...tasks[taskIndex],
-            channel: newChannel,
-            client: newClient,
-            collaborator: newCollaborator,
-            monthly_videos: newVideos
-          };
-        }
-        
-        // Update display elements
-        row.querySelector('.channel-display').textContent = newChannel;
-        row.querySelector('.client-display').textContent = newClient;
-        row.querySelector('.collaborator-display').textContent = newCollaborator || 'Unassigned';
-        row.querySelector('.videos-display').textContent = newVideos;
-        
-        // Exit edit mode
-        cancelRowEdit(id);
-        
-        alert('✅ Row updated successfully!');
-        
-      } catch (error) {
-        console.error('Error updating row:', error);
-        alert('❌ Failed to update row. Please try again.');
-      }
-    };
-
-    window.cancelRowEdit = function(id) {
-      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
-      if (!row) return;
-      
-      // Re-enable dragging
-      row.draggable = true;
-      row.classList.remove('row-editing');
-      
-      // Show display elements and hide input elements
-      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
-      const inputs = row.querySelectorAll('.edit-input');
-      
-      displays.forEach(display => display.style.display = 'inline');
-      inputs.forEach(input => input.style.display = 'none');
-      
-      // Show normal actions, hide edit actions
-      const normalActions = row.querySelector('.normal-actions');
-      const editActions = row.querySelector('.edit-actions');
-      normalActions.style.display = 'block';
-      editActions.style.display = 'none';
-      
-      // Reset input values to original
-      const originalChannel = row.querySelector('.channel-display').textContent;
-      const originalClient = row.querySelector('.client-display').textContent;
-      const originalCollaborator = row.querySelector('.collaborator-display').textContent;
-      const originalVideos = row.querySelector('.videos-display').textContent;
-      
-      row.querySelector('.channel-edit').value = originalChannel;
-      row.querySelector('.client-edit').value = originalClient;
-      row.querySelector('.collaborator-edit').value = originalCollaborator === 'Unassigned' ? '' : originalCollaborator;
-      row.querySelector('.videos-edit').value = originalVideos;
-    };
-
-    // Handle Enter key for saving edits
-    document.addEventListener('keydown', function(e) {
-      if (e.target.classList.contains('edit-input')) {
-        const row = e.target.closest('tr');
-        const channelId = row.getAttribute('data-channel-id');
-        
-        if (e.key === 'Enter') {
-          saveRowEdit(channelId);
-        } else if (e.key === 'Escape') {
-          cancelRowEdit(channelId);
-        }
-      }
-    });
 
     // Drag and Drop Event Handlers
     function handleDragStart(e) {
@@ -1410,6 +1124,112 @@
       });
       draggedElement = null;
     }
+
+    // Save channel order to database
+    async function saveChannelOrder() {
+      try {
+        const rows = document.querySelectorAll('#tasksBody tr');
+        const newOrder = [];
+        
+        rows.forEach((row, index) => {
+          const channelId = row.getAttribute('data-channel-id');
+          if (channelId) {
+            newOrder.push({
+              channel_id: channelId,
+              order_position: index
+            });
+          }
+        });
+        
+        // Clear existing order and insert new one
+        await supabase.from('channel_order').delete().gt('id', 0);
+        if (newOrder.length > 0) {
+          await supabase.from('channel_order').insert(newOrder);
+        }
+        
+        channelOrder = newOrder;
+      } catch (error) {
+        console.error('Error saving channel order:', error);
+      }
+    }
+
+    // Global functions for window access
+    window.toggleForm = function() {
+      const formSection = document.getElementById('formSection');
+      const formContent = document.getElementById('formContent');
+      const toggleBtn = document.querySelector('.form-toggle-btn');
+      
+      if (formContent.classList.contains('expanded')) {
+        formContent.classList.remove('expanded');
+        formSection.classList.remove('expanded');
+        toggleBtn.innerHTML = `➕ Add New Channel <span class="toggle-icon">▼</span>`;
+      } else {
+        formContent.classList.add('expanded');
+        formSection.classList.add('expanded');
+        toggleBtn.innerHTML = `➖ Hide Form <span class="toggle-icon">▲</span>`;
+        setTimeout(() => {
+          document.getElementById('channelId').focus();
+        }, 300);
+      }
+    };
+
+    window.addChannel = async function() {
+      const id = document.getElementById('channelId').value.trim();
+      const channel = document.getElementById('channelName').value.trim();
+      const client = document.getElementById('client').value.trim();
+      const collaborator = document.getElementById('collaborator').value.trim();
+      const monthlyVideos = +document.getElementById('monthlyVideos').value || 0;
+
+      if (!id || !channel) {
+        alert("Channel ID and Name are required.");
+        return;
+      }
+
+      try {
+        const { error } = await supabase
+          .from('tasks')
+          .insert([{
+            id: id,
+            channel: channel,
+            client: client,
+            collaborator: collaborator,
+            daily_videos: monthlyVideos,
+            status: 'pending',
+            last_updated: new Date().toISOString(),
+            created_at: new Date().toISOString()
+          }]);
+
+        if (error) throw error;
+
+        // Add to local array
+        tasks.push({
+          id: id,
+          channel: channel,
+          client: client,
+          collaborator: collaborator,
+          daily_videos: monthlyVideos,
+          status: 'pending'
+        });
+
+        // Clear form
+        document.getElementById('channelId').value = '';
+        document.getElementById('channelName').value = '';
+        document.getElementById('client').value = '';
+        document.getElementById('collaborator').value = '';
+        document.getElementById('monthlyVideos').value = '';
+        
+        toggleForm();
+        renderTasks();
+        alert('✅ Channel added successfully!');
+      } catch (error) {
+        console.error('Error adding channel:', error);
+        if (error.code === '23505') {
+          alert('❌ Channel ID already exists. Please use a different ID.');
+        } else {
+          alert('❌ Failed to add channel. Please try again.');
+        }
+      }
+    };
 
     window.toggleTask = async function(id) {
       try {
@@ -1471,73 +1291,125 @@
       }
     };
 
-    // Toggle form visibility
-    window.toggleForm = function() {
-      const formSection = document.getElementById('formSection');
-      const formContent = document.getElementById('formContent');
-      const toggleBtn = document.querySelector('.form-toggle-btn');
+    window.editRow = function(id) {
+      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
+      if (!row) return;
       
-      if (formContent.classList.contains('expanded')) {
-        formContent.classList.remove('expanded');
-        formSection.classList.remove('expanded');
-        toggleBtn.innerHTML = `➕ Add New Channel <span class="toggle-icon">▼</span>`;
-      } else {
-        formContent.classList.add('expanded');
-        formSection.classList.add('expanded');
-        toggleBtn.innerHTML = `➖ Hide Form <span class="toggle-icon">▲</span>`;
-        setTimeout(() => {
-          document.getElementById('channelId').focus();
-        }, 300);
+      // Disable dragging while editing
+      row.draggable = false;
+      row.classList.add('row-editing');
+      
+      // Hide display elements and show input elements
+      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
+      const inputs = row.querySelectorAll('.edit-input');
+      
+      displays.forEach(display => display.style.display = 'none');
+      inputs.forEach(input => input.style.display = 'block');
+      
+      // Show edit actions, hide normal actions
+      const normalActions = row.querySelector('.normal-actions');
+      const editActions = row.querySelector('.edit-actions');
+      normalActions.style.display = 'none';
+      editActions.style.display = 'flex';
+      
+      // Focus on first input
+      const firstInput = row.querySelector('.channel-edit');
+      if (firstInput) {
+        firstInput.focus();
+        firstInput.select();
       }
     };
 
-    window.addChannel = async function() {
-      const id = document.getElementById('channelId').value.trim();
-      const channel = document.getElementById('channelName').value.trim();
-      const client = document.getElementById('client').value.trim();
-      const collaborator = document.getElementById('collaborator').value.trim();
-      const monthlyVideos = +document.getElementById('monthlyVideos').value || 0;
-
-      if (!id || !channel) return alert("Channel ID and Name are required.");
-
+    window.saveRowEdit = async function(id) {
+      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
+      if (!row) return;
+      
+      // Get new values from inputs
+      const newChannel = row.querySelector('.channel-edit').value.trim();
+      const newClient = row.querySelector('.client-edit').value.trim();
+      const newCollaborator = row.querySelector('.collaborator-edit').value.trim();
+      const newVideos = parseInt(row.querySelector('.videos-edit').value) || 0;
+      
+      if (!newChannel) {
+        alert('Channel name cannot be empty!');
+        return;
+      }
+      
       try {
+        // Update Supabase
         const { error } = await supabase
           .from('tasks')
-          .insert([{
-            id: id,
-            channel: channel,
-            client: client,
-            collaborator: collaborator,
-            monthly_videos: monthlyVideos,
-            status: 'pending',
-            last_updated: new Date().toISOString(),
-            created_at: new Date().toISOString()
-          }]);
-
+          .update({
+            channel: newChannel,
+            client: newClient,
+            collaborator: newCollaborator,
+            daily_videos: newVideos,
+            last_updated: new Date().toISOString()
+          })
+          .eq('id', id);
+        
         if (error) throw error;
-
-        // Add to local array
-        tasks.push({
-          id: id,
-          channel: channel,
-          client: client,
-          collaborator: collaborator,
-          daily_videos: monthlyVideos,
-          status: 'pending'
-        });
-
-        document.querySelectorAll('.form-content input').forEach(i => i.value = '');
-        toggleForm();
-        renderTasks();
-        alert('✅ Channel added successfully!');
-      } catch (error) {
-        console.error('Error adding channel:', error);
-        if (error.code === '23505') {
-          alert('❌ Channel ID already exists. Please use a different ID.');
-        } else {
-          alert('❌ Failed to add channel. Please try again.');
+        
+        // Update local tasks array
+        const taskIndex = tasks.findIndex(t => t.id === id);
+        if (taskIndex !== -1) {
+          tasks[taskIndex] = {
+            ...tasks[taskIndex],
+            channel: newChannel,
+            client: newClient,
+            collaborator: newCollaborator,
+            daily_videos: newVideos
+          };
         }
+        
+        // Update display elements
+        row.querySelector('.channel-display').textContent = newChannel;
+        row.querySelector('.client-display').textContent = newClient;
+        row.querySelector('.collaborator-display').textContent = newCollaborator || 'Unassigned';
+        row.querySelector('.videos-display').textContent = newVideos;
+        
+        // Exit edit mode
+        cancelRowEdit(id);
+        
+        alert('✅ Row updated successfully!');
+        
+      } catch (error) {
+        console.error('Error updating row:', error);
+        alert('❌ Failed to update row. Please try again.');
       }
+    };
+
+    window.cancelRowEdit = function(id) {
+      const row = document.querySelector(`tr[data-channel-id="${id}"]`);
+      if (!row) return;
+      
+      // Re-enable dragging
+      row.draggable = true;
+      row.classList.remove('row-editing');
+      
+      // Show display elements and hide input elements
+      const displays = row.querySelectorAll('.channel-display, .client-display, .collaborator-display, .videos-display, .edit-pencil');
+      const inputs = row.querySelectorAll('.edit-input');
+      
+      displays.forEach(display => display.style.display = 'inline');
+      inputs.forEach(input => input.style.display = 'none');
+      
+      // Show normal actions, hide edit actions
+      const normalActions = row.querySelector('.normal-actions');
+      const editActions = row.querySelector('.edit-actions');
+      normalActions.style.display = 'block';
+      editActions.style.display = 'none';
+      
+      // Reset input values to original
+      const originalChannel = row.querySelector('.channel-display').textContent;
+      const originalClient = row.querySelector('.client-display').textContent;
+      const originalCollaborator = row.querySelector('.collaborator-display').textContent;
+      const originalVideos = row.querySelector('.videos-display').textContent;
+      
+      row.querySelector('.channel-edit').value = originalChannel;
+      row.querySelector('.client-edit').value = originalClient;
+      row.querySelector('.collaborator-edit').value = originalCollaborator === 'Unassigned' ? '' : originalCollaborator;
+      row.querySelector('.videos-edit').value = originalVideos;
     };
 
     window.resetAllChannels = async function() {
@@ -1582,7 +1454,72 @@
       }
     };
 
-    // Celebration functions
+    window.toggleDropdown = function() {
+      const dropdown = document.getElementById('dropdownMenu');
+      dropdown.classList.toggle('show');
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function closeDropdown(e) {
+        if (!e.target.closest('.dropdown-container')) {
+          dropdown.classList.remove('show');
+          document.removeEventListener('click', closeDropdown);
+        }
+      });
+    };
+
+    window.reorderBy = async function(type) {
+      const dropdown = document.getElementById('dropdownMenu');
+      dropdown.classList.remove('show');
+      
+      try {
+        const { data: tasks, error } = await supabase
+          .from('tasks')
+          .select('*')
+        
+        if (error) throw error;
+
+        let sortedEntries;
+        
+        if (type === 'collaborator') {
+          // Sort by collaborator name, then by channel name
+          sortedEntries = tasks.sort((a, b) => {
+            const collabA = (a.collaborator || 'Unassigned').toLowerCase();
+            const collabB = (b.collaborator || 'Unassigned').toLowerCase();
+            if (collabA === collabB) {
+              return a.channel.toLowerCase().localeCompare(b.channel.toLowerCase());
+            }
+            return collabA.localeCompare(collabB);
+          });
+        } else if (type === 'project') {
+          // Sort by channel/project name
+          sortedEntries = tasks.sort((a, b) => {
+            return a.channel.toLowerCase().localeCompare(b.channel.toLowerCase());
+          });
+        }
+        
+        // Create new order array
+        const newOrder = sortedEntries.map((task, index) => ({
+          channel_id: task.id,
+          order_position: index
+        }));
+        
+        // Clear existing order and insert new one
+        await supabase.from('channel_order').delete().gt('id', 0);
+        await supabase.from('channel_order').insert(newOrder);
+        
+        channelOrder = newOrder;
+        
+        // Re-load and render tasks
+        await loadTasks();
+        
+        const orderType = type === 'collaborator' ? 'Collaborator' : 'Project';
+        alert(`✅ Channels reordered by ${orderType} successfully!`);
+      } catch (error) {
+        console.error('Error reordering:', error);
+        alert('❌ Failed to reorder channels');
+      }
+    };
+
     window.showCelebration = function() {
       const modal = document.getElementById('celebrationModal');
       modal.classList.add('show');
@@ -1598,18 +1535,83 @@
       modal.classList.remove('show');
     };
 
-    function updateDateTime() {
-      const now = new Date();
-      const bdt = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
-      currentDateTime.textContent = bdt.toLocaleString('en-US', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
-        hour: '2-digit', minute: '2-digit', second: '2-digit'
-      });
-    }
+    // Handle Enter key for saving edits
+    document.addEventListener('keydown', function(e) {
+      if (e.target.classList.contains('edit-input')) {
+        const row = e.target.closest('tr');
+        const channelId = row.getAttribute('data-channel-id');
+        
+        if (e.key === 'Enter') {
+          saveRowEdit(channelId);
+        } else if (e.key === 'Escape') {
+          cancelRowEdit(channelId);
+        }
+      }
+    });
 
-    updateDateTime();
-    setInterval(updateDateTime, 1000);
-    loadTasks();
+    // Start the application
+    init();
   </script>
 </body>
 </html>
+
+    <div class="status-container">
+      <div id="supabaseStatus">🟢 Connected to Database</div>
+      <button class="reset-btn" onclick="resetAllChannels()" id="resetBtn">
+        🔄 Reset All Channels
+      </button>
+      <div class="dropdown-container">
+        <button class="auto-reorder-btn" onclick="toggleDropdown()">
+          🔄 Auto Reorder ▼
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <div class="dropdown-item" onclick="reorderBy('collaborator')">
+            👥 Collaborator Arrangement
+          </div>
+          <div class="dropdown-item" onclick="reorderBy('project')">
+            📁 Project Arrangement
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Client</th>
+            <th>Collaborator</th>
+            <th>Videos/Month</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="tasksBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div class="celebration-modal" id="celebrationModal">
+      <div class="celebration-content">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        
+        <div class="celebration-emoji">
+          <div class="green-circle">
+            <div class="white-tick">✓</div>
+          </div>
+        </div>
+        <h1 class="celebration-title">CONGRATULATIONS!</h1>
+        <div class="celebration-line"></div>
+        <p class="celebration-message">
+          You Are Helping LemonCore To Grow, Keep That Up Champ!
+        </p>
+        <button class="celebration-close" onclick="closeCelebration()">
+          ✨ Continue The Great Work! ✨
+        </button>
+      </div>
+    </div>
