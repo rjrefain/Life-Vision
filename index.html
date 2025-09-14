@@ -272,9 +272,12 @@
 
     .table-wrapper {
       overflow-x: auto;
-      border-radius: 8px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
       margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     table {
@@ -768,8 +771,11 @@
       }
 
       .status-container {
+        margin: -10px -10px 25px -10px;
         flex-direction: column;
         gap: 15px;
+        padding: 20px 15px;
+        border-radius: 0 0 20px 20px;
       }
 
       .reset-btn, .auto-reorder-btn {
@@ -911,6 +917,7 @@
     <div class="header-section">
       <div id="currentDateTime">Loading time...</div>
       <a href="task-dashboard.html" class="admin-btn">Manager Task</a>
+      <a href="channel-status-tracker.html" class="admin-btn">📊 Channel Status</a>
       <a href="payment_tracker.html" class="admin-btn">💰 Payment Tracker</a>
     </div>
 
