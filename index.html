@@ -299,7 +299,7 @@
       top: 0;
     }
 
-    /* Center and bold the Videos/Day column */
+    /* Center and bold the Videos/Month column */
     th:nth-child(4), 
     td:nth-child(4) {
       text-align: center;
@@ -938,7 +938,7 @@
         <input type="text" id="channelName" placeholder="Channel Name" required />
         <input type="text" id="client" placeholder="Client Name" />
         <input type="text" id="collaborator" placeholder="Collaborator Name" />
-        <input type="number" id="dailyVideos" placeholder="Daily Videos" min="0" />
+        <input type="number" id="monthlyVideos" placeholder="Monthly Videos" min="0" />
         <button onclick="addChannel()">Create Channel</button>
       </div>
     </div>
@@ -970,7 +970,7 @@
             <th>Channel</th>
             <th>Client</th>
             <th>Collaborator</th>
-            <th>Videos/Day</th>
+            <th>Videos/Month</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -1189,10 +1189,10 @@
             <span class="collaborator-display">${task.collaborator || 'Unassigned'}</span>
             <input type="text" class="edit-input collaborator-edit" value="${task.collaborator || ''}" style="display: none;" />
           </td>
-          <td data-label="Videos/Day">
-            <span class="videos-display">${task.daily_videos || 0}</span>
+          <td data-label="Videos/Month">
+            <span class="videos-display">${task.monthly_videos || 0}</span>
             <span class="edit-pencil" onclick="editRow('${task.id}')" title="Edit this row">✏️</span>
-            <input type="number" class="edit-input videos-edit" value="${task.daily_videos || 0}" style="display: none;" min="0" />
+            <input type="number" class="edit-input videos-edit" value="${task.monthly_videos || 0}" style="display: none;" min="0" />
           </td>
           <td data-label="Status"><span class="status-badge status-${task.status}">${task.status.toUpperCase()}</span></td>
           <td class="action-cell">
@@ -1274,7 +1274,7 @@
             channel: newChannel,
             client: newClient,
             collaborator: newCollaborator,
-            daily_videos: newVideos,
+            monthly_videos: newVideos,
             last_updated: new Date().toISOString()
           })
           .eq('id', id);
@@ -1289,7 +1289,7 @@
             channel: newChannel,
             client: newClient,
             collaborator: newCollaborator,
-            daily_videos: newVideos
+            monthly_videos: newVideos
           };
         }
         
@@ -1496,7 +1496,7 @@
       const channel = document.getElementById('channelName').value.trim();
       const client = document.getElementById('client').value.trim();
       const collaborator = document.getElementById('collaborator').value.trim();
-      const dailyVideos = +document.getElementById('dailyVideos').value || 0;
+      const monthlyVideos = +document.getElementById('monthlyVideos').value || 0;
 
       if (!id || !channel) return alert("Channel ID and Name are required.");
 
@@ -1508,7 +1508,7 @@
             channel: channel,
             client: client,
             collaborator: collaborator,
-            daily_videos: dailyVideos,
+            monthly_videos: monthlyVideos,
             status: 'pending',
             last_updated: new Date().toISOString(),
             created_at: new Date().toISOString()
@@ -1522,7 +1522,7 @@
           channel: channel,
           client: client,
           collaborator: collaborator,
-          daily_videos: dailyVideos,
+          monthly_videos: monthlyVideos,
           status: 'pending'
         });
 
