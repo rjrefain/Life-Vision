@@ -292,7 +292,7 @@
       flex-wrap: wrap;
     }
 
-    /* Visit checkbox styles */
+    /* Visit checkbox styles - IMPROVED ALIGNMENT */
     .visit-checkbox {
       display: flex;
       align-items: center;
@@ -303,6 +303,7 @@
       border-radius: 8px;
       transition: all 0.3s ease;
       min-width: 140px;
+      height: 36px; /* Fixed height for consistent alignment */
     }
 
     .visit-checkbox.visited {
@@ -334,6 +335,7 @@
       justify-content: center;
       font-size: 12px;
       font-weight: bold;
+      flex-shrink: 0; /* Prevent shrinking */
     }
 
     .visit-check.checked {
@@ -349,11 +351,15 @@
     .warning-badge {
       background: var(--danger);
       color: white;
-      padding: 2px 6px;
-      border-radius: 8px;
+      padding: 3px 8px;
+      border-radius: 12px;
       font-size: 0.7em;
       font-weight: bold;
       animation: warningBlink 1.5s infinite;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      height: 20px; /* Fixed height for consistent alignment */
     }
 
     @keyframes warningBlink {
@@ -367,6 +373,7 @@
       gap: 8px;
       font-size: 0.85em;
       font-weight: 500;
+      height: 36px; /* Match visit checkbox height */
     }
 
     .toggle-switch {
@@ -377,6 +384,7 @@
       border-radius: 25px;
       cursor: pointer;
       transition: background 0.3s ease;
+      flex-shrink: 0;
     }
 
     .toggle-switch.active {
@@ -402,6 +410,8 @@
     .condition-selector {
       display: flex;
       gap: 5px;
+      align-items: center;
+      height: 36px; /* Match other controls */
     }
 
     .condition-btn {
@@ -411,6 +421,7 @@
       border: 3px solid transparent;
       cursor: pointer;
       transition: all 0.3s ease;
+      flex-shrink: 0;
     }
 
     .condition-btn.green {
@@ -502,6 +513,12 @@
 
       .stats-grid {
         grid-template-columns: repeat(2, 1fr);
+      }
+
+      .visit-checkbox,
+      .topic-toggle,
+      .condition-selector {
+        height: auto; /* Allow flexible height on mobile */
       }
     }
   </style>
@@ -678,167 +695,6 @@
                 });
               
               // Update local data
-              channel.last_visited = false;
-              channel.visited_at = null;
-            } catch (error) {
-              console.error('Error resetting visit status:', error);
-            }
-          }
-        }
-      });
-    }
-
-    function getVisitStatus(channel) {
-      if (!channel.visited_at || !channel.last_visited) {
-        return { status: 'warning', message: 'Need visit' };
-      }
-
-      const now = new Date().getTime();
-      const visitTime = new Date(channel.visited_at).getTime();
-      const timeDiff = now - visitTime;
-      const FORTY_EIGHT_HOURS = 48 * 60 * 60 * 1000;
-
-      if (timeDiff > FORTY_EIGHT_HOURS) {
-        return { status: 'warning', message: 'Need visit' };
-      } else {
-        const hoursLeft = Math.ceil((FORTY_EIGHT_HOURS - timeDiff) / (60 * 60 * 1000));
-        return { status: 'visited', message: `${hoursLeft}h left` };
-      }
-    }
-
-    // Sort channels
-    function sortChannels(channelsList) {
-      const priorityOrder = { 'green': 0, 'yellow': 1, 'red': 2 };
-      return channelsList.sort((a, b) => {
-        const priorityDiff = priorityOrder[a.condition] - priorityOrder[b.condition];
-        if (priorityDiff !== 0) return priorityDiff;
-        
-        const aTime = new Date(a.last_updated || 0).getTime();
-        const bTime = new Date(b.last_updated || 0).getTime();
-        return aTime - bTime;
-      });
-    }
-
-    function renderChannels() {
-      const channelsBody = document.getElementById('channelsBody');
-      
-      if (channels.length === 0) {
-        channelsBody.innerHTML = `
-          <div class="empty-state">
-            <h3>No Active Channels</h3>
-            <p>Add channels in the main tracker to see them here.</p>
-          </div>
-        `;
-        return;
-      }
-
-      const sortedChannels = sortChannels([...channels]);
-      
-      channelsBody.innerHTML = sortedChannels.map(channel => {
-        const visitStatus = getVisitStatus(channel);
-        
-        return `
-          <div class="channel-item condition-${channel.condition}" data-id="${channel.id}">
-            <div class="priority-badge priority-${channel.condition}"></div>
-            <div class="channel-info">
-              <div>
-                <div class="channel-name">
-                  ${channel.channel}
-                  ${visitStatus.status === 'warning' ? '<span class="warning-badge">⚠️ VISIT</span>' : ''}
-                </div>
-                <div class="channel-client">Client: ${channel.client || 'Not specified'}</div>
-              </div>
-              <div class="channel-collaborator">
-                👤 ${channel.collaborator || 'Unassigned'}
-              </div>
-              <div style="color: var(--gray-600); font-size: 0.9em;">
-                📹 ${channel.daily_videos || 0} videos/day
-              </div>
-              <div class="channel-controls">
-                <div class="visit-checkbox ${visitStatus.status}">
-                  <div class="visit-check ${channel.last_visited ? 'checked' : ''}" 
-                       onclick="toggleVisit('${channel.id}')"
-                       title="Mark as visited for 48 hours">
-                    ${channel.last_visited ? '✓' : ''}
-                  </div>
-                  <span>${visitStatus.message}</span>
-                </div>
-                <div class="topic-toggle">
-                  <span>Topic:</span>
-                  <div class="toggle-switch ${channel.topic_available ? 'active' : ''}" onclick="toggleTopic('${channel.id}')">
-                    <div class="toggle-slider"></div>
-                  </div>
-                  <span style="font-weight: 600; color: ${channel.topic_available ? 'var(--success)' : 'var(--danger)'}; font-size: 0.8em;">
-                    ${channel.topic_available ? 'YES' : 'NO'}
-                  </span>
-                </div>
-                <div class="condition-selector">
-                  <div class="condition-btn green ${channel.condition === 'green' ? 'active' : ''}" 
-                       onclick="setCondition('${channel.id}', 'green')" title="Green - All Good"></div>
-                  <div class="condition-btn yellow ${channel.condition === 'yellow' ? 'active' : ''}" 
-                       onclick="setCondition('${channel.id}', 'yellow')" title="Yellow - Attention Needed"></div>
-                  <div class="condition-btn red ${channel.condition === 'red' ? 'active' : ''}" 
-                       onclick="setCondition('${channel.id}', 'red')" title="Red - Issues"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // Global functions
-    window.toggleVisit = async function(channelId) {
-      if (!isConnected) {
-        alert('No database connection. Please check your internet.');
-        return;
-      }
-
-      const channel = channels.find(c => c.id === channelId);
-      if (channel) {
-        const newVisitStatus = !channel.last_visited;
-        const visitedAt = newVisitStatus ? new Date().toISOString() : null;
-        
-        try {
-          await supabase
-            .from('channel_status')
-            .upsert({
-              channel_id: channelId,
-              last_visited: newVisitStatus,
-              visited_at: visitedAt
-            });
-          
-          // Update local data
-          channel.last_visited = newVisitStatus;
-          channel.visited_at = visitedAt;
-          renderChannels();
-          updateStats();
-        } catch (error) {
-          console.error('Error updating visit status:', error);
-          alert('Failed to update visit status. Please try again.');
-        }
-      }
-    };
-
-    window.toggleTopic = async function(channelId) {
-      if (!isConnected) {
-        alert('No database connection. Please check your internet.');
-        return;
-      }
-
-      const channel = channels.find(c => c.id === channelId);
-      if (channel) {
-        try {
-          const newTopicStatus = !channel.topic_available;
-          
-          await supabase
-            .from('channel_status')
-            .upsert({
-              channel_id: channelId,
-              topic_available: newTopicStatus
-            });
-          
-          // Update local data
           channel.topic_available = newTopicStatus;
           renderChannels();
           updateStats();
@@ -932,3 +788,164 @@
   </script>
 </body>
 </html>
+              channel.last_visited = false;
+              channel.visited_at = null;
+            } catch (error) {
+              console.error('Error resetting visit status:', error);
+            }
+          }
+        }
+      });
+    }
+
+    function getVisitStatus(channel) {
+      if (!channel.visited_at || !channel.last_visited) {
+        return { status: 'warning', message: 'Need visit' };
+      }
+
+      const now = new Date().getTime();
+      const visitTime = new Date(channel.visited_at).getTime();
+      const timeDiff = now - visitTime;
+      const FORTY_EIGHT_HOURS = 48 * 60 * 60 * 1000;
+
+      if (timeDiff > FORTY_EIGHT_HOURS) {
+        return { status: 'warning', message: 'Need visit' };
+      } else {
+        const hoursLeft = Math.ceil((FORTY_EIGHT_HOURS - timeDiff) / (60 * 60 * 1000));
+        return { status: 'visited', message: `${hoursLeft}h left` };
+      }
+    }
+
+    // Sort channels
+    function sortChannels(channelsList) {
+      const priorityOrder = { 'green': 0, 'yellow': 1, 'red': 2 };
+      return channelsList.sort((a, b) => {
+        const priorityDiff = priorityOrder[a.condition] - priorityOrder[b.condition];
+        if (priorityDiff !== 0) return priorityDiff;
+        
+        const aTime = new Date(a.last_updated || 0).getTime();
+        const bTime = new Date(b.last_updated || 0).getTime();
+        return aTime - bTime;
+      });
+    }
+
+    function renderChannels() {
+      const channelsBody = document.getElementById('channelsBody');
+      
+      if (channels.length === 0) {
+        channelsBody.innerHTML = `
+          <div class="empty-state">
+            <h3>No Active Channels</h3>
+            <p>Add channels in the main tracker to see them here.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const sortedChannels = sortChannels([...channels]);
+      
+      channelsBody.innerHTML = sortedChannels.map(channel => {
+        const visitStatus = getVisitStatus(channel);
+        
+        return `
+          <div class="channel-item condition-${channel.condition}" data-id="${channel.id}">
+            <div class="priority-badge priority-${channel.condition}"></div>
+            <div class="channel-info">
+              <div>
+                <div class="channel-name">
+                  ${channel.channel}
+                  ${visitStatus.status === 'warning' ? '<span class="warning-badge">⚠️ VISIT</span>' : ''}
+                </div>
+                <div class="channel-client">Client: ${channel.client || 'Not specified'}</div>
+              </div>
+              <div class="channel-collaborator">
+                👤 ${channel.collaborator || 'Unassigned'}
+              </div>
+              <div style="color: var(--gray-600); font-size: 0.9em;">
+                📹 ${channel.daily_videos || 0} videos/month
+              </div>
+              <div class="channel-controls">
+                <div class="visit-checkbox ${visitStatus.status}">
+                  <div class="visit-check ${channel.last_visited ? 'checked' : ''}" 
+                       onclick="toggleVisit('${channel.id}')"
+                       title="Mark as visited for 48 hours">
+                    ${channel.last_visited ? '✓' : ''}
+                  </div>
+                  <span>${visitStatus.message}</span>
+                </div>
+                <div class="topic-toggle">
+                  <span>Topic:</span>
+                  <div class="toggle-switch ${channel.topic_available ? 'active' : ''}" onclick="toggleTopic('${channel.id}')">
+                    <div class="toggle-slider"></div>
+                  </div>
+                  <span style="font-weight: 600; color: ${channel.topic_available ? 'var(--success)' : 'var(--danger)'}; font-size: 0.8em;">
+                    ${channel.topic_available ? 'YES' : 'NO'}
+                  </span>
+                </div>
+                <div class="condition-selector">
+                  <div class="condition-btn green ${channel.condition === 'green' ? 'active' : ''}" 
+                       onclick="setCondition('${channel.id}', 'green')" title="Green - All Good"></div>
+                  <div class="condition-btn yellow ${channel.condition === 'yellow' ? 'active' : ''}" 
+                       onclick="setCondition('${channel.id}', 'yellow')" title="Yellow - Attention Needed"></div>
+                  <div class="condition-btn red ${channel.condition === 'red' ? 'active' : ''}" 
+                       onclick="setCondition('${channel.id}', 'red')" title="Red - Issues"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Global functions
+    window.toggleVisit = async function(channelId) {
+      if (!isConnected) {
+        alert('No database connection. Please check your internet.');
+        return;
+      }
+
+      const channel = channels.find(c => c.id === channelId);
+      if (channel) {
+        const newVisitStatus = !channel.last_visited;
+        const visitedAt = newVisitStatus ? new Date().toISOString() : null;
+        
+        try {
+          await supabase
+            .from('channel_status')
+            .upsert({
+              channel_id: channelId,
+              last_visited: newVisitStatus,
+              visited_at: visitedAt
+            });
+          
+          // Update local data
+          channel.last_visited = newVisitStatus;
+          channel.visited_at = visitedAt;
+          renderChannels();
+          updateStats();
+        } catch (error) {
+          console.error('Error updating visit status:', error);
+          alert('Failed to update visit status. Please try again.');
+        }
+      }
+    };
+
+    window.toggleTopic = async function(channelId) {
+      if (!isConnected) {
+        alert('No database connection. Please check your internet.');
+        return;
+      }
+
+      const channel = channels.find(c => c.id === channelId);
+      if (channel) {
+        try {
+          const newTopicStatus = !channel.topic_available;
+          
+          await supabase
+            .from('channel_status')
+            .upsert({
+              channel_id: channelId,
+              topic_available: newTopicStatus
+            });
+          
+          // Update local data
