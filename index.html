@@ -250,7 +250,7 @@
       font-weight: 600;
     }
 
-    th:nth-child(4) {
+    th:nth-child(4), th:nth-child(5) {
       text-align: center;
     }
 
@@ -263,6 +263,11 @@
       text-align: center;
       font-weight: bold;
       color: #667eea;
+      position: relative;
+    }
+
+    td:nth-child(5) {
+      text-align: center;
     }
 
     tr:nth-child(even) {
@@ -287,6 +292,83 @@
     .channel-cell {
       display: flex;
       align-items: center;
+    }
+
+    /* Edit Mode */
+    .edit-input {
+      width: 100%;
+      padding: 5px;
+      border: 2px solid #667eea;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .edit-number {
+      width: 80px;
+      text-align: center;
+    }
+
+    .edit-btn {
+      background: none;
+      border: none;
+      color: #667eea;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 0 5px;
+      transition: transform 0.2s;
+    }
+
+    .edit-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .save-cancel-btns {
+      display: flex;
+      gap: 5px;
+    }
+
+    .save-btn, .cancel-btn {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .save-btn {
+      background: #27ae60;
+      color: white;
+    }
+
+    .cancel-btn {
+      background: #e74c3c;
+      color: white;
+    }
+
+    /* Health Status */
+    .health-status {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .health-good {
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      color: white;
+    }
+
+    .health-issue {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white;
+    }
+
+    .health-status:hover {
+      transform: scale(1.05);
     }
 
     .status-badge {
@@ -507,13 +589,14 @@
               <th>Client</th>
               <th>Collaborator</th>
               <th>Videos/Month</th>
+              <th>Health</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody id="tableBody">
             <tr>
-              <td colspan="6" style="text-align: center; padding: 40px;">
+              <td colspan="7" style="text-align: center; padding: 40px;">
                 Loading channels...
               </td>
             </tr>
@@ -543,6 +626,7 @@
 
     let tasks = [];
     let channelOrder = [];
+    let editingId = null;
 
     // Initialize
     function init() {
@@ -590,6 +674,12 @@
         tasks = tasksData || [];
         channelOrder = orderData || [];
         
+        // Initialize health_status if not present
+        tasks = tasks.map(task => ({
+          ...task,
+          health_status: task.health_status || 'good'
+        }));
+        
         renderTable();
         
         document.getElementById('status').textContent = '🟢 Connected';
@@ -603,7 +693,7 @@
       const tbody = document.getElementById('tableBody');
       
       if (tasks.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No channels found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px;">No channels found</td></tr>';
         return;
       }
 
@@ -614,38 +704,157 @@
         return orderA - orderB;
       });
 
-      tbody.innerHTML = sortedTasks.map(task => `
-        <tr data-id="${task.id}">
-          <td data-label="Channel">
-            <div class="channel-cell">
-              <span class="drag-handle">⋮⋮</span>
-              ${task.channel}
-            </div>
-          </td>
-          <td data-label="Client">${task.client || 'Not specified'}</td>
-          <td data-label="Collaborator">${task.collaborator || 'Unassigned'}</td>
-          <td data-label="Videos/Month">${task.daily_videos || 0}</td>
-          <td data-label="Status">
-            <span class="status-badge status-${task.status}">
-              ${task.status}
-            </span>
-          </td>
-          <td data-label="Actions">
-            <div class="actions">
-              <button class="action-btn complete-btn ${task.status === 'completed' ? 'completed' : ''}" 
-                      onclick="toggleStatus('${task.id}')">
-                ${task.status === 'completed' ? 'Completed' : 'Complete'}
-              </button>
-              <button class="action-btn delete-btn" onclick="deleteTask('${task.id}')">
-                🗑️
-              </button>
-            </div>
-          </td>
-        </tr>
-      `).join('');
+      tbody.innerHTML = sortedTasks.map(task => {
+        if (editingId === task.id) {
+          return `
+            <tr data-id="${task.id}">
+              <td data-label="Channel">
+                <div class="channel-cell">
+                  <span class="drag-handle">⋮⋮</span>
+                  <input type="text" class="edit-input" id="edit-channel-${task.id}" value="${task.channel}" />
+                </div>
+              </td>
+              <td data-label="Client">
+                <input type="text" class="edit-input" id="edit-client-${task.id}" value="${task.client || ''}" />
+              </td>
+              <td data-label="Collaborator">
+                <input type="text" class="edit-input" id="edit-collaborator-${task.id}" value="${task.collaborator || ''}" />
+              </td>
+              <td data-label="Videos/Month">
+                <input type="number" class="edit-input edit-number" id="edit-videos-${task.id}" value="${task.daily_videos || 0}" min="0" />
+              </td>
+              <td data-label="Health">
+                <span class="health-status health-${task.health_status}" onclick="toggleHealth('${task.id}')">
+                  ${task.health_status === 'good' ? '✓ Good' : '⚠ Issue'}
+                </span>
+              </td>
+              <td data-label="Status">
+                <span class="status-badge status-${task.status}">
+                  ${task.status}
+                </span>
+              </td>
+              <td data-label="Actions">
+                <div class="actions">
+                  <div class="save-cancel-btns">
+                    <button class="save-btn" onclick="saveEdit('${task.id}')">✓</button>
+                    <button class="cancel-btn" onclick="cancelEdit()">✗</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          `;
+        } else {
+          return `
+            <tr data-id="${task.id}">
+              <td data-label="Channel">
+                <div class="channel-cell">
+                  <span class="drag-handle">⋮⋮</span>
+                  ${task.channel}
+                </div>
+              </td>
+              <td data-label="Client">${task.client || 'Not specified'}</td>
+              <td data-label="Collaborator">${task.collaborator || 'Unassigned'}</td>
+              <td data-label="Videos/Month">
+                ${task.daily_videos || 0}
+                <button class="edit-btn" onclick="startEdit('${task.id}')">✏️</button>
+              </td>
+              <td data-label="Health">
+                <span class="health-status health-${task.health_status}" onclick="toggleHealth('${task.id}')">
+                  ${task.health_status === 'good' ? '✓ Good' : '⚠ Issue'}
+                </span>
+              </td>
+              <td data-label="Status">
+                <span class="status-badge status-${task.status}">
+                  ${task.status}
+                </span>
+              </td>
+              <td data-label="Actions">
+                <div class="actions">
+                  <button class="action-btn complete-btn ${task.status === 'completed' ? 'completed' : ''}" 
+                          onclick="toggleStatus('${task.id}')">
+                    ${task.status === 'completed' ? 'Completed' : 'Complete'}
+                  </button>
+                  <button class="action-btn delete-btn" onclick="deleteTask('${task.id}')">
+                    🗑️
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+      }).join('');
     }
 
     // Global functions
+    window.startEdit = function(id) {
+      editingId = id;
+      renderTable();
+    };
+
+    window.cancelEdit = function() {
+      editingId = null;
+      renderTable();
+    };
+
+    window.saveEdit = async function(id) {
+      const channel = document.getElementById(`edit-channel-${id}`).value.trim();
+      const client = document.getElementById(`edit-client-${id}`).value.trim();
+      const collaborator = document.getElementById(`edit-collaborator-${id}`).value.trim();
+      const dailyVideos = +document.getElementById(`edit-videos-${id}`).value || 0;
+
+      if (!channel) {
+        alert('Channel name is required');
+        return;
+      }
+
+      try {
+        const { error } = await supabase
+          .from('tasks')
+          .update({
+            channel,
+            client,
+            collaborator,
+            daily_videos: dailyVideos,
+            last_updated: new Date().toISOString()
+          })
+          .eq('id', id);
+
+        if (error) throw error;
+
+        editingId = null;
+        loadData();
+        alert('✅ Channel updated successfully!');
+      } catch (error) {
+        console.error('Error updating channel:', error);
+        alert('❌ Failed to update channel');
+      }
+    };
+
+    window.toggleHealth = async function(id) {
+      try {
+        const task = tasks.find(t => t.id === id);
+        if (!task) return;
+        
+        const newHealth = task.health_status === 'good' ? 'issue' : 'good';
+        
+        const { error } = await supabase
+          .from('tasks')
+          .update({ 
+            health_status: newHealth, 
+            last_updated: new Date().toISOString() 
+          })
+          .eq('id', id);
+        
+        if (error) throw error;
+        
+        task.health_status = newHealth;
+        renderTable();
+      } catch (error) {
+        console.error('Error updating health status:', error);
+        alert('❌ Failed to update health status');
+      }
+    };
+
     window.toggleForm = function() {
       const content = document.getElementById('formContent');
       const icon = document.getElementById('formIcon');
@@ -680,6 +889,7 @@
           collaborator,
           daily_videos: monthlyVideos,
           status: 'pending',
+          health_status: 'good',
           last_updated: new Date().toISOString(),
           created_at: new Date().toISOString()
         }]);
@@ -765,59 +975,4 @@
         alert('✅ All channels reset to pending');
       } catch (error) {
         console.error('Error resetting:', error);
-        alert('❌ Failed to reset channels');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = '🔄 Reset All';
-      }
-    };
-
-    window.toggleReorder = function() {
-      document.getElementById('reorderDropdown').classList.toggle('show');
-    };
-
-    window.reorder = async function(type) {
-      document.getElementById('reorderDropdown').classList.remove('show');
-      
-      try {
-        const { data: allTasks, error } = await supabase.from('tasks').select('*');
-        if (error) throw error;
-
-        let sorted;
-        if (type === 'collaborator') {
-          sorted = allTasks.sort((a, b) => {
-            const collabA = (a.collaborator || 'Unassigned').toLowerCase();
-            const collabB = (b.collaborator || 'Unassigned').toLowerCase();
-            return collabA === collabB 
-              ? a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
-              : collabA.localeCompare(collabB);
-          });
-        } else {
-          sorted = allTasks.sort((a, b) => a.channel.toLowerCase().localeCompare(b.channel.toLowerCase()));
-        }
-        
-        const newOrder = sorted.map((task, index) => ({
-          channel_id: task.id,
-          order_position: index
-        }));
-        
-        await supabase.from('channel_order').delete().gt('id', 0);
-        await supabase.from('channel_order').insert(newOrder);
-        
-        loadData();
-        alert(`✅ Reordered by ${type === 'collaborator' ? 'Collaborator' : 'Project'}`);
-      } catch (error) {
-        console.error('Error reordering:', error);
-        alert('❌ Failed to reorder');
-      }
-    };
-
-    window.closeModal = function() {
-      document.getElementById('modal').classList.remove('show');
-    };
-
-    // Start
-    init();
-  </script>
-</body>
-</html>
+        alert('❌
