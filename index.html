@@ -1002,6 +1002,85 @@
       document.getElementById('successModal').classList.remove('show');
     };
 
+    // Reorder functionality
+    window.toggleReorderDropdown = function() {
+      document.getElementById('reorderDropdown').classList.toggle('show');
+    };
+
+    window.reorderChannels = async function(sortBy) {
+      document.getElementById('reorderDropdown').classList.remove('show');
+      
+      try {
+        updateStatus('🔄 Reordering...', '#ffc107');
+
+        // Get all channels for sorting
+        const { data: allChannels, error } = await supabase.from('tasks').select('*');
+        if (error) throw error;
+
+        let sortedChannels;
+        
+        switch(sortBy) {
+          case 'collaborator':
+            sortedChannels = allChannels.sort((a, b) => {
+              const collabA = (a.collaborator || 'Unassigned').toLowerCase();
+              const collabB = (b.collaborator || 'Unassigned').toLowerCase();
+              return collabA === collabB 
+                ? a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
+                : collabA.localeCompare(collabB);
+            });
+            break;
+          case 'channel':
+            sortedChannels = allChannels.sort((a, b) => 
+              a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
+            );
+            break;
+          case 'client':
+            sortedChannels = allChannels.sort((a, b) => {
+              const clientA = (a.client || 'No Client').toLowerCase();
+              const clientB = (b.client || 'No Client').toLowerCase();
+              return clientA === clientB 
+                ? a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
+                : clientA.localeCompare(clientB);
+            });
+            break;
+          default:
+            sortedChannels = allChannels;
+        }
+        
+        // Create new order array
+        const newOrder = sortedChannels.map((channel, index) => ({
+          channel_id: channel.id,
+          order_position: index
+        }));
+        
+        // Delete existing order and insert new one
+        await supabase.from('channel_order').delete().gt('id', 0);
+        
+        if (newOrder.length > 0) {
+          const { error: insertError } = await supabase
+            .from('channel_order')
+            .insert(newOrder);
+          
+          if (insertError) throw insertError;
+        }
+        
+        loadChannels();
+        
+        const sortNames = {
+          'collaborator': 'Collaborator',
+          'channel': 'Channel Name', 
+          'client': 'Client'
+        };
+        
+        showSuccess(`Channels reordered by ${sortNames[sortBy]}!`);
+
+      } catch (error) {
+        console.error('Error reordering channels:', error);
+        updateStatus('🔴 Error', '#dc3545');
+        showError('Failed to reorder channels');
+      }
+    };
+
     // Start the application
     initApp();
   </script>
