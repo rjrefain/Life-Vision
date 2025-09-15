@@ -19,7 +19,7 @@
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
       background: white;
       border-radius: 20px;
@@ -129,7 +129,7 @@
       transform: none;
     }
 
-    /* Dropdown - HIGHEST Z-INDEX */
+    /* Dropdown */
     .dropdown {
       position: absolute;
       top: 100%;
@@ -259,15 +259,10 @@
       border-bottom: 1px solid #f0f0f0;
     }
 
-    td:nth-child(4) {
+    td:nth-child(4), td:nth-child(5) {
       text-align: center;
       font-weight: bold;
       color: #667eea;
-      position: relative;
-    }
-
-    td:nth-child(5) {
-      text-align: center;
     }
 
     tr:nth-child(even) {
@@ -294,83 +289,6 @@
       align-items: center;
     }
 
-    /* Edit Mode */
-    .edit-input {
-      width: 100%;
-      padding: 5px;
-      border: 2px solid #667eea;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    .edit-number {
-      width: 80px;
-      text-align: center;
-    }
-
-    .edit-btn {
-      background: none;
-      border: none;
-      color: #667eea;
-      cursor: pointer;
-      font-size: 18px;
-      padding: 0 5px;
-      transition: transform 0.2s;
-    }
-
-    .edit-btn:hover {
-      transform: scale(1.2);
-    }
-
-    .save-cancel-btns {
-      display: flex;
-      gap: 5px;
-    }
-
-    .save-btn, .cancel-btn {
-      padding: 5px 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .save-btn {
-      background: #27ae60;
-      color: white;
-    }
-
-    .cancel-btn {
-      background: #e74c3c;
-      color: white;
-    }
-
-    /* Health Status */
-    .health-status {
-      display: inline-block;
-      padding: 8px 16px;
-      border-radius: 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      user-select: none;
-    }
-
-    .health-good {
-      background: linear-gradient(135deg, #27ae60, #2ecc71);
-      color: white;
-    }
-
-    .health-issue {
-      background: linear-gradient(135deg, #e74c3c, #c0392b);
-      color: white;
-    }
-
-    .health-status:hover {
-      transform: scale(1.05);
-    }
-
     .status-badge {
       padding: 5px 10px;
       border-radius: 12px;
@@ -389,10 +307,83 @@
       color: #155724;
     }
 
+    /* Health Status Button */
+    .health-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .health-good {
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      color: white;
+      box-shadow: 0 2px 10px rgba(39, 174, 96, 0.3);
+    }
+
+    .health-issue {
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white;
+      box-shadow: 0 2px 10px rgba(231, 76, 60, 0.3);
+    }
+
+    .health-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Edit Input Styles */
+    .edit-input {
+      width: 100%;
+      max-width: 150px;
+      padding: 8px;
+      border: 2px solid #667eea;
+      border-radius: 6px;
+      font-size: 14px;
+      background: white;
+    }
+
+    .edit-input:focus {
+      outline: none;
+      border-color: #764ba2;
+    }
+
+    .edit-actions {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .save-btn {
+      background: linear-gradient(135deg, #27ae60, #2ecc71);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .cancel-btn {
+      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
     .actions {
       display: flex;
       gap: 8px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .action-btn {
@@ -402,6 +393,18 @@
       font-weight: 600;
       cursor: pointer;
       transition: transform 0.2s ease;
+    }
+
+    .edit-btn {
+      background: linear-gradient(135deg, #f39c12, #e67e22);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
     }
 
     .complete-btn {
@@ -522,6 +525,10 @@
         font-weight: bold;
         color: #667eea;
       }
+
+      .actions {
+        justify-content: flex-end;
+      }
     }
   </style>
 </head>
@@ -626,7 +633,10 @@
 
     let tasks = [];
     let channelOrder = [];
-    let editingId = null;
+    let editingTask = null;
+    
+    // Store health status in memory since it doesn't exist in database yet
+    let healthStatus = {};
 
     // Initialize
     function init() {
@@ -674,11 +684,12 @@
         tasks = tasksData || [];
         channelOrder = orderData || [];
         
-        // Initialize health_status if not present
-        tasks = tasks.map(task => ({
-          ...task,
-          health_status: task.health_status || 'good'
-        }));
+        // Initialize health status for all tasks (default to 'good')
+        tasks.forEach(task => {
+          if (!healthStatus[task.id]) {
+            healthStatus[task.id] = 'good';
+          }
+        });
         
         renderTable();
         
@@ -705,156 +716,77 @@
       });
 
       tbody.innerHTML = sortedTasks.map(task => {
-        if (editingId === task.id) {
-          return `
-            <tr data-id="${task.id}">
-              <td data-label="Channel">
-                <div class="channel-cell">
-                  <span class="drag-handle">⋮⋮</span>
+        const isEditing = editingTask === task.id;
+        const health = healthStatus[task.id] || 'good';
+        
+        return `
+        <tr data-id="${task.id}">
+          <td data-label="Channel">
+            <div class="channel-cell">
+              <span class="drag-handle">⋮⋮</span>
+              ${isEditing ? 
+                `<div>
                   <input type="text" class="edit-input" id="edit-channel-${task.id}" value="${task.channel}" />
+                </div>` :
+                task.channel
+              }
+            </div>
+          </td>
+          <td data-label="Client">
+            ${isEditing ? 
+              `<input type="text" class="edit-input" id="edit-client-${task.id}" value="${task.client || ''}" />` :
+              (task.client || 'Not specified')
+            }
+          </td>
+          <td data-label="Collaborator">
+            ${isEditing ? 
+              `<input type="text" class="edit-input" id="edit-collaborator-${task.id}" value="${task.collaborator || ''}" />` :
+              (task.collaborator || 'Unassigned')
+            }
+          </td>
+          <td data-label="Videos/Month">
+            ${isEditing ? 
+              `<input type="number" class="edit-input" id="edit-videos-${task.id}" value="${task.daily_videos || 0}" min="0" style="max-width: 80px;" />` :
+              (task.daily_videos || 0)
+            }
+          </td>
+          <td data-label="Health">
+            <button class="health-btn health-${health}" onclick="toggleHealth('${task.id}')">
+              ${health === 'good' ? '✓ Good' : '⚠ Issue'}
+            </button>
+          </td>
+          <td data-label="Status">
+            <span class="status-badge status-${task.status}">
+              ${task.status}
+            </span>
+          </td>
+          <td data-label="Actions">
+            <div class="actions">
+              ${isEditing ? `
+                <div class="edit-actions">
+                  <button class="save-btn" onclick="saveEdit('${task.id}')">Save</button>
+                  <button class="cancel-btn" onclick="cancelEdit()">Cancel</button>
                 </div>
-              </td>
-              <td data-label="Client">
-                <input type="text" class="edit-input" id="edit-client-${task.id}" value="${task.client || ''}" />
-              </td>
-              <td data-label="Collaborator">
-                <input type="text" class="edit-input" id="edit-collaborator-${task.id}" value="${task.collaborator || ''}" />
-              </td>
-              <td data-label="Videos/Month">
-                <input type="number" class="edit-input edit-number" id="edit-videos-${task.id}" value="${task.daily_videos || 0}" min="0" />
-              </td>
-              <td data-label="Health">
-                <span class="health-status health-${task.health_status}" onclick="toggleHealth('${task.id}')">
-                  ${task.health_status === 'good' ? '✓ Good' : '⚠ Issue'}
-                </span>
-              </td>
-              <td data-label="Status">
-                <span class="status-badge status-${task.status}">
-                  ${task.status}
-                </span>
-              </td>
-              <td data-label="Actions">
-                <div class="actions">
-                  <div class="save-cancel-btns">
-                    <button class="save-btn" onclick="saveEdit('${task.id}')">✓</button>
-                    <button class="cancel-btn" onclick="cancelEdit()">✗</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          `;
-        } else {
-          return `
-            <tr data-id="${task.id}">
-              <td data-label="Channel">
-                <div class="channel-cell">
-                  <span class="drag-handle">⋮⋮</span>
-                  ${task.channel}
-                </div>
-              </td>
-              <td data-label="Client">${task.client || 'Not specified'}</td>
-              <td data-label="Collaborator">${task.collaborator || 'Unassigned'}</td>
-              <td data-label="Videos/Month">
-                ${task.daily_videos || 0}
-                <button class="edit-btn" onclick="startEdit('${task.id}')">✏️</button>
-              </td>
-              <td data-label="Health">
-                <span class="health-status health-${task.health_status}" onclick="toggleHealth('${task.id}')">
-                  ${task.health_status === 'good' ? '✓ Good' : '⚠ Issue'}
-                </span>
-              </td>
-              <td data-label="Status">
-                <span class="status-badge status-${task.status}">
-                  ${task.status}
-                </span>
-              </td>
-              <td data-label="Actions">
-                <div class="actions">
-                  <button class="action-btn complete-btn ${task.status === 'completed' ? 'completed' : ''}" 
-                          onclick="toggleStatus('${task.id}')">
-                    ${task.status === 'completed' ? 'Completed' : 'Complete'}
-                  </button>
-                  <button class="action-btn delete-btn" onclick="deleteTask('${task.id}')">
-                    🗑️
-                  </button>
-                </div>
-              </td>
-            </tr>
-          `;
-        }
+              ` : `
+                <button class="action-btn edit-btn" onclick="startEdit('${task.id}')" title="Edit Channel">
+                  ✏️
+                </button>
+                <button class="action-btn complete-btn ${task.status === 'completed' ? 'completed' : ''}" 
+                        onclick="toggleStatus('${task.id}')">
+                  ${task.status === 'completed' ? 'Completed' : 'Complete'}
+                </button>
+                <button class="action-btn delete-btn" onclick="deleteTask('${task.id}')" title="Delete Channel">
+                  🗑️
+                </button>
+              `}
+            </div>
+          </td>
+        </tr>
+      `;
       }).join('');
     }
 
     // Global functions
-    window.startEdit = function(id) {
-      editingId = id;
-      renderTable();
-    };
-
-    window.cancelEdit = function() {
-      editingId = null;
-      renderTable();
-    };
-
-    window.saveEdit = async function(id) {
-      const channel = document.getElementById(`edit-channel-${id}`).value.trim();
-      const client = document.getElementById(`edit-client-${id}`).value.trim();
-      const collaborator = document.getElementById(`edit-collaborator-${id}`).value.trim();
-      const dailyVideos = +document.getElementById(`edit-videos-${id}`).value || 0;
-
-      if (!channel) {
-        alert('Channel name is required');
-        return;
-      }
-
-      try {
-        const { error } = await supabase
-          .from('tasks')
-          .update({
-            channel,
-            client,
-            collaborator,
-            daily_videos: dailyVideos,
-            last_updated: new Date().toISOString()
-          })
-          .eq('id', id);
-
-        if (error) throw error;
-
-        editingId = null;
-        loadData();
-        alert('✅ Channel updated successfully!');
-      } catch (error) {
-        console.error('Error updating channel:', error);
-        alert('❌ Failed to update channel');
-      }
-    };
-
-    window.toggleHealth = async function(id) {
-      try {
-        const task = tasks.find(t => t.id === id);
-        if (!task) return;
-        
-        const newHealth = task.health_status === 'good' ? 'issue' : 'good';
-        
-        const { error } = await supabase
-          .from('tasks')
-          .update({ 
-            health_status: newHealth, 
-            last_updated: new Date().toISOString() 
-          })
-          .eq('id', id);
-        
-        if (error) throw error;
-        
-        task.health_status = newHealth;
-        renderTable();
-      } catch (error) {
-        console.error('Error updating health status:', error);
-        alert('❌ Failed to update health status');
-      }
-    };
-
     window.toggleForm = function() {
       const content = document.getElementById('formContent');
       const icon = document.getElementById('formIcon');
@@ -889,12 +821,14 @@
           collaborator,
           daily_videos: monthlyVideos,
           status: 'pending',
-          health_status: 'good',
           last_updated: new Date().toISOString(),
           created_at: new Date().toISOString()
         }]);
 
         if (error) throw error;
+
+        // Initialize health status for new channel
+        healthStatus[id] = 'good';
 
         // Clear form
         document.getElementById('channelId').value = '';
@@ -910,6 +844,82 @@
         console.error('Error adding channel:', error);
         alert('❌ ' + (error.code === '23505' ? 'Channel ID already exists' : 'Failed to add channel'));
       }
+    };
+
+    // EDIT FUNCTIONALITY
+    window.startEdit = function(id) {
+      if (editingTask && editingTask !== id) {
+        cancelEdit();
+      }
+      editingTask = id;
+      renderTable();
+      
+      // Focus on the first input
+      setTimeout(() => {
+        const firstInput = document.getElementById(`edit-channel-${id}`);
+        if (firstInput) firstInput.focus();
+      }, 100);
+    };
+
+    window.saveEdit = async function(id) {
+      try {
+        const channel = document.getElementById(`edit-channel-${id}`).value.trim();
+        const client = document.getElementById(`edit-client-${id}`).value.trim();
+        const collaborator = document.getElementById(`edit-collaborator-${id}`).value.trim();
+        const videos = +document.getElementById(`edit-videos-${id}`).value || 0;
+
+        if (!channel) {
+          alert('Channel name is required');
+          return;
+        }
+
+        const { error } = await supabase
+          .from('tasks')
+          .update({
+            channel,
+            client: client || null,
+            collaborator: collaborator || null,
+            daily_videos: videos,
+            last_updated: new Date().toISOString()
+          })
+          .eq('id', id);
+
+        if (error) throw error;
+
+        // Update local data
+        const task = tasks.find(t => t.id === id);
+        if (task) {
+          task.channel = channel;
+          task.client = client || null;
+          task.collaborator = collaborator || null;
+          task.daily_videos = videos;
+        }
+
+        editingTask = null;
+        renderTable();
+        alert('✅ Channel updated successfully!');
+      } catch (error) {
+        console.error('Error updating channel:', error);
+        alert('❌ Failed to update channel');
+      }
+    };
+
+    window.cancelEdit = function() {
+      editingTask = null;
+      renderTable();
+    };
+
+    // HEALTH STATUS TOGGLE (stored in memory)
+    window.toggleHealth = function(id) {
+      const currentHealth = healthStatus[id] || 'good';
+      const newHealth = currentHealth === 'good' ? 'issue' : 'good';
+      
+      healthStatus[id] = newHealth;
+      renderTable();
+      
+      // Show feedback
+      const message = newHealth === 'good' ? '✅ Channel marked as Good' : '⚠️ Channel marked as Issue';
+      console.log(message);
     };
 
     window.toggleStatus = async function(id) {
@@ -946,8 +956,9 @@
         const { error } = await supabase.from('tasks').delete().eq('id', id);
         if (error) throw error;
         
-        // Also delete from order
+        // Also delete from order and health status
         await supabase.from('channel_order').delete().eq('channel_id', id);
+        delete healthStatus[id];
         
         loadData();
       } catch (error) {
@@ -975,4 +986,59 @@
         alert('✅ All channels reset to pending');
       } catch (error) {
         console.error('Error resetting:', error);
-        alert('❌
+        alert('❌ Failed to reset channels');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🔄 Reset All';
+      }
+    };
+
+    window.toggleReorder = function() {
+      document.getElementById('reorderDropdown').classList.toggle('show');
+    };
+
+    window.reorder = async function(type) {
+      document.getElementById('reorderDropdown').classList.remove('show');
+      
+      try {
+        const { data: allTasks, error } = await supabase.from('tasks').select('*');
+        if (error) throw error;
+
+        let sorted;
+        if (type === 'collaborator') {
+          sorted = allTasks.sort((a, b) => {
+            const collabA = (a.collaborator || 'Unassigned').toLowerCase();
+            const collabB = (b.collaborator || 'Unassigned').toLowerCase();
+            return collabA === collabB 
+              ? a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
+              : collabA.localeCompare(collabB);
+          });
+        } else {
+          sorted = allTasks.sort((a, b) => a.channel.toLowerCase().localeCompare(b.channel.toLowerCase()));
+        }
+        
+        const newOrder = sorted.map((task, index) => ({
+          channel_id: task.id,
+          order_position: index
+        }));
+        
+        await supabase.from('channel_order').delete().gt('id', 0);
+        await supabase.from('channel_order').insert(newOrder);
+        
+        loadData();
+        alert(`✅ Reordered by ${type === 'collaborator' ? 'Collaborator' : 'Project'}`);
+      } catch (error) {
+        console.error('Error reordering:', error);
+        alert('❌ Failed to reorder');
+      }
+    };
+
+    window.closeModal = function() {
+      document.getElementById('modal').classList.remove('show');
+    };
+
+    // Start
+    init();
+  </script>
+</body>
+</html>
