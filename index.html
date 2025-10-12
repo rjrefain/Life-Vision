@@ -78,6 +78,119 @@
       transform: translateY(-2px);
     }
 
+    /* Time Converter Section - NEW */
+    .time-converter-section {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 0;
+      padding: 30px;
+      color: white;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .converter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .converter-header h2 {
+      font-size: 28px;
+      margin: 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .ny-current-time {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .ny-time-display {
+      font-size: 20px;
+      margin-left: 10px;
+      font-weight: 700;
+    }
+
+    .timezone-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .timezone-card {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 25px;
+      text-align: center;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .timezone-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .timezone-flag {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .timezone-location {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      opacity: 0.9;
+    }
+
+    .timezone-time {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #ffd700;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .timezone-label {
+      font-size: 12px;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .converter-instructions {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .instruction-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 12px 0;
+      font-size: 15px;
+    }
+
+    .instruction-item:not(:last-child) {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .instruction-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+
     /* Controls */
     .controls {
       background: #f8f9fa;
@@ -482,6 +595,19 @@
         flex-direction: column;
       }
 
+      .converter-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .converter-header h2 {
+        font-size: 22px;
+      }
+
+      .timezone-grid {
+        grid-template-columns: 1fr;
+      }
+
       .controls {
         flex-direction: column;
         gap: 15px;
@@ -540,6 +666,62 @@
         </nav>
       </div>
     </header>
+
+    <!-- TIME CONVERTER SECTION - NEW! -->
+    <div class="time-converter-section">
+      <div class="converter-header">
+        <h2>🕐 Schedule Videos for New York 12:00 PM (Noon)</h2>
+        <div class="ny-current-time">
+          <span>🗽 Current NY Time:</span>
+          <span id="nyCurrentTime" class="ny-time-display">Loading...</span>
+        </div>
+      </div>
+      
+      <div class="timezone-grid">
+        <div class="timezone-card">
+          <div class="timezone-flag">🇧🇩</div>
+          <div class="timezone-location">Bangladesh (Dhaka)</div>
+          <div class="timezone-time" id="bangladeshTime">Loading...</div>
+          <div class="timezone-label">Schedule at this time</div>
+        </div>
+        
+        <div class="timezone-card">
+          <div class="timezone-flag">🇮🇳</div>
+          <div class="timezone-location">India (IST)</div>
+          <div class="timezone-time" id="indiaTime">Loading...</div>
+          <div class="timezone-label">Schedule at this time</div>
+        </div>
+        
+        <div class="timezone-card">
+          <div class="timezone-flag">🇸🇬</div>
+          <div class="timezone-location">Singapore</div>
+          <div class="timezone-time" id="singaporeTime">Loading...</div>
+          <div class="timezone-label">Schedule at this time</div>
+        </div>
+        
+        <div class="timezone-card">
+          <div class="timezone-flag">🇶🇦</div>
+          <div class="timezone-location">Qatar</div>
+          <div class="timezone-time" id="qatarTime">Loading...</div>
+          <div class="timezone-label">Schedule at this time</div>
+        </div>
+      </div>
+      
+      <div class="converter-instructions">
+        <div class="instruction-item">
+          <span class="instruction-icon">✅</span>
+          <span>Always select <strong>"New York"</strong> timezone in YouTube scheduling</span>
+        </div>
+        <div class="instruction-item">
+          <span class="instruction-icon">⏰</span>
+          <span>Use YOUR local time shown above when scheduling</span>
+        </div>
+        <div class="instruction-item">
+          <span class="instruction-icon">⚠️</span>
+          <span>Double-check the date (might be next day for some locations)</span>
+        </div>
+      </div>
+    </div>
 
     <!-- Controls -->
     <div class="controls">
@@ -627,6 +809,8 @@
     function initApp() {
       updateDateTime();
       setInterval(updateDateTime, 1000);
+      updateTimezoneConverter();
+      setInterval(updateTimezoneConverter, 1000);
       loadChannels();
     }
 
@@ -642,6 +826,69 @@
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit'
+      });
+    }
+
+    // Update timezone converter - NEW FUNCTION!
+    function updateTimezoneConverter() {
+      const now = new Date();
+      
+      // New York current time
+      const nyTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      document.getElementById('nyCurrentTime').textContent = nyTime.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      });
+      
+      // Calculate when 12 PM NY time is in each timezone
+      const nyNoon = new Date(nyTime);
+      nyNoon.setHours(12, 0, 0, 0);
+      
+      // If current NY time is past noon, show tomorrow's noon
+      if (nyTime.getHours() >= 12) {
+        nyNoon.setDate(nyNoon.getDate() + 1);
+      }
+      
+      // Bangladesh (UTC+6)
+      const bangladeshTime = new Date(nyNoon.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
+      document.getElementById('bangladeshTime').textContent = bangladeshTime.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      
+      // India (UTC+5:30)
+      const indiaTime = new Date(nyNoon.toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }));
+      document.getElementById('indiaTime').textContent = indiaTime.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      
+      // Singapore (UTC+8)
+      const singaporeTime = new Date(nyNoon.toLocaleString('en-US', { timeZone: 'Asia/Singapore' }));
+      document.getElementById('singaporeTime').textContent = singaporeTime.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+      
+      // Qatar (UTC+3)
+      const qatarTime = new Date(nyNoon.toLocaleString('en-US', { timeZone: 'Asia/Qatar' }));
+      document.getElementById('qatarTime').textContent = qatarTime.toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
       });
     }
 
@@ -1000,85 +1247,6 @@
 
     window.closeModal = function() {
       document.getElementById('successModal').classList.remove('show');
-    };
-
-    // Reorder functionality
-    window.toggleReorderDropdown = function() {
-      document.getElementById('reorderDropdown').classList.toggle('show');
-    };
-
-    window.reorderChannels = async function(sortBy) {
-      document.getElementById('reorderDropdown').classList.remove('show');
-      
-      try {
-        updateStatus('🔄 Reordering...', '#ffc107');
-
-        // Get all channels for sorting
-        const { data: allChannels, error } = await supabase.from('tasks').select('*');
-        if (error) throw error;
-
-        let sortedChannels;
-        
-        switch(sortBy) {
-          case 'collaborator':
-            sortedChannels = allChannels.sort((a, b) => {
-              const collabA = (a.collaborator || 'Unassigned').toLowerCase();
-              const collabB = (b.collaborator || 'Unassigned').toLowerCase();
-              return collabA === collabB 
-                ? a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
-                : collabA.localeCompare(collabB);
-            });
-            break;
-          case 'channel':
-            sortedChannels = allChannels.sort((a, b) => 
-              a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
-            );
-            break;
-          case 'client':
-            sortedChannels = allChannels.sort((a, b) => {
-              const clientA = (a.client || 'No Client').toLowerCase();
-              const clientB = (b.client || 'No Client').toLowerCase();
-              return clientA === clientB 
-                ? a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
-                : clientA.localeCompare(clientB);
-            });
-            break;
-          default:
-            sortedChannels = allChannels;
-        }
-        
-        // Create new order array
-        const newOrder = sortedChannels.map((channel, index) => ({
-          channel_id: channel.id,
-          order_position: index
-        }));
-        
-        // Delete existing order and insert new one
-        await supabase.from('channel_order').delete().gt('id', 0);
-        
-        if (newOrder.length > 0) {
-          const { error: insertError } = await supabase
-            .from('channel_order')
-            .insert(newOrder);
-          
-          if (insertError) throw insertError;
-        }
-        
-        loadChannels();
-        
-        const sortNames = {
-          'collaborator': 'Collaborator',
-          'channel': 'Channel Name', 
-          'client': 'Client'
-        };
-        
-        showSuccess(`Channels reordered by ${sortNames[sortBy]}!`);
-
-      } catch (error) {
-        console.error('Error reordering channels:', error);
-        updateStatus('🔴 Error', '#dc3545');
-        showError('Failed to reorder channels');
-      }
     };
 
     // Start the application
