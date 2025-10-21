@@ -192,7 +192,7 @@
     .table-container {
       background: white;
       border-radius: 15px;
-      overflow: hidden;
+      overflow-x: auto;
       box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     }
 
@@ -355,6 +355,20 @@
       margin-top: 20px;
       font-weight: 600;
     }
+
+    .debug-info {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #0f0;
+      padding: 10px;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 12px;
+      max-width: 300px;
+      display: none;
+    }
   </style>
 </head>
 <body>
@@ -376,14 +390,14 @@
         <span>🟢</span>
         <span>Connected</span>
       </div>
-      <button class="control-btn" onclick="resetAllChannels()">
+      <button class="control-btn" id="resetBtn">
         🔄 Reset All to Pending
       </button>
     </div>
 
     <main class="main-content">
       <section class="add-channel-section">
-        <div class="form-header" onclick="toggleAddForm()">
+        <div class="form-header" id="formHeader">
           <span>➕ Add New Channel</span>
           <span id="formToggleIcon">▼</span>
         </div>
@@ -395,7 +409,7 @@
             <input type="text" id="collaboratorName" placeholder="Collaborator" class="form-input">
             <input type="number" id="videosPerMonth" placeholder="Videos Per Month" class="form-input" min="0">
           </div>
-          <button class="submit-btn" onclick="addNewChannel()">Create Channel</button>
+          <button class="submit-btn" id="submitBtn">Create Channel</button>
         </div>
       </section>
 
@@ -429,25 +443,44 @@
         <div class="modal-icon">✓</div>
         <div style="font-size: 24px; margin-bottom: 15px; font-weight: 600;">Great Job!</div>
         <div>Channel completed successfully!</div>
-        <button class="modal-close" onclick="closeModal()">Continue</button>
+        <button class="modal-close" id="modalCloseBtn">Continue</button>
       </div>
     </div>
   </div>
 
+  <div class="debug-info" id="debugInfo">Console: Open F12</div>
+
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+
+    console.log('Script loaded successfully');
 
     const supabase = createClient(
       'https://prkrbswttmtgeplsvzlj.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBya3Jic3d0dG10Z2VwbHN2emxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTk5NjQsImV4cCI6MjA3MjYzNTk2NH0.Ul2cd-cpWHfpK1HTgHM7Tv2NDCrFWcAq2N-C7Tv9oz8'
     );
 
+    console.log('Supabase client initialized');
+
     let channels = [];
 
     function initApp() {
+      console.log('Initializing app...');
       updateDateTime();
       setInterval(updateDateTime, 1000);
       loadChannels();
+      setupEventListeners();
+    }
+
+    function setupEventListeners() {
+      console.log('Setting up event listeners...');
+      
+      document.getElementById('formHeader').addEventListener('click', toggleAddForm);
+      document.getElementById('submitBtn').addEventListener('click', addNewChannel);
+      document.getElementById('resetBtn').addEventListener('click', resetAllChannels);
+      document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+      
+      console.log('Event listeners attached');
     }
 
     function updateDateTime() {
@@ -465,6 +498,7 @@
 
     async function loadChannels() {
       try {
+        console.log('Loading channels from database...');
         updateStatus('🔄 Loading...', '#ffc107');
         
         const { data, error } = await supabase
@@ -472,23 +506,27 @@
           .select('*')
           .order('created_at', { ascending: false });
 
+        console.log('Database response:', { data, error });
+
         if (error) {
-          console.error('Supabase error:', error);
+          console.error('Database error:', error);
           throw error;
         }
 
         channels = data || [];
+        console.log(`Loaded ${channels.length} channels`);
         renderChannelsTable();
         updateStatus('🟢 Connected', '#28a745');
 
       } catch (error) {
         console.error('Error loading channels:', error);
         updateStatus('🔴 Error', '#dc3545');
-        alert('Failed to load channels. Check console for details.');
+        alert('Failed to load channels. Error: ' + error.message);
       }
     }
 
     function renderChannelsTable() {
+      console.log('Rendering table with', channels.length, 'channels');
       const tbody = document.getElementById('channelsTableBody');
       
       if (channels.length === 0) {
@@ -510,7 +548,7 @@
           <td>${channel.collaborator || 'Unassigned'}</td>
           <td>${channel.daily_videos || 0}</td>
           <td>
-            <button class="health-btn health-${channel.health || 'good'}" onclick="toggleHealth('${channel.id}')">
+            <button class="health-btn health-${channel.health || 'good'}" data-action="toggle-health" data-id="${channel.id}">
               ${channel.health === 'issue' ? '⚠ Issue' : '✓ Good'}
             </button>
           </td>
@@ -522,16 +560,40 @@
           <td>
             <div class="actions">
               <button class="action-btn complete-btn ${channel.status === 'completed' ? 'completed' : ''}" 
-                      onclick="toggleChannelStatus('${channel.id}')">
+                      data-action="toggle-status" data-id="${channel.id}">
                 ${channel.status === 'completed' ? 'Completed' : 'Complete'}
               </button>
-              <button class="action-btn delete-btn" onclick="deleteChannel('${channel.id}')">
+              <button class="action-btn delete-btn" data-action="delete" data-id="${channel.id}">
                 Delete
               </button>
             </div>
           </td>
         </tr>
       `).join('');
+
+      attachTableEventListeners();
+    }
+
+    function attachTableEventListeners() {
+      console.log('Attaching table button listeners...');
+      
+      document.querySelectorAll('[data-action]').forEach(button => {
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const action = this.getAttribute('data-action');
+          const id = this.getAttribute('data-id');
+          
+          console.log('Button clicked:', action, id);
+          
+          if (action === 'toggle-health') {
+            toggleHealth(id);
+          } else if (action === 'toggle-status') {
+            toggleChannelStatus(id);
+          } else if (action === 'delete') {
+            deleteChannel(id);
+          }
+        });
+      });
     }
 
     function updateStatus(text, color) {
@@ -539,7 +601,8 @@
       indicator.innerHTML = `<span style="color: ${color}">●</span><span>${text}</span>`;
     }
 
-    window.toggleAddForm = function() {
+    function toggleAddForm() {
+      console.log('Toggle form clicked');
       const form = document.getElementById('addChannelForm');
       const icon = document.getElementById('formToggleIcon');
       
@@ -550,14 +613,17 @@
         form.classList.add('open');
         icon.textContent = '▲';
       }
-    };
+    }
 
-    window.addNewChannel = async function() {
+    async function addNewChannel() {
+      console.log('Add channel clicked');
       const id = document.getElementById('channelId').value.trim();
       const name = document.getElementById('channelName').value.trim();
       const client = document.getElementById('clientName').value.trim();
       const collaborator = document.getElementById('collaboratorName').value.trim();
       const videosPerMonth = parseInt(document.getElementById('videosPerMonth').value) || 0;
+
+      console.log('Form values:', { id, name, client, collaborator, videosPerMonth });
 
       if (!id || !name) {
         alert('Channel ID and Name are required');
@@ -567,7 +633,7 @@
       try {
         updateStatus('🔄 Adding...', '#ffc107');
 
-        const { error } = await supabase.from('tasks').insert([{
+        const newChannel = {
           id,
           channel: name,
           client: client || null,
@@ -577,9 +643,16 @@
           health: 'good',
           last_updated: new Date().toISOString(),
           created_at: new Date().toISOString()
-        }]);
+        };
 
-        if (error) throw error;
+        console.log('Inserting channel:', newChannel);
+
+        const { error } = await supabase.from('tasks').insert([newChannel]);
+
+        if (error) {
+          console.error('Insert error:', error);
+          throw error;
+        }
 
         document.getElementById('channelId').value = '';
         document.getElementById('channelName').value = '';
@@ -594,16 +667,21 @@
       } catch (error) {
         console.error('Error adding channel:', error);
         updateStatus('🔴 Error', '#dc3545');
-        alert(error.code === '23505' ? 'Channel ID already exists' : 'Failed to add channel');
+        alert(error.code === '23505' ? 'Channel ID already exists' : 'Failed to add channel: ' + error.message);
       }
-    };
+    }
 
-    window.toggleHealth = async function(channelId) {
+    async function toggleHealth(channelId) {
+      console.log('Toggle health for:', channelId);
       try {
         const channel = channels.find(c => c.id === channelId);
-        if (!channel) return;
+        if (!channel) {
+          console.error('Channel not found:', channelId);
+          return;
+        }
 
         const newHealth = channel.health === 'good' ? 'issue' : 'good';
+        console.log('Updating health to:', newHealth);
 
         const { error } = await supabase
           .from('tasks')
@@ -615,16 +693,21 @@
         
       } catch (error) {
         console.error('Error updating health:', error);
-        alert('Failed to update health status');
+        alert('Failed to update health status: ' + error.message);
       }
-    };
+    }
 
-    window.toggleChannelStatus = async function(channelId) {
+    async function toggleChannelStatus(channelId) {
+      console.log('Toggle status for:', channelId);
       try {
         const channel = channels.find(c => c.id === channelId);
-        if (!channel) return;
+        if (!channel) {
+          console.error('Channel not found:', channelId);
+          return;
+        }
 
         const newStatus = channel.status === 'completed' ? 'pending' : 'completed';
+        console.log('Updating status to:', newStatus);
 
         const { error } = await supabase
           .from('tasks')
@@ -641,11 +724,12 @@
 
       } catch (error) {
         console.error('Error updating status:', error);
-        alert('Failed to update status');
+        alert('Failed to update status: ' + error.message);
       }
-    };
+    }
 
-    window.deleteChannel = async function(channelId) {
+    async function deleteChannel(channelId) {
+      console.log('Delete channel:', channelId);
       if (!confirm('Are you sure you want to delete this channel?')) return;
 
       try {
@@ -656,11 +740,12 @@
 
       } catch (error) {
         console.error('Error deleting channel:', error);
-        alert('Failed to delete channel');
+        alert('Failed to delete channel: ' + error.message);
       }
-    };
+    }
 
-    window.resetAllChannels = async function() {
+    async function resetAllChannels() {
+      console.log('Reset all channels clicked');
       if (!confirm('Are you sure you want to reset all channels to pending?')) return;
 
       try {
@@ -675,13 +760,14 @@
 
       } catch (error) {
         console.error('Error resetting channels:', error);
-        alert('Failed to reset channels');
+        alert('Failed to reset channels: ' + error.message);
       }
-    };
+    }
 
-    window.closeModal = function() {
+    function closeModal() {
+      console.log('Close modal clicked');
       document.getElementById('successModal').classList.remove('show');
-    };
+    }
 
     initApp();
   </script>
