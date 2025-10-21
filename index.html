@@ -27,7 +27,6 @@
       overflow: hidden;
     }
 
-    /* Header */
     .header {
       background: linear-gradient(135deg, #667eea, #764ba2);
       color: white;
@@ -70,7 +69,6 @@
       text-decoration: none;
       font-weight: 600;
       transition: all 0.3s ease;
-      border: 2px solid transparent;
     }
 
     .nav-btn:hover {
@@ -78,7 +76,6 @@
       transform: translateY(-2px);
     }
 
-    /* Controls */
     .controls {
       background: #f8f9fa;
       padding: 20px 30px;
@@ -109,9 +106,6 @@
       cursor: pointer;
       transition: all 0.3s ease;
       font-size: 14px;
-    }
-
-    .reset-btn {
       background: linear-gradient(135deg, #ff6b6b, #ee5a24);
       color: white;
     }
@@ -121,18 +115,10 @@
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     }
 
-    .control-btn:disabled {
-      background: #6c757d;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    /* Main Content */
     .main-content {
       padding: 30px;
     }
 
-    /* Add Channel Form */
     .add-channel-section {
       background: #f8f9fa;
       border-radius: 15px;
@@ -203,7 +189,6 @@
       box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
     }
 
-    /* Table */
     .table-container {
       background: white;
       border-radius: 15px;
@@ -225,18 +210,10 @@
       font-size: 16px;
     }
 
-    th:nth-child(4), th:nth-child(5) {
-      text-align: center;
-    }
-
     td {
       padding: 20px 15px;
       border-bottom: 1px solid #f0f0f0;
       vertical-align: middle;
-    }
-
-    td:nth-child(4), td:nth-child(5) {
-      text-align: center;
     }
 
     tr:nth-child(even) {
@@ -252,7 +229,6 @@
       color: #2c3e50;
     }
 
-    /* Health Status Button */
     .health-btn {
       padding: 8px 16px;
       border: none;
@@ -262,27 +238,18 @@
       transition: all 0.3s ease;
       font-size: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .health-good {
       background: linear-gradient(135deg, #27ae60, #2ecc71);
       color: white;
-      box-shadow: 0 2px 10px rgba(39, 174, 96, 0.3);
     }
 
     .health-issue {
       background: linear-gradient(135deg, #e74c3c, #c0392b);
       color: white;
-      box-shadow: 0 2px 10px rgba(231, 76, 60, 0.3);
     }
 
-    .health-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Status Badge */
     .status-badge {
       padding: 6px 12px;
       border-radius: 15px;
@@ -301,39 +268,25 @@
       color: #155724;
     }
 
-    /* Actions */
     .actions {
       display: flex;
       gap: 10px;
       align-items: center;
-      flex-wrap: wrap;
     }
 
     .action-btn {
-      padding: 8px 12px;
+      padding: 8px 16px;
       border: none;
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s ease;
       font-size: 12px;
-    }
-
-    .edit-btn {
-      background: linear-gradient(135deg, #f39c12, #e67e22);
       color: white;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .complete-btn {
       background: linear-gradient(135deg, #667eea, #764ba2);
-      color: white;
-      padding: 8px 16px;
     }
 
     .complete-btn.completed {
@@ -342,61 +295,18 @@
 
     .delete-btn {
       background: linear-gradient(135deg, #e74c3c, #c0392b);
-      color: white;
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .action-btn:hover {
       transform: translateY(-2px);
     }
 
-    /* Edit Mode */
-    .edit-input {
-      width: 100%;
-      max-width: 150px;
-      padding: 8px 12px;
-      border: 2px solid #667eea;
-      border-radius: 6px;
-      font-size: 14px;
-      background: white;
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #6c757d;
     }
 
-    .edit-input:focus {
-      outline: none;
-      border-color: #764ba2;
-    }
-
-    .edit-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .save-btn, .cancel-btn {
-      padding: 6px 12px;
-      border: none;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      font-weight: 600;
-    }
-
-    .save-btn {
-      background: linear-gradient(135deg, #27ae60, #2ecc71);
-      color: white;
-    }
-
-    .cancel-btn {
-      background: linear-gradient(135deg, #95a5a6, #7f8c8d);
-      color: white;
-    }
-
-    /* Success Modal */
     .modal {
       position: fixed;
       top: 0;
@@ -421,18 +331,6 @@
       border-radius: 20px;
       text-align: center;
       max-width: 400px;
-      animation: modalSlideIn 0.3s ease;
-    }
-
-    @keyframes modalSlideIn {
-      from {
-        transform: scale(0.7);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
     }
 
     .modal-icon {
@@ -447,12 +345,6 @@
       font-size: 40px;
     }
 
-    .modal-title {
-      font-size: 24px;
-      margin-bottom: 15px;
-      font-weight: 600;
-    }
-
     .modal-close {
       background: rgba(255, 255, 255, 0.2);
       color: white;
@@ -463,99 +355,33 @@
       margin-top: 20px;
       font-weight: 600;
     }
-
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: #6c757d;
-    }
-
-    .empty-state h3 {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    /* Mobile Responsive */
-    @media (max-width: 768px) {
-      .header-info {
-        flex-direction: column;
-      }
-
-      .controls {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      table, thead, tbody, th, td, tr {
-        display: block;
-      }
-
-      thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-      }
-
-      tr {
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        margin-bottom: 15px;
-        padding: 15px;
-        background: white;
-      }
-
-      td {
-        border: none;
-        padding: 8px 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      td::before {
-        content: attr(data-label);
-        font-weight: bold;
-        color: #667eea;
-        margin-right: 10px;
-      }
-
-      .actions {
-        justify-content: flex-end;
-      }
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <header class="header">
       <h1>🎥 Video Production Tracker</h1>
       <div class="header-info">
         <div class="datetime" id="datetime">Loading...</div>
         <nav class="nav-links">
-          <a href="task-dashboard.html" class="nav-btn">📋 Manager Task</a>
-          <a href="channel-status-tracker.html" class="nav-btn">📊 Channel Status</a>
-          <a href="payment_tracker.html" class="nav-btn">💰 Payment</a>
+          <a href="#" class="nav-btn">📋 Manager Task</a>
+          <a href="#" class="nav-btn">📊 Channel Status</a>
+          <a href="#" class="nav-btn">💰 Payment</a>
         </nav>
       </div>
     </header>
 
-    <!-- Controls -->
     <div class="controls">
       <div class="status-indicator" id="statusIndicator">
         <span>🟢</span>
         <span>Connected</span>
       </div>
-      
-      <button class="control-btn reset-btn" onclick="resetAllChannels()" id="resetBtn">
+      <button class="control-btn" onclick="resetAllChannels()">
         🔄 Reset All to Pending
       </button>
     </div>
 
-    <!-- Main Content -->
     <main class="main-content">
-      <!-- Add Channel Form -->
       <section class="add-channel-section">
         <div class="form-header" onclick="toggleAddForm()">
           <span>➕ Add New Channel</span>
@@ -563,8 +389,8 @@
         </div>
         <div class="form-content" id="addChannelForm">
           <div class="form-grid">
-            <input type="text" id="channelId" placeholder="Channel ID" class="form-input" required>
-            <input type="text" id="channelName" placeholder="Channel Name" class="form-input" required>
+            <input type="text" id="channelId" placeholder="Channel ID" class="form-input">
+            <input type="text" id="channelName" placeholder="Channel Name" class="form-input">
             <input type="text" id="clientName" placeholder="Client Name" class="form-input">
             <input type="text" id="collaboratorName" placeholder="Collaborator" class="form-input">
             <input type="number" id="videosPerMonth" placeholder="Videos Per Month" class="form-input" min="0">
@@ -573,7 +399,6 @@
         </div>
       </section>
 
-      <!-- Channels Table -->
       <section class="table-container">
         <table>
           <thead>
@@ -599,11 +424,10 @@
       </section>
     </main>
 
-    <!-- Success Modal -->
     <div class="modal" id="successModal">
       <div class="modal-content">
         <div class="modal-icon">✓</div>
-        <div class="modal-title">Great Job!</div>
+        <div style="font-size: 24px; margin-bottom: 15px; font-weight: 600;">Great Job!</div>
         <div>Channel completed successfully!</div>
         <button class="modal-close" onclick="closeModal()">Continue</button>
       </div>
@@ -611,30 +435,24 @@
   </div>
 
   <script type="module">
-    import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js@2'
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    // Initialize Supabase
     const supabase = createClient(
       'https://prkrbswttmtgeplsvzlj.supabase.co',
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBya3Jic3d0dG10Z2VwbHN2emxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNTk5NjQsImV4cCI6MjA3MjYzNTk2NH0.Ul2cd-cpWHfpK1HTgHM7Tv2NDCrFWcAq2N-C7Tv9oz8'
     );
 
-    // Global variables
     let channels = [];
-    let editingChannelId = null;
 
-    // Initialize the application
     function initApp() {
       updateDateTime();
       setInterval(updateDateTime, 1000);
       loadChannels();
     }
 
-    // Update date and time
     function updateDateTime() {
       const now = new Date();
-      const bdTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Dhaka' }));
-      document.getElementById('datetime').textContent = bdTime.toLocaleString('en-US', {
+      document.getElementById('datetime').textContent = now.toLocaleString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -645,7 +463,6 @@
       });
     }
 
-    // Load channels from database
     async function loadChannels() {
       try {
         updateStatus('🔄 Loading...', '#ffc107');
@@ -655,7 +472,10 @@
           .select('*')
           .order('created_at', { ascending: false });
 
-        if (error) throw error;
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
 
         channels = data || [];
         renderChannelsTable();
@@ -664,11 +484,10 @@
       } catch (error) {
         console.error('Error loading channels:', error);
         updateStatus('🔴 Error', '#dc3545');
-        showError('Failed to load channels');
+        alert('Failed to load channels. Check console for details.');
       }
     }
 
-    // Render channels table
     function renderChannelsTable() {
       const tbody = document.getElementById('channelsTableBody');
       
@@ -684,85 +503,42 @@
         return;
       }
 
-      tbody.innerHTML = channels.map(channel => {
-        const isEditing = editingChannelId === channel.id;
-        const health = channel.health || 'good';
-        
-        return `
-          <tr data-id="${channel.id}">
-            <td data-label="Channel">
-              ${isEditing ? 
-                `<input type="text" class="edit-input" id="edit-channel-${channel.id}" value="${channel.channel}">` :
-                `<div class="channel-name">${channel.channel}</div>`
-              }
-            </td>
-            <td data-label="Client">
-              ${isEditing ? 
-                `<input type="text" class="edit-input" id="edit-client-${channel.id}" value="${channel.client || ''}">` :
-                (channel.client || 'Not specified')
-              }
-            </td>
-            <td data-label="Collaborator">
-              ${isEditing ? 
-                `<input type="text" class="edit-input" id="edit-collaborator-${channel.id}" value="${channel.collaborator || ''}">` :
-                (channel.collaborator || 'Unassigned')
-              }
-            </td>
-            <td data-label="Videos/Month">
-              ${isEditing ? 
-                `<input type="number" class="edit-input" id="edit-videos-${channel.id}" value="${channel.daily_videos || 0}" min="0" style="max-width: 80px;">` :
-                (channel.daily_videos || 0)
-              }
-            </td>
-            <td data-label="Health">
-              <button class="health-btn health-${health}" onclick="toggleHealth('${channel.id}')">
-                ${health === 'good' ? '✓ Good' : '⚠ Issue'}
+      tbody.innerHTML = channels.map(channel => `
+        <tr>
+          <td><div class="channel-name">${channel.channel || 'N/A'}</div></td>
+          <td>${channel.client || 'Not specified'}</td>
+          <td>${channel.collaborator || 'Unassigned'}</td>
+          <td>${channel.daily_videos || 0}</td>
+          <td>
+            <button class="health-btn health-${channel.health || 'good'}" onclick="toggleHealth('${channel.id}')">
+              ${channel.health === 'issue' ? '⚠ Issue' : '✓ Good'}
+            </button>
+          </td>
+          <td>
+            <span class="status-badge status-${channel.status || 'pending'}">
+              ${channel.status || 'pending'}
+            </span>
+          </td>
+          <td>
+            <div class="actions">
+              <button class="action-btn complete-btn ${channel.status === 'completed' ? 'completed' : ''}" 
+                      onclick="toggleChannelStatus('${channel.id}')">
+                ${channel.status === 'completed' ? 'Completed' : 'Complete'}
               </button>
-            </td>
-            <td data-label="Status">
-              <span class="status-badge status-${channel.status}">
-                ${channel.status}
-              </span>
-            </td>
-            <td data-label="Actions">
-              <div class="actions">
-                ${isEditing ? `
-                  <div class="edit-actions">
-                    <button class="save-btn" onclick="saveChannelEdit('${channel.id}')">Save</button>
-                    <button class="cancel-btn" onclick="cancelEdit()">Cancel</button>
-                  </div>
-                ` : `
-                  <button class="action-btn edit-btn" onclick="startEdit('${channel.id}')" title="Edit Channel">✏️</button>
-                  <button class="action-btn complete-btn ${channel.status === 'completed' ? 'completed' : ''}" 
-                          onclick="toggleChannelStatus('${channel.id}')">
-                    ${channel.status === 'completed' ? 'Completed' : 'Complete'}
-                  </button>
-                  <button class="action-btn delete-btn" onclick="deleteChannel('${channel.id}')" title="Delete Channel">🗑️</button>
-                `}
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
+              <button class="action-btn delete-btn" onclick="deleteChannel('${channel.id}')">
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
     }
 
-    // Update status indicator
     function updateStatus(text, color) {
       const indicator = document.getElementById('statusIndicator');
       indicator.innerHTML = `<span style="color: ${color}">●</span><span>${text}</span>`;
     }
 
-    // Show error message
-    function showError(message) {
-      alert('❌ ' + message);
-    }
-
-    // Show success message
-    function showSuccess(message) {
-      alert('✅ ' + message);
-    }
-
-    // Global functions
     window.toggleAddForm = function() {
       const form = document.getElementById('addChannelForm');
       const icon = document.getElementById('formToggleIcon');
@@ -773,7 +549,6 @@
       } else {
         form.classList.add('open');
         icon.textContent = '▲';
-        setTimeout(() => document.getElementById('channelId').focus(), 300);
       }
     };
 
@@ -785,7 +560,7 @@
       const videosPerMonth = parseInt(document.getElementById('videosPerMonth').value) || 0;
 
       if (!id || !name) {
-        showError('Channel ID and Name are required');
+        alert('Channel ID and Name are required');
         return;
       }
 
@@ -806,7 +581,6 @@
 
         if (error) throw error;
 
-        // Clear form
         document.getElementById('channelId').value = '';
         document.getElementById('channelName').value = '';
         document.getElementById('clientName').value = '';
@@ -815,69 +589,13 @@
         
         toggleAddForm();
         loadChannels();
-        showSuccess('Channel added successfully!');
+        alert('✅ Channel added successfully!');
 
       } catch (error) {
         console.error('Error adding channel:', error);
         updateStatus('🔴 Error', '#dc3545');
-        showError(error.code === '23505' ? 'Channel ID already exists' : 'Failed to add channel');
+        alert(error.code === '23505' ? 'Channel ID already exists' : 'Failed to add channel');
       }
-    };
-
-    window.startEdit = function(channelId) {
-      if (editingChannelId && editingChannelId !== channelId) {
-        cancelEdit();
-      }
-      editingChannelId = channelId;
-      renderChannelsTable();
-      
-      setTimeout(() => {
-        const firstInput = document.getElementById(`edit-channel-${channelId}`);
-        if (firstInput) firstInput.focus();
-      }, 100);
-    };
-
-    window.saveChannelEdit = async function(channelId) {
-      try {
-        const name = document.getElementById(`edit-channel-${channelId}`).value.trim();
-        const client = document.getElementById(`edit-client-${channelId}`).value.trim();
-        const collaborator = document.getElementById(`edit-collaborator-${channelId}`).value.trim();
-        const videos = parseInt(document.getElementById(`edit-videos-${channelId}`).value) || 0;
-
-        if (!name) {
-          showError('Channel name is required');
-          return;
-        }
-
-        updateStatus('🔄 Saving...', '#ffc107');
-
-        const { error } = await supabase
-          .from('tasks')
-          .update({
-            channel: name,
-            client: client || null,
-            collaborator: collaborator || null,
-            daily_videos: videos,
-            last_updated: new Date().toISOString()
-          })
-          .eq('id', channelId);
-
-        if (error) throw error;
-
-        editingChannelId = null;
-        loadChannels();
-        showSuccess('Channel updated successfully!');
-
-      } catch (error) {
-        console.error('Error updating channel:', error);
-        updateStatus('🔴 Error', '#dc3545');
-        showError('Failed to update channel');
-      }
-    };
-
-    window.cancelEdit = function() {
-      editingChannelId = null;
-      renderChannelsTable();
     };
 
     window.toggleHealth = async function(channelId) {
@@ -885,27 +603,19 @@
         const channel = channels.find(c => c.id === channelId);
         if (!channel) return;
 
-        const currentHealth = channel.health || 'good';
-        const newHealth = currentHealth === 'good' ? 'issue' : 'good';
-
-        updateStatus('🔄 Updating...', '#ffc107');
+        const newHealth = channel.health === 'good' ? 'issue' : 'good';
 
         const { error } = await supabase
           .from('tasks')
-          .update({ 
-            health: newHealth, 
-            last_updated: new Date().toISOString() 
-          })
+          .update({ health: newHealth, last_updated: new Date().toISOString() })
           .eq('id', channelId);
 
         if (error) throw error;
-
         loadChannels();
         
       } catch (error) {
         console.error('Error updating health:', error);
-        updateStatus('🔴 Error', '#dc3545');
-        showError('Failed to update health status');
+        alert('Failed to update health status');
       }
     };
 
@@ -916,18 +626,12 @@
 
         const newStatus = channel.status === 'completed' ? 'pending' : 'completed';
 
-        updateStatus('🔄 Updating...', '#ffc107');
-
         const { error } = await supabase
           .from('tasks')
-          .update({ 
-            status: newStatus, 
-            last_updated: new Date().toISOString() 
-          })
+          .update({ status: newStatus, last_updated: new Date().toISOString() })
           .eq('id', channelId);
 
         if (error) throw error;
-
         loadChannels();
 
         if (newStatus === 'completed') {
@@ -937,8 +641,7 @@
 
       } catch (error) {
         console.error('Error updating status:', error);
-        updateStatus('🔴 Error', '#dc3545');
-        showError('Failed to update status');
+        alert('Failed to update status');
       }
     };
 
@@ -946,55 +649,33 @@
       if (!confirm('Are you sure you want to delete this channel?')) return;
 
       try {
-        updateStatus('🔄 Deleting...', '#ffc107');
-
-        const { error } = await supabase
-          .from('tasks')
-          .delete()
-          .eq('id', channelId);
-
+        const { error } = await supabase.from('tasks').delete().eq('id', channelId);
         if (error) throw error;
-
         loadChannels();
-        showSuccess('Channel deleted successfully!');
+        alert('✅ Channel deleted successfully!');
 
       } catch (error) {
         console.error('Error deleting channel:', error);
-        updateStatus('🔴 Error', '#dc3545');
-        showError('Failed to delete channel');
+        alert('Failed to delete channel');
       }
     };
 
     window.resetAllChannels = async function() {
-      if (!confirm('Are you sure you want to reset all channels to pending status?')) return;
-
-      const btn = document.getElementById('resetBtn');
-      btn.disabled = true;
-      btn.textContent = '🔄 Resetting...';
+      if (!confirm('Are you sure you want to reset all channels to pending?')) return;
 
       try {
-        updateStatus('🔄 Resetting...', '#ffc107');
-
         const { error } = await supabase
           .from('tasks')
-          .update({ 
-            status: 'pending', 
-            last_updated: new Date().toISOString() 
-          })
+          .update({ status: 'pending', last_updated: new Date().toISOString() })
           .eq('status', 'completed');
 
         if (error) throw error;
-
         loadChannels();
-        showSuccess('All channels reset to pending!');
+        alert('✅ All channels reset to pending!');
 
       } catch (error) {
         console.error('Error resetting channels:', error);
-        updateStatus('🔴 Error', '#dc3545');
-        showError('Failed to reset channels');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = '🔄 Reset All to Pending';
+        alert('Failed to reset channels');
       }
     };
 
@@ -1002,86 +683,6 @@
       document.getElementById('successModal').classList.remove('show');
     };
 
-    // Reorder functionality
-    window.toggleReorderDropdown = function() {
-      document.getElementById('reorderDropdown').classList.toggle('show');
-    };
-
-    window.reorderChannels = async function(sortBy) {
-      document.getElementById('reorderDropdown').classList.remove('show');
-      
-      try {
-        updateStatus('🔄 Reordering...', '#ffc107');
-
-        // Get all channels for sorting
-        const { data: allChannels, error } = await supabase.from('tasks').select('*');
-        if (error) throw error;
-
-        let sortedChannels;
-        
-        switch(sortBy) {
-          case 'collaborator':
-            sortedChannels = allChannels.sort((a, b) => {
-              const collabA = (a.collaborator || 'Unassigned').toLowerCase();
-              const collabB = (b.collaborator || 'Unassigned').toLowerCase();
-              return collabA === collabB 
-                ? a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
-                : collabA.localeCompare(collabB);
-            });
-            break;
-          case 'channel':
-            sortedChannels = allChannels.sort((a, b) => 
-              a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
-            );
-            break;
-          case 'client':
-            sortedChannels = allChannels.sort((a, b) => {
-              const clientA = (a.client || 'No Client').toLowerCase();
-              const clientB = (b.client || 'No Client').toLowerCase();
-              return clientA === clientB 
-                ? a.channel.toLowerCase().localeCompare(b.channel.toLowerCase())
-                : clientA.localeCompare(clientB);
-            });
-            break;
-          default:
-            sortedChannels = allChannels;
-        }
-        
-        // Create new order array
-        const newOrder = sortedChannels.map((channel, index) => ({
-          channel_id: channel.id,
-          order_position: index
-        }));
-        
-        // Delete existing order and insert new one
-        await supabase.from('channel_order').delete().gt('id', 0);
-        
-        if (newOrder.length > 0) {
-          const { error: insertError } = await supabase
-            .from('channel_order')
-            .insert(newOrder);
-          
-          if (insertError) throw insertError;
-        }
-        
-        loadChannels();
-        
-        const sortNames = {
-          'collaborator': 'Collaborator',
-          'channel': 'Channel Name', 
-          'client': 'Client'
-        };
-        
-        showSuccess(`Channels reordered by ${sortNames[sortBy]}!`);
-
-      } catch (error) {
-        console.error('Error reordering channels:', error);
-        updateStatus('🔴 Error', '#dc3545');
-        showError('Failed to reorder channels');
-      }
-    };
-
-    // Start the application
     initApp();
   </script>
 </body>
